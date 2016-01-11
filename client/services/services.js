@@ -26,7 +26,8 @@ angular.module('services', [])
 				socket.emit('hostPlayerState',
 				{
 					currentTime: $window.youtubePlayer.getCurrentTime(),
-					currentState: $window.youtubePlayer.getPlayerState()
+					currentState: $window.youtubePlayer.getPlayerState(),
+					room : videoId
 				});
 			}
 		};
@@ -57,24 +58,20 @@ angular.module('services', [])
 				width: '600',
 				videoId: videoId,
 				events: {
-					'onStateChange': onYoutubeStateChange
+					'onStateChange': onYoutubeStateChange,
+					'onReady' : submitRoom
 				}
 			});
+		}
 
 			//sets up the socket stream and events
+
+		var submitRoom = function(){
 			$window.socket = io.connect('http://localhost:8001');
+
 			if(host){
-
-				socket.emit('createRoom',{room : videoId});
-
-				$interval(function() {
-					//emits an event to the server
-					socket.emit('hostPlayerState', {
-						currentTime: $window.youtubePlayer.getCurrentTime(),
-						currentState: $window.youtubePlayer.getPlayerState(),
-						room: videoId
-					});
-				}, 1000);
+				var videoTitle = $window.youtubePlayer.getVideoData().title
+				socket.emit('createRoom',{room : videoId, roomTitle : videoTitle});
 			}
 
 			//makes the viewers synch to the host whenever the host emits a time event
@@ -84,7 +81,7 @@ angular.module('services', [])
 				socket.emit ('joinRoom', {room: videoId});
 
 				socket.on("hostPlayerSync", function(data){
-					console.log(data)
+					console.log(data, "hostPlayerSync -- viewer")
 					$window.youtubePlayer.seekTo(data.currentTime)
 				})
 			}
@@ -117,8 +114,6 @@ angular.module('services', [])
 			var userImage = $rootScope.user.photo
 			//since our socket only currently sends to people who did
 			//not brodcast we need to add the message to our messages array
-			messages.unshift({"user" : username, "message" : message, "userImage" : userImage})
-
 			socket.emit('newMessage', {
 				"user" : username,
 				"message" : message,
