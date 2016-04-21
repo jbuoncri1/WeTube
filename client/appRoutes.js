@@ -17,6 +17,13 @@ app.config(function($routeProvider, $sceDelegateProvider){
      };
 
 	$routeProvider
+    .when("/homepage", {
+      templateUrl:"",
+      controller:"",
+      resolve: {
+        loggedin: checkLoggedin
+      }
+    })
 		.when("/stream", {
 			templateUrl: "stream/stream.html",
 			controller: "StreamController",

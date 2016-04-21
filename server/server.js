@@ -1,12 +1,10 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
 var cors = require('cors');
 var GoogleStrategy = require('passport-google-oauth2').Strategy;
 var passport = require('passport');
 var session = require('express-session')
-var User = require('../DB/users/userModel')
 
 app.use(session({secret: "abstractedChalupas", cookie: {}, resave: false, saveUninitialized: false }));
 
@@ -49,24 +47,26 @@ function (request, accessToken, refreshToken, profile, done) {
   process.nextTick(function() {
     console.log(profile.photos[0].value);
     // check for users in database here, if the database doesnt have that user, add them as a usermodel in mongo
-    User.findOne({'id':profile.id}, function (err, record){
-      if (err){
-        return err;
-      }
-      // if the record exists and is found, return it
-      if (record) {
-        return done(null, record);
-      }
-      else {
-        record = {'id': profile.id, 'username': profile.name.givenName, 'email': profile.email, 'photo': profile.photos[0].value}
-        User.create(record, function (err, record) {
-          if (err) {
-            throw err;
-          }
-          return done(null, record);
-        })
-      }
-    });
+    record = {'id': profile.id, 'username': profile.name.givenName, 'email': profile.email, 'photo': profile.photos[0].value}
+    return done(null, record);
+
+    // User.findOne({'id':profile.id}, function (err, record){
+    //   if (err){
+    //     return err;
+    //   }
+    //   // if the record exists and is found, return it
+    //   if (record) {
+    //     return done(null, record);
+    //   }
+    //   else {
+    //     User.create(record, function (err, record) {
+    //       if (err) {
+    //         throw err;
+    //       }
+    //       return done(null, record);
+    //     })
+    //   }
+    // });
   });
 }
 ));
@@ -76,11 +76,6 @@ app.use( passport.initialize());
 app.use( passport.session());
 
 
-
-
-// Connect to a database called we-tube
-mongoose.connect('mongodb://localhost/we-tube')
-;
 var PORT = 8001;
 
 var io = require('socket.io').listen(app.listen(PORT));
@@ -91,6 +86,9 @@ var io = require('socket.io').listen(app.listen(PORT));
 
 app.use(express.static(__dirname+"/../client"));
 
+
+
+//socket stuff (to be abstracted)
 io.on('connection', function (socket) {
   var connectedClients = [];
   connectedClients.push(socket);
