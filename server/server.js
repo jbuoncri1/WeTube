@@ -1,14 +1,17 @@
 var express = require('express');
-var app = express();
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var GoogleStrategy = require('passport-google-oauth2').Strategy;
 var passport = require('passport');
 var session = require('express-session')
+var bcrypt = require('bcrypt');
+var controllers = require('./db/controllers')
+var bodyParser = require('body-parser');
 
+var app = express();
+
+app.use(bodyParser.json());
 app.use(session({secret: "abstractedChalupas", cookie: {}, resave: false, saveUninitialized: false }));
-
-
 // "1082022701969-rdl6108k798kf2apth302dcuornld9pg.apps.googleusercontent.com"
 
 /* GOOGLE AUTHENTICATION */
@@ -76,6 +79,18 @@ app.use( passport.initialize());
 app.use( passport.session());
 
 
+// const myPlaintextPassword = 's0/\/\P4$$w0rD';
+// const someOtherPlaintextPassword = 'not_bacon';
+// // bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
+// bcrypt.hash(myPlaintextPassword, 10, function(err, hash) {
+//   bcrypt.compare(myPlaintextPassword, hash, function(err, res){
+//     console.log(res)
+//   })
+// });
+
+
+
+
 var PORT = 8001;
 
 var io = require('socket.io').listen(app.listen(PORT));
@@ -128,6 +143,9 @@ io.on('connection', function (socket) {
   });
 });
 
+
+
+
 app.get('/api/loggedin', function (req, res) {
   var auth = req.isAuthenticated();
   if (auth) {
@@ -148,6 +166,13 @@ app.get('/api/logout', function (req, res) {
 //   app.use(cors());
 //   res.redirect('https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://localhost:8001');
 // })
+
+app.post('/createUser', function (req, res) {
+  console.log(req.body)
+  res.send({message:"ok"})
+})
+
+
 
 app.get('/auth/google', passport.authenticate('google', {scope: [
         'https://www.googleapis.com/auth/plus.login',

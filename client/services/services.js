@@ -12,6 +12,24 @@ angular.module('services', [])
 		};
 	})
 
+	.factory('userData', function ($http) {
+		var createUser = function(userData){
+			console.log("userdata", userData)
+			return $http({
+				method: "POST",
+				url: "/createUser",
+				data: userData
+			}).then(function(data){
+				console.log(data)
+			})
+
+		}
+
+		return {
+			createUser: createUser
+		}
+	})
+
 	.factory('getVideo', function ($window, $interval, $rootScope) {
 
 		var onYoutubeStateChange = function() {
