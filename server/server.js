@@ -188,7 +188,21 @@ app.post('/createUser', function (req, res) {
 })
 
 app.post('/login', function (req, res) {
-  res.send({message:"ok"})
+  controllers.findUserByUserName(req.body.userName, function (err, response) {
+    if(err){
+      console.log("Error in login router finding user by userName", err)
+    } else {
+      console.log(response)
+      if(response.length){
+        //will be a bcrypt check
+        if(req.body.password === response[0].password) {
+          res.send({loggedin : true})
+        }
+      } else {
+        res.send({loggedin : false})
+      }
+    }
+  })  
 })
 
 app.get('/auth/google', passport.authenticate('google', {scope: [
