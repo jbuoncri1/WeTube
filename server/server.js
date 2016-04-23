@@ -168,8 +168,23 @@ app.get('/api/logout', function (req, res) {
 // })
 
 app.post('/createUser', function (req, res) {
-  console.log(req.body)
-  res.send({message:"ok"})
+  controllers.findUserByUserName(req.body.userName, function (err, response){
+    if(err){
+      console.log("Error in router finding user by userName")
+    } else {
+      if(response.length){
+        res.send({created:false})
+      } else {
+        controllers.addUser(req.body, function (err, response){
+          if(err){
+            console.log("Error in router creating new user", req.body)
+          } else {
+            res.send({created:true})
+          }
+        })
+      }
+    }
+  })
 })
 
 

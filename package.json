@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "postinstall": "bower install --allow-root",
-    "installMainDb": "mysql -u root -p < server/db/schema/mainSchema.sql"
+    "installMainDb": "mysql -u root -p < server/db/schema/mainSchema.sql",
+    "updateDb": "mysql -u root -p < server/db/schema/updateSchema.sql"
   },
   "repository": {
     "type": "git",
