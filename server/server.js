@@ -79,14 +79,6 @@ app.use( passport.initialize());
 app.use( passport.session());
 
 
-// const myPlaintextPassword = 's0/\/\P4$$w0rD';
-// const someOtherPlaintextPassword = 'not_bacon';
-// // bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
-// bcrypt.hash(myPlaintextPassword, 10, function(err, hash) {
-//   bcrypt.compare(myPlaintextPassword, hash, function(err, res){
-//     console.log(res)
-//   })
-// });
 
 
 
@@ -175,18 +167,36 @@ app.post('/createUser', function (req, res) {
       if(response.length){
         res.send({created:false})
       } else {
-        controllers.addUser(req.body, function (err, response){
+
+        bcrypt.hash(req.body.password, 13, function(err, hash) {
           if(err){
-            console.log("Error in router creating new user", req.body)
+            console.log("Error hashing password", err)
           } else {
-            res.send({created:true})
+            req.body.password = hash
+            controllers.addUser(req.body, function (err, response){
+              if(err){
+                console.log("Error in router creating new user", req.body)
+              } else {
+                res.send({created:true})
+              }
+            })
+            
           }
         })
+
       }
     }
   })
 })
 
+// const myPlaintextPassword = 's0/\/\P4$$w0rD';
+// const someOtherPlaintextPassword = 'not_bacon';
+// // bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
+// bcrypt.hash(myPlaintextPassword, 10, function(err, hash) {
+//   bcrypt.compare(myPlaintextPassword, hash, function(err, res){
+//     console.log(res)
+//   })
+// });
 app.post('/login', function (req, res) {
   controllers.findUserByUserName(req.body.userName, function (err, response) {
     if(err){
@@ -195,11 +205,20 @@ app.post('/login', function (req, res) {
       console.log(response)
       if(response.length){
         //will be a bcrypt check
-        if(req.body.password === response[0].password) {
-          res.send({loggedin : true})
-        }
+        bcrypt.compare(req.body.password, response[0].password, function(err, bcryptResponse){
+          if(err){
+            console.log("Error in login comparing passwords")
+          } else {
+            if(bcryptResponse){
+              res.send({loggedin : true})
+            } else {
+              res.send({loggedin : false, message: "incorrect password"})
+            }
+            console.log(bcryptResponse)
+          }
+        })
       } else {
-        res.send({loggedin : false})
+        res.send({loggedin : false, message: "username not found"})
       }
     }
   })  
