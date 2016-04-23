@@ -13,19 +13,19 @@
 
         <md-input-container class = "md-block">
           <label>username</label>
-          <input ng-model = "login.userName" type="text">
+          <input ng-model = "loginData.userName" type="text">
         </md-input-container>
         <md-input-container class = "md-block">
           <label>display name</label>
-          <input ng-model = "login.displayName" type="text">
+          <input ng-model = "loginData.displayName" type="text">
         </md-input-container>        
         <md-input-container>
           <label>password</label>
-          <input ng-model = "login.password" type="text">
+          <input ng-model = "loginData.password" type="text">
         </md-input-container>
 
 
-        <md-button class="loginBtns md-raised md-primary">Login</md-button>
+        <md-button class="loginBtns md-raised md-primary" ng-click = "loginUser()">Login</md-button>
         <md-button class="loginBtns md-raised md-primary" ng-href='/auth/google'>Login With Google</md-button>
         <md-button class="loginBtns md-raised md-primary" ng-click = "createAccount()">Create An Account</md-button>
       </section> 

@@ -187,7 +187,9 @@ app.post('/createUser', function (req, res) {
   })
 })
 
-
+app.post('/login', function (req, res) {
+  res.send({message:"ok"})
+})
 
 app.get('/auth/google', passport.authenticate('google', {scope: [
         'https://www.googleapis.com/auth/plus.login',

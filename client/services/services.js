@@ -14,7 +14,6 @@ angular.module('services', [])
 
 	.factory('userData', function ($http) {
 		var createUser = function(userData){
-			console.log("userdata", userData)
 			return $http({
 				method: "POST",
 				url: "/createUser",
@@ -25,8 +24,19 @@ angular.module('services', [])
 
 		}
 
+		var loginUser = function(userData){
+			return $http({
+				method: "POST",
+				url: "/login",
+				data: userData
+			}).then(function(response){
+				return response.data
+			})
+		}
+
 		return {
-			createUser: createUser
+			createUser: createUser,
+			loginUser: loginUser
 		}
 	})
 
