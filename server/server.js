@@ -35,7 +35,7 @@ passport.deserializeUser(function(user, done) {
     if (err) {
       return err;
     } else {
-      done(null, record);
+      done(null, response);
     }    
   })
 });
@@ -48,7 +48,6 @@ passport.use(new GoogleStrategy({
 },
 function (request, accessToken, refreshToken, profile, done) {
   process.nextTick(function() {
-    console.log(profile.photos[0].value);
     // check for users in database here, if the database doesnt have that user, add them as a usermodel in mongo
     record = {'username': profile.email, 'displayName':profile.name.givenName, 'email': profile.email, 'profile_photo': profile.photos[0].value}
     // return done(null, record);
@@ -71,26 +70,9 @@ function (request, accessToken, refreshToken, profile, done) {
         }
       }
     })
-    // User.findOne({'id':profile.id}, function (err, record){
-    //   if (err){
-    //     return err;
-    //   }
-    //   // if the record exists and is found, return it
-    //   if (record) {
-    //     return done(null, record);
-    //   }
-    //   else {
-    //     User.create(record, function (err, record) {
-    //       if (err) {
-    //         throw err;
-    //       }
-    //       return done(null, record);
-    //     })
-    //   }
-    // });
   });
-}
-));
+}));
+
 app.use(cors());
 
 app.use( passport.initialize());
@@ -159,7 +141,7 @@ io.on('connection', function (socket) {
 app.get('/api/loggedin', function (req, res) {
   var auth = req.isAuthenticated();
   if (auth) {
-    console.log(req.user)
+    console.log("check logged in",req.user, req.session)
     res.send(req.user);
   }
   else
@@ -168,7 +150,7 @@ app.get('/api/loggedin', function (req, res) {
 
 app.get('/api/logout', function (req, res) {
   req.logout();
-  res.redirect('/#stream');
+  res.redirect('/#/stream');
 })
 
 
@@ -185,7 +167,6 @@ app.post('/createUser', function (req, res) {
       if(response.length){
         res.send({created:false, message: "I'm sorry that User Name is already taken"})
       } else {
-
         bcrypt.hash(req.body.password, 13, function(err, hash) {
           if(err){
             console.log("Error hashing password", err)
@@ -198,10 +179,8 @@ app.post('/createUser', function (req, res) {
                 res.send({created:true})
               }
             })
-            
           }
         })
-
       }
     }
   })
@@ -228,16 +207,18 @@ app.post('/login', function (req, res) {
           } else {
             if(bcryptResponse){
               //create the session
-              req.session.save(function(err){
+              req.login(response[0], function(err){
                 if(err){
-                  console.log("Error saving session at login", err)
+                  console.log("Error logging in at login", err)
+                } else {
+                  req.session.passport.user = response[0].id
+                  req.session.lastLocation = ["Homepage", new Date]
+                  res.send({loggedin : true})
                 }
               })
-              res.send({loggedin : true})
             } else {
               res.send({loggedin : false, message: "incorrect password"})
             }
-            console.log(bcryptResponse)
           }
         })
       } else {

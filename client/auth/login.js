@@ -1,5 +1,5 @@
 angular.module('login', [])
-	.controller("AuthController", function ($scope, OAuth, userData) {
+	.controller("AuthController", function ($scope, OAuth, userData, $location) {
 		$scope.loginData = {};
 
     $scope.createAccount = function(){
@@ -20,6 +20,7 @@ angular.module('login', [])
       .then(function (userInfo) {
         if(userInfo["loggedin"]){
           console.log("redirect")
+          $location.path("/stream")
         } else {
           console.log(userInfo["message"])
         }
