@@ -48,6 +48,9 @@ passport.use(new GoogleStrategy({
 },
 function (request, accessToken, refreshToken, profile, done) {
   process.nextTick(function() {
+  req.session.lastLocation = ["Homepage", new Date]
+    
+    
     // check for users in database here, if the database doesnt have that user, add them as a usermodel in mongo
     record = {'username': profile.email, 'displayName':profile.name.givenName, 'email': profile.email, 'profile_photo': profile.photos[0].value}
     // return done(null, record);
