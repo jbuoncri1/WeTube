@@ -20,7 +20,7 @@ var GOOGLE_CLIENT_ID = "1082022701969-rdl6108k798kf2apth302dcuornld9pg";
 var GOOGLE_CLIENT_SECRET = "rf5SxZAdcpha9sNXcN-QD3uq";
 var rooms = [];
 
-// identify which property defines user. this is the users google id which is a number
+// identify which property defines user. this is the users google id or sql id which are integers
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
@@ -31,13 +31,13 @@ passport.deserializeUser(function(user, done) {
   // var userRecord = mongoose query for user based on obj
   // if error, then call done(err);
   //obj should be the user record plucked from database
-  User.findOne({'id': user},function(err, record) {
+  controllers.findUserByUserName(user, function(err, response){
     if (err) {
       return err;
-    }
-    done(null, record);
+    } else {
+      done(null, record);
+    }    
   })
-  // done(null, user);
 });
 
 passport.use(new GoogleStrategy({
@@ -50,9 +50,27 @@ function (request, accessToken, refreshToken, profile, done) {
   process.nextTick(function() {
     console.log(profile.photos[0].value);
     // check for users in database here, if the database doesnt have that user, add them as a usermodel in mongo
-    record = {'id': profile.id, 'username': profile.name.givenName, 'email': profile.email, 'photo': profile.photos[0].value}
-    return done(null, record);
-
+    record = {'username': profile.email, 'displayName':profile.name.givenName, 'email': profile.email, 'profile_photo': profile.photos[0].value}
+    // return done(null, record);
+    controllers.findUserByUserName(record.username, function(err, response){
+      if(err){
+        console.log("Error finding user in GoogleStrategy", err)
+      } else {
+        if(response.length){
+          record.id = response[0].id
+          return done(null, record)
+        } else {
+          controllers.addUser(record, function (err, response){
+            if(err){
+              console.log("Error adding user in google Oauth", err)
+            } else {
+              record.id = response
+              return done(null, record)
+            }
+          })
+        }
+      }
+    })
     // User.findOne({'id':profile.id}, function (err, record){
     //   if (err){
     //     return err;
@@ -165,7 +183,7 @@ app.post('/createUser', function (req, res) {
       console.log("Error in router finding user by userName")
     } else {
       if(response.length){
-        res.send({created:false})
+        res.send({created:false, message: "I'm sorry that User Name is already taken"})
       } else {
 
         bcrypt.hash(req.body.password, 13, function(err, hash) {
@@ -202,7 +220,6 @@ app.post('/login', function (req, res) {
     if(err){
       console.log("Error in login router finding user by userName", err)
     } else {
-      console.log(response)
       if(response.length){
         //will be a bcrypt check
         bcrypt.compare(req.body.password, response[0].password, function(err, bcryptResponse){
@@ -210,6 +227,12 @@ app.post('/login', function (req, res) {
             console.log("Error in login comparing passwords")
           } else {
             if(bcryptResponse){
+              //create the session
+              req.session.save(function(err){
+                if(err){
+                  console.log("Error saving session at login", err)
+                }
+              })
               res.send({loggedin : true})
             } else {
               res.send({loggedin : false, message: "incorrect password"})

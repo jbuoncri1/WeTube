@@ -13,13 +13,14 @@ angular.module('services', [])
 	})
 
 	.factory('userData', function ($http) {
+
 		var createUser = function(userData){
 			return $http({
 				method: "POST",
 				url: "/createUser",
 				data: userData
-			}).then(function(data){
-				console.log(data)
+			}).then(function(response){
+				return response.data
 			})
 
 		}

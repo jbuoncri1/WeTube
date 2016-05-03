@@ -16,3 +16,7 @@ md-card {
 .loginBtns {
   min-width: 188px
 }
+
+.center {
+  text-align: center
+}
