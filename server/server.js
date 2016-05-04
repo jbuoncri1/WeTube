@@ -18,7 +18,7 @@ app.use(session({secret: "abstractedChalupas", cookie: {}, resave: false, saveUn
 
 var GOOGLE_CLIENT_ID = "1082022701969-rdl6108k798kf2apth302dcuornld9pg";
 var GOOGLE_CLIENT_SECRET = "rf5SxZAdcpha9sNXcN-QD3uq";
-var rooms = [];
+var rooms = {};
 
 // identify which property defines user. this is the users google id or sql id which are integers
 passport.serializeUser(function(user, done) {
@@ -48,9 +48,7 @@ passport.use(new GoogleStrategy({
 },
 function (request, accessToken, refreshToken, profile, done) {
   process.nextTick(function() {
-  req.session.lastLocation = ["Homepage", new Date]
-    
-    
+
     // check for users in database here, if the database doesnt have that user, add them as a usermodel in mongo
     record = {'username': profile.email, 'displayName':profile.name.givenName, 'email': profile.email, 'profile_photo': profile.photos[0].value}
     // return done(null, record);
@@ -97,7 +95,7 @@ var io = require('socket.io').listen(app.listen(PORT));
 app.use(express.static(__dirname+"/../client"));
 
 
-
+var uniqueId = 0
 //socket stuff (to be abstracted)
 io.on('connection', function (socket) {
   var connectedClients = [];
@@ -108,7 +106,9 @@ io.on('connection', function (socket) {
              'suggestedQuality': 'large'});
 
   socket.on('createRoom', function(data) {
-    rooms.push({room : data.room, roomTitle : data.roomTitle});
+    uniqueId++;
+
+    rooms[uniqueId] = {room : data.room, roomTitle : data.roomTitle};
     console.log("creating room", rooms);
     //joining room
     socket.join(data.room);
@@ -118,6 +118,11 @@ io.on('connection', function (socket) {
     socket.join(data.room);
     io.to(data.room).emit('newViewer', data);
   });
+
+  socket.on('disconnect', function(data){
+    console.log('user disconnected', data);
+  });
+
   //on hearing this event the server return sync data to all viewers
   socket.on('hostPlayerState', function (data) {
     console.log(data.room, "hostPlayerSync");
@@ -144,7 +149,7 @@ io.on('connection', function (socket) {
 app.get('/api/loggedin', function (req, res) {
   var auth = req.isAuthenticated();
   if (auth) {
-    console.log("check logged in",req.user, req.session)
+    req.session.lastLocation = ["Homepage", new Date]
     res.send(req.user);
   }
   else
@@ -203,20 +208,22 @@ app.post('/login', function (req, res) {
       console.log("Error in login router finding user by userName", err)
     } else {
       if(response.length){
+        var userData = response[0]
         //will be a bcrypt check
-        bcrypt.compare(req.body.password, response[0].password, function(err, bcryptResponse){
+        bcrypt.compare(req.body.password, userData.password, function(err, bcryptResponse){
+          delete userData["password"]
           if(err){
             console.log("Error in login comparing passwords")
           } else {
             if(bcryptResponse){
               //create the session
-              req.login(response[0], function(err){
+              req.login(userData, function(err){
                 if(err){
                   console.log("Error logging in at login", err)
                 } else {
-                  req.session.passport.user = response[0].id
+                  req.session.passport.user = userData.id
                   req.session.lastLocation = ["Homepage", new Date]
-                  res.send({loggedin : true})
+                  res.send({loggedin : true, userData: userData})
                 }
               })
             } else {

@@ -17,12 +17,12 @@ angular.module('login', [])
 
     $scope.loginUser = function () {
       userData.loginUser($scope.loginData)
-      .then(function (userInfo) {
-        if(userInfo["loggedin"]){
-          console.log("redirect")
+      .then(function (response) {
+        if(response["loggedin"]){
+          userData.updateUserData(response.userData)
           $location.path("/stream")
         } else {
-          console.log(userInfo["message"])
+          $scope.message = response.message
         }
       })
     }

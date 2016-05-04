@@ -13,6 +13,7 @@ angular.module('services', [])
 	})
 
 	.factory('userData', function ($http) {
+		var userData = {}
 
 		var createUser = function(userData){
 			return $http({
@@ -35,9 +36,19 @@ angular.module('services', [])
 			})
 		}
 
+		var updateUserData = function(newUserData){
+			userData = newUserData
+		}
+
+		var getUserData = function(){
+			return userData
+		}
+
 		return {
 			createUser: createUser,
-			loginUser: loginUser
+			loginUser: loginUser,
+			updateUserData: updateUserData,
+			getUserData: getUserData
 		}
 	})
 

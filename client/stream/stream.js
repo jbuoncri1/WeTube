@@ -30,8 +30,8 @@ angular.module('stream', [])
 			$scope.videoId += url[1] 
 			//pass in true since they are the host
 			getVideo.setupPlayer($scope.videoId, true)			
-			$scope.user = "Bob"
 		};
+		
 		$scope.logout = function() {
 			return $http({
 				method: "GET",
@@ -42,7 +42,6 @@ angular.module('stream', [])
 		$scope.joinStream = function(videoId){
 			//pass in false since they are a viewer
 			getVideo.setupPlayer(videoId, false)
-			$scope.user = "Not Bob"
 		}
 
 		$scope.submitMessage = function(keyCode){
