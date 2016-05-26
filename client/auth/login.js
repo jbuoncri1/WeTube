@@ -1,5 +1,5 @@
 angular.module('login', [])
-	.controller("AuthController", function ($scope, OAuth, userData, $location) {
+	.controller("AuthController", function ($scope, OAuth, userData, $state) {
 		$scope.loginData = {};
 
     $scope.createAccount = function(){
@@ -7,7 +7,6 @@ angular.module('login', [])
       userData.createUser($scope.loginData)
       .then(function(response){
         if(response["created"]){
-          console.log("logging in")
           $scope.loginUser()
         } else {
           $scope.message = response.message
@@ -20,7 +19,7 @@ angular.module('login', [])
       .then(function (response) {
         if(response["loggedin"]){
           userData.updateUserData(response.userData)
-          $location.path("/stream")
+          $state.go("stream")
         } else {
           $scope.message = response.message
         }

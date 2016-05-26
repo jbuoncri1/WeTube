@@ -1,4 +1,4 @@
-app.config(function($routeProvider, $sceDelegateProvider){
+app.config(function($routeProvider,$stateProvider, $urlRouterProvider, $sceDelegateProvider){
 
 	var checkLoggedin = function($q, $http, $location, $rootScope) {
        var deferred = $q.defer();
@@ -16,28 +16,26 @@ app.config(function($routeProvider, $sceDelegateProvider){
        return deferred.promise;
      };
 
-	$routeProvider
-    .when("/homepage", {
+  $urlRouterProvider.otherwise("/")
+
+	$stateProvider
+    .state("home", {
+      url: "/home",
       templateUrl:"",
       controller:"",
-      resolve: {
-        loggedin: checkLoggedin
-      }
     })
-		.when("/stream", {
+		.state("stream", {
+      url: "/stream",
 			templateUrl: "stream/stream.html",
 			controller: "StreamController",
-      resolve: {
-         loggedin: checkLoggedin
-       }
+      authenticate: true
 		})
-		.when("/", {
+		.state("login", {
+      url: "/",
 			templateUrl: "auth/login.html",
 			controller: "AuthController"
 		})
-		.otherwise({
-			redirectTo: '/'
-		})
+
 
 	$sceDelegateProvider.resourceUrlWhitelist([
     // Allow same origin resource loads.

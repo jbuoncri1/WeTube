@@ -12,6 +12,27 @@ angular.module('services', [])
 		};
 	})
 
+	.factory('auth', function ($http){
+
+		var checkLoggedIn = function (token, nextLocation) {
+			return false
+		}
+
+		var isAuthenticated = function(){
+			return false
+		}
+
+		var updateLocation = function(){
+
+		}
+		return {
+			checkLoggedIn: checkLoggedIn,
+			isAuthenticated: isAuthenticated,
+			updateLocation: updateLocation
+		}
+
+	})
+
 	.factory('userData', function ($http) {
 		var userData = {}
 
