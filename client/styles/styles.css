@@ -1,9 +1,5 @@
 body {
-  background-color: #eee;
-}
-
-md-card {
-	background-color:#fff
+  background-color: rgb(63,81,181);
 }
 
 .cardContainer {
@@ -19,4 +15,15 @@ md-card {
 
 .center {
   text-align: center
+}
+
+.sidenav {
+  background-color: rgb(180,180,180);
+  overflow: scroll-hidden;
+  min-width: 170px;
+}
+
+.friend {
+  min-height: 50px;
+  background-color: rgb(200,200,200);
 }

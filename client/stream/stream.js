@@ -7,6 +7,7 @@ angular.module('stream', [])
 		$scope.messages = getVideo.messages;
 		$scope.rooms = [];
 		$scope.userData = userData.getUserData();
+		$scope.toolbars = true;
 
 		$scope.clearUrl = function(){
 			$scope.url = ''

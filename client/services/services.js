@@ -19,7 +19,7 @@ angular.module('services', [])
 		}
 
 		var isAuthenticated = function(){
-			return false
+			return true
 		}
 
 		var updateLocation = function(){

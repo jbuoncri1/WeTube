@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngRoute', 'login', 'stream', 'services', 'ngMaterial', 'ui.router']);
+var app = angular.module('app', ['ngRoute', 'login', 'stream', 'services', 'ngMaterial', 'ui.router', 'homepage']);
 
 app.run(function ($rootScope, $state, auth) {
   $rootScope.$on("$stateChangeStart", function (event, toState) {
@@ -7,7 +7,6 @@ app.run(function ($rootScope, $state, auth) {
         auth.updateLocation(toState.name)
       } else {
         if(!auth.checkLoggedIn(toState.name)){
-          console.log("redirecting")
           $state.transitionTo("login")
           event.preventDefault();
         }

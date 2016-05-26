@@ -19,7 +19,7 @@ angular.module('login', [])
       .then(function (response) {
         if(response["loggedin"]){
           userData.updateUserData(response.userData)
-          $state.go("stream")
+          $state.go("home.stream")
         } else {
           $scope.message = response.message
         }

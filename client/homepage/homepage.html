@@ -1,0 +1,32 @@
+<md-content layout = "column" style = "height:100vh">  
+  <md-toolbar layout = "row" >
+    <span flex = "5"></span><h1>WeTube</h1> 
+    <span flex></span>
+    <div layout = "column">
+      <span flex></span>
+      <md-button layout-align = "center" class="md-button" aria-label="Settings" ng-href = '/api/logout'>
+        <img class="png-icon" src="styles/ic_exit_to_app_black_24dp_2x.png" >
+      </md-button>  
+      <span flex></span>
+   </div>
+    <span flex = "5"></span>
+  </md-toolbar>
+
+  <div layout = "row" flex>
+    <md-sidenav md-is-locked-open = "true" class = "sidenav" flex = "20">
+      <h2> Friends List </h2>
+      <md-card ng-repeat = "friend in friends" class = "friend">
+        <md-card-content>
+          <div layout = "row">
+              <div></div>
+              <label>{{friend.name}}</label>
+              <span flex></span><span style = "float:right">5 min ago</span>
+          </div>
+        </md-card-content>
+      <md-card>
+    </md-sidenav>
+
+
+    <div ui-view flex></div>
+  </div>
+</md-content>  

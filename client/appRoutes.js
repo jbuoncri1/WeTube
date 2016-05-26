@@ -21,10 +21,10 @@ app.config(function($routeProvider,$stateProvider, $urlRouterProvider, $sceDeleg
 	$stateProvider
     .state("home", {
       url: "/home",
-      templateUrl:"",
-      controller:"",
+      templateUrl:"homepage/homepage.html",
+      controller:"HomepageController",
     })
-		.state("stream", {
+		.state("home.stream", {
       url: "/stream",
 			templateUrl: "stream/stream.html",
 			controller: "StreamController",
