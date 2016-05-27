@@ -1,5 +1,5 @@
 <md-content layout = "column" style = "height:100vh" ng-keydown="changeSelected()">  
-  <md-toolbar layout = "row" style = "max-height:100px">
+  <md-toolbar layout = "row">
     <span flex = "5"></span><h1>WeTube</h1>
     <span flex></span>
     <div layout = "column">
@@ -14,7 +14,7 @@
             <img layout-align = "center" class="material-icons toolbar" src = "/styles/search.png">
           </div>
           <span flex></span>
-            <div class = "searchMenu">
+            <div class = "menuItem">
               <div class = "searchBox" ng-repeat = "option in searchOptions track by $index" ng-mouseover = "select($index)" ng-class = "{selected:option.selected}">
                 <p>search {{searchQuery}} {{option}}</p>
               </div>
@@ -30,10 +30,14 @@
     <span flex = "5"></span>
   </md-toolbar>
 
-  <div layout = "row" flex>
+
+  <div layout = "row" flex style = "z-index:1">
     <md-sidenav md-is-locked-open = "true" class = "sidenav background" flex = "20">
+    <md-toolbar>
       <h2> Friends List </h2>
-      <md-card ng-repeat = "friend in friends" class = "friend md-button">
+    </md-toolbar>
+    <md-content>
+      <md-card ng-repeat = "friend in friends" class = "friend">
         <md-card-content>
           <div layout = "row">
             <label>{{friend.name}}</label>
@@ -42,6 +46,7 @@
           </div>
         </md-card-content>
       <md-card>
+    </md-content>
     </md-sidenav>
 
 
