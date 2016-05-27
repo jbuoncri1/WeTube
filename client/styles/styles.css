@@ -1,4 +1,4 @@
-body {
+body, #loginBackground {
   background-color: rgb(63,81,181);
 }
 
@@ -18,12 +18,14 @@ body {
 }
 
 .sidenav {
-  background-color: rgb(180,180,180);
   min-width: 170px;
 }
-
-md-content{
+.background, md-content{
   background-color: rgb(180,180,180);
+}
+
+.content{
+  background-color: rgb(200,200,200);
 }
 
 .toolbar{
