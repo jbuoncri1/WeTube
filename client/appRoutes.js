@@ -31,7 +31,7 @@ app.config(function($routeProvider,$stateProvider, $urlRouterProvider, $sceDeleg
       authenticate: true
 		})
     .state("home.search", {
-      url: "/search",
+      url: "/search/:searchQuery",
       templateUrl: "search/search.html",
       controller:"SearchController",
       params: {

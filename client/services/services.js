@@ -79,7 +79,7 @@ angular.module('services', [])
 				method: "GET",
 				url :"searchYoutube/" + searchQuery
 			}).then(function(response){
-				console.log(response.data)
+				return response.data.items
 			})
 		}
 
