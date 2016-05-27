@@ -15,8 +15,8 @@
           </div>
           <span flex></span>
             <div class = "menuItem">
-              <div class = "searchBox" ng-repeat = "option in searchOptions track by $index" ng-mouseover = "select($index)" ng-class = "{selected:option.selected}">
-                <p>search {{searchQuery}} {{option.name}}</p>
+              <div class = "searchBox" ng-repeat = "option in searchOptions track by $index" ng-mouseover = "select($index)" ng-class = "{selected:option.selected}" ng-click = "fullSearch(option.name)">
+                <p>search {{searchQuery}} {{option.article}} {{option.name}}</p>
               </div>
             </div>
         </div>
@@ -32,21 +32,23 @@
 
 
   <div layout = "row" flex style = "z-index:1">
-    <md-sidenav md-is-locked-open = "true" class = "sidenav background" flex = "20">
-    <md-toolbar>
-      <h2> Friends List </h2>
-    </md-toolbar>
-    <md-content>
-      <md-card ng-repeat = "friend in friends" class = "friend">
-        <md-card-content>
-          <div layout = "row">
-            <label>{{friend.name}}</label>
-            <span flex></span>
-            <span style = "float:right">5 min ago</span>
-          </div>
-        </md-card-content>
-      <md-card>
-    </md-content>
+    <md-sidenav md-is-locked-open = "true" class = "sidenav background shadow" flex = "20">
+      <md-toolbar layout = "row">
+        <span flex></span>
+        <h4 class = "center"> Friends </h4>
+        <span flex></span>
+      </md-toolbar>
+      <md-content>
+        <md-card ng-repeat = "friend in friends" class = "friend">
+          <md-card-content>
+            <div layout = "row">
+              <label>{{friend.name}}</label>
+              <span flex></span>
+              <span style = "float:right">5 min ago</span>
+            </div>
+          </md-card-content>
+        <md-card>
+      </md-content>
     </md-sidenav>
 
 

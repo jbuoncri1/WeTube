@@ -30,6 +30,16 @@ app.config(function($routeProvider,$stateProvider, $urlRouterProvider, $sceDeleg
 			controller: "StreamController",
       authenticate: true
 		})
+    .state("home.search", {
+      url: "/search",
+      templateUrl: "search/search.html",
+      controller:"SearchController",
+      params: {
+        searchQuery: "",
+        searchType: ""
+      },
+      authenticate:true
+    })
 		.state("login", {
       url: "/",
 			templateUrl: "auth/login.html",

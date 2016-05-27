@@ -1,8 +1,9 @@
 angular.module("homepage", [])
 
-.controller("HomepageController", function ($scope){
+.controller("HomepageController", function ($scope, $state){
   $scope.friends = [{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"}]
-  $scope.searchOptions;
+
+
   $scope.changeSelected = function(){
     $scope.searchOptions = ["in people", "by email", "on youtube", "by youtube url"]
 
@@ -10,7 +11,7 @@ angular.module("homepage", [])
 
   $scope.displayOptions = function(){
     if($scope.searchQuery.length){
-      $scope.searchOptions = [{name:"in people"}, {name:"by email"}, {name:"on youtube"}, {name:"by youtube url"}]
+      $scope.searchOptions = [{name:"people", article:"in"}, {name:"email",article:"by"}, {name:"youtube",article:"on"}, {name:"youtube url", article:"by"}]
     } else {
       $scope.searchOptions = []
     }
@@ -40,5 +41,10 @@ angular.module("homepage", [])
         $scope.select(newSelect)
       }
     }
+  }
+
+  $scope.fullSearch = function(searchType){
+    $scope.searchOptions = []
+    $state.go('home.search', {searchQuery: $scope.searchQuery, searchType: searchType})
   }
 })
