@@ -73,6 +73,21 @@ angular.module('services', [])
 		}
 	})
 
+	.factory('search', function($http){
+		var searchYoutube = function(searchQuery){
+			return $http({
+				method: "GET",
+				url :"searchYoutube/" + searchQuery
+			}).then(function(response){
+				console.log(response.data)
+			})
+		}
+
+		return{
+			searchYoutube
+		}
+	})
+
 	.factory('getVideo', function ($window, $interval, $rootScope) {
 
 		var onYoutubeStateChange = function() {
