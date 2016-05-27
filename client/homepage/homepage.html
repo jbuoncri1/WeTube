@@ -16,7 +16,7 @@
           <span flex></span>
             <div class = "menuItem">
               <div class = "searchBox" ng-repeat = "option in searchOptions track by $index" ng-mouseover = "select($index)" ng-class = "{selected:option.selected}">
-                <p>search {{searchQuery}} {{option}}</p>
+                <p>search {{searchQuery}} {{option.name}}</p>
               </div>
             </div>
         </div>
