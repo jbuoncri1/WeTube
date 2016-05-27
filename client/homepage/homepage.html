@@ -1,12 +1,30 @@
-<md-content layout = "column" style = "height:100vh">  
-  <md-toolbar layout = "row" >
-    <span flex = "5"></span><h1>WeTube</h1> 
+<md-content layout = "column" style = "height:100vh" ng-keydown="changeSelected()">  
+  <md-toolbar layout = "row" style = "max-height:100px">
+    <span flex = "5"></span><h1>WeTube</h1>
     <span flex></span>
     <div layout = "column">
       <span flex></span>
-      <md-button layout-align = "center" class="md-button" aria-label="Settings" ng-href = '/api/logout'>
-        <img class="png-icon" src="styles/ic_exit_to_app_black_24dp_2x.png" >
-      </md-button>  
+      <div layout = "row">
+
+        <!-- search bar -->
+        <div layout = "column">
+          <span flex></span>
+          <div layout = "row">
+            <input ng-model = "searchQuery" ng-change = "displayOptions()" >
+            <img layout-align = "center" class="material-icons toolbar" src = "/styles/search.png">
+          </div>
+          <span flex></span>
+            <div class = "searchMenu">
+              <div class = "searchBox" ng-repeat = "option in searchOptions track by $index" ng-mouseover = "select($index)" ng-class = "{selected:option.selected}">
+                <p>search {{searchQuery}} {{option}}</p>
+              </div>
+            </div>
+        </div>
+
+        <md-button class="md-button" aria-label="Settings" ng-href = '/api/logout'>
+          <img class="png-icon" src="styles/ic_exit_to_app_black_24dp_2x.png" >
+        </md-button>  
+      </div>
       <span flex></span>
    </div>
     <span flex = "5"></span>
@@ -15,12 +33,12 @@
   <div layout = "row" flex>
     <md-sidenav md-is-locked-open = "true" class = "sidenav" flex = "20">
       <h2> Friends List </h2>
-      <md-card ng-repeat = "friend in friends" class = "friend">
+      <md-card ng-repeat = "friend in friends" class = "friend md-button">
         <md-card-content>
           <div layout = "row">
-              <div></div>
-              <label>{{friend.name}}</label>
-              <span flex></span><span style = "float:right">5 min ago</span>
+            <label>{{friend.name}}</label>
+            <span flex></span>
+            <span style = "float:right">5 min ago</span>
           </div>
         </md-card-content>
       <md-card>

@@ -1,20 +1,12 @@
 <md-content>
   <div>
-    <div ng-init = "getRooms()" ng-show = "!inRoom">
-      <input ng-model = "url"></input>
-      <h3>
-        User Data:
-        {{userData}}
-      </h3>
-      <button ng-click = "inRoom = !inRoom; submitUrl(url);">Submit</button>
-      <p ng-repeat = "room in rooms" ng-click = "$parent.inRoom = !$parent.inRoom; joinStream(room.room)">{{room.roomTitle}} No! Click me</p>
-    </div>
+
 
     <!-- where the player gets added -->
     <div id="player"></div>
 
     <!-- where the messager goes when we're in room -->
-    <div ng-show = "inRoom">
+    <div ng-show = "bool">
 
       <input class = "messanger" ng-model = "message" ng-keyup="submitMessage($event.keyCode)"></input>
 

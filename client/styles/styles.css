@@ -19,11 +19,37 @@ body {
 
 .sidenav {
   background-color: rgb(180,180,180);
-  overflow: scroll-hidden;
   min-width: 170px;
+}
+
+md-content{
+  background-color: rgb(180,180,180);
+}
+
+.toolbar{
+  max-height: 48px; 
+  margin-top:-5px;
 }
 
 .friend {
   min-height: 50px;
   background-color: rgb(200,200,200);
+}
+
+.searchMenu{
+  position: fixed;
+}
+
+.searchBox{
+  background-color: rgb(220,220,220);
+  border: 1px solid gray;
+  width:40vh;
+  transition:background-color .3s ease-in-out;
+}
+
+.searchBox.selected{
+  background-color: rgb(180,180,180);
+}
+.searchBox:hover{
+  background-color: rgb(180,180,180);
 }
