@@ -1,8 +1,8 @@
 <md-content class = "subView">
   <md-card ng-repeat = "result in searchResults" class = "searchResult">
     <md-card-content layout = "row">
-      <img src="{{result.snippet.thumbnails.default.url}}">
-      <label>{{result.snippet.title}}</label>
+      <img class = "thumbnail" src="{{result.snippet.thumbnails.default.url}}">
+      <p>{{result.snippet.title}}</p>
     </md-card-content>
   </md-card>
 </md-content>
