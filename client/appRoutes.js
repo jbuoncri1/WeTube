@@ -20,15 +20,20 @@ app.config(function($routeProvider,$stateProvider, $urlRouterProvider, $sceDeleg
 
 	$stateProvider
     .state("home", {
-      url: "/home",
+      url: "",
       templateUrl:"homepage/homepage.html",
       controller:"HomepageController",
     })
 		.state("home.stream", {
-      url: "/stream",
+      url: "/stream/:roomId",
 			templateUrl: "stream/stream.html",
 			controller: "StreamController",
-      authenticate: true
+      authenticate: true,
+      params: {
+        roomId:"",
+        host: false,
+        currentVideo: ""
+      }
 		})
     .state("home.search", {
       url: "/search/:searchQuery",
@@ -41,7 +46,7 @@ app.config(function($routeProvider,$stateProvider, $urlRouterProvider, $sceDeleg
       authenticate:true
     })
 		.state("login", {
-      url: "/",
+      url: "/login",
 			templateUrl: "auth/login.html",
 			controller: "AuthController"
 		})

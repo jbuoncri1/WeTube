@@ -1,6 +1,6 @@
 angular.module("search", [])
 
-.controller("SearchController", function ($scope, $stateParams, search){
+.controller("SearchController", function ($scope, $stateParams, search, $state, getVideo){
   $scope.searchResults;
   console.log($stateParams, "search params")
   
@@ -8,4 +8,8 @@ angular.module("search", [])
     console.log(searchResults)
     $scope.searchResults = searchResults
   })
+
+  $scope.buildRoom = function(videoId, videoTitle){
+    getVideo.submitRoom(videoId, videoTitle, true)
+  }
 })

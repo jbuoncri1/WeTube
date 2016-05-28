@@ -1,5 +1,5 @@
 angular.module('stream', [])
-	.controller('StreamController', function ($scope, $http, getVideo, userData) {
+	.controller('StreamController', function ($scope, $http, getVideo, userData, $stateParams) {
 		$scope.videoId = "";
 		$scope.startTime = 120;
 		//set messages to the factory array of messages since that is where
@@ -8,6 +8,10 @@ angular.module('stream', [])
 		$scope.rooms = [];
 		$scope.userData = userData.getUserData();
 		$scope.toolbars = true;
+
+		if($stateParams.host){
+			getVideo.setupPlayer($stateParams.currentVideo, true)
+		}
 
 		$scope.clearUrl = function(){
 			$scope.url = ''
@@ -25,6 +29,10 @@ angular.module('stream', [])
        console.log("Error finding rooms",error);
 			});
 		};
+
+		$scope.addVideo = function(videoId){
+			getVideo.setupPlayer(videoId, true);
+		}
 
 		$scope.submitUrl = function(url){
 			url = url.split("v=")

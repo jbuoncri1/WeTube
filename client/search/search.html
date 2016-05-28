@@ -1,5 +1,5 @@
 <md-content class = "subView">
-  <md-card ng-repeat = "result in searchResults" class = "searchResult">
+  <md-card ng-repeat = "result in searchResults" class = "searchResult" ng-click = "buildRoom(result.id.videoId, result.snippet.title)" >
     <md-card-content layout = "row">
       <img class = "thumbnail" src="{{result.snippet.thumbnails.default.url}}">
       <p>{{result.snippet.title}}</p>

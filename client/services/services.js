@@ -84,11 +84,11 @@ angular.module('services', [])
 		}
 
 		return{
-			searchYoutube
+			searchYoutube: searchYoutube
 		}
 	})
 
-	.factory('getVideo', function ($window, $interval, $rootScope) {
+	.factory('getVideo', function ($window, $interval, $rootScope, bcrypt, userData, $state) {
 
 		var onYoutubeStateChange = function() {
 			console.log('state change!')
@@ -135,28 +135,34 @@ angular.module('services', [])
 				videoId: videoId,
 				events: {
 					'onStateChange': onYoutubeStateChange,
-					'onReady' : submitRoom
 				}
 			});
 		}
 
 			//sets up the socket stream and events
-		var submitRoom = function(){
+		var submitRoom = function(videoId, videoTitle, host){
 			$window.socket = io.connect('http://localhost:8001');
 
+
+			var displayName = userData.getUserData().displayName
+
 			if(host){
-				var videoTitle = $window.youtubePlayer.getVideoData().title
-				socket.emit('createRoom',{room : videoId, roomTitle : videoTitle});
-				
-				socket.on('newViewer', function(data){
-					if($window.youtubePlayer.getCurrentTime() > 0)
-					socket.emit('hostPlayerState',
-					{
-						currentTime: $window.youtubePlayer.getCurrentTime(),
-						currentState: $window.youtubePlayer.getPlayerState(),
-						room : videoId
-					});
-				})
+				bcrypt.hash(displayName, 8, function(err, hash) {
+					socket.emit('createRoom',{room : hash, roomTitle : videoTitle});
+					$state.go("home.stream", {roomId: hash, currentVideo:videoId, host:true})
+
+					setupPlayer(videoId, true)
+
+					socket.on('newViewer', function(data){
+						if($window.youtubePlayer.getCurrentTime() > 0)
+						socket.emit('hostPlayerState',
+						{
+							currentTime: $window.youtubePlayer.getCurrentTime(),
+							currentState: $window.youtubePlayer.getPlayerState(),
+							room : videoId
+						});
+					})
+				});
 			}
 
 			//makes the viewers synch to the host whenever the host emits a time event
@@ -211,6 +217,7 @@ angular.module('services', [])
 		return {
 			setupPlayer: setupPlayer,
 			submitMessage : submitMessage,
-			messages : messages
+			messages : messages,
+			submitRoom: submitRoom
 		};
 	})
