@@ -34,7 +34,7 @@ passport.deserializeUser(function(user, done) {
   // var userRecord = mongoose query for user based on obj
   // if error, then call done(err);
   //obj should be the user record plucked from database
-  controllers.findUserByUserName(user, function(err, response){
+  controllers.findUserByEmail(user, function(err, response){
     if (err) {
       return err;
     } else {
@@ -55,7 +55,7 @@ function (request, accessToken, refreshToken, profile, done) {
     // check for users in database here, if the database doesnt have that user, add them as a usermodel in mongo
     record = {'username': profile.email, 'displayName':profile.name.givenName, 'email': profile.email, 'profile_photo': profile.photos[0].value}
     // return done(null, record);
-    controllers.findUserByUserName(record.username, function(err, response){
+    controllers.findUserByEmail(record.username, function(err, response){
       if(err){
         console.log("Error finding user in GoogleStrategy", err)
       } else {

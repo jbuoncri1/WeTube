@@ -24,9 +24,9 @@ module.exports = function(app, express){
   })
 
   app.post('/createUser', function (req, res) {
-    controllers.findUserByUserName(req.body.userName, function (err, response){
+    controllers.findUserByEmail(req.body.email, function (err, response){
       if(err){
-        console.log("Error in router finding user by userName")
+        console.log("Error in router finding user by email")
       } else {
         if(response.length){
           res.send({created:false, message: "I'm sorry that User Name is already taken"})
@@ -59,9 +59,9 @@ module.exports = function(app, express){
   //   })
   // });
   app.post('/login', function (req, res) {
-    controllers.findUserByUserName(req.body.userName, function (err, response) {
+    controllers.findUserByEmail(req.body.email, function (err, response) {
       if(err){
-        console.log("Error in login router finding user by userName", err)
+        console.log("Error in login router finding user by email", err)
       } else {
         if(response.length){
           var userData = response[0]
@@ -88,7 +88,7 @@ module.exports = function(app, express){
             }
           })
         } else {
-          res.send({loggedin : false, message: "username not found"})
+          res.send({loggedin : false, message: "email not found"})
         }
       }
     })  
