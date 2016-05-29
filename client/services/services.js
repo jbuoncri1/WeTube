@@ -172,8 +172,8 @@ angular.module('services', [])
 			if(host){
 				bcrypt.hash(displayName, 8, function(err, hash) {
 					roomId = hash
-					socket.emit('createRoom',{room : room, roomTitle : videoTitle});
-					$state.go("home.stream", {roomId: room, currentVideo:videoId, host:true})
+					socket.emit('createRoom',{room : roomId, roomTitle : videoTitle});
+					$state.go("home.stream", {roomId: roomId, currentVideo:videoId, host:true})
 
 					setupPlayer(videoId, true)
 
@@ -181,7 +181,7 @@ angular.module('services', [])
 						console.log("newViewer")
 						socket.emit('currentVideo',{
 							currentVideo: currentVideo,
-							roomId : room
+							roomId : roomId
 						});
 
 						if($window.youtubePlayer.getCurrentTime() > 0)
@@ -189,7 +189,7 @@ angular.module('services', [])
 						{
 							currentTime: $window.youtubePlayer.getCurrentTime(),
 							currentState: $window.youtubePlayer.getPlayerState(),
-							room : room
+							room : roomId
 						});
 					})
 				});

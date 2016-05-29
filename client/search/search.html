@@ -1,8 +1,32 @@
 <md-content class = "subView">
-  <md-card ng-repeat = "result in searchResults" class = "searchResult" ng-click = "buildRoom(result.id.videoId, result.snippet.title)" >
+
+  <md-card ng-show = "searchType === 'youtube'" ng-repeat = "result in searchResults" class = "searchResult" ng-click = "buildRoom(result.id.videoId, result.snippet.title)" >
     <md-card-content layout = "row">
       <img class = "thumbnail" src="{{result.snippet.thumbnails.default.url}}">
       <p>{{result.snippet.title}}</p>
     </md-card-content>
   </md-card>
+
+  <div ng-show = "searchType === 'people' || 'email'" layout = "row">
+    <span flex></span>
+    <div layout = "column">
+      <md-card ng-repeat = "result in searchResults" class = "personResult">
+        <md-card-content layout = "row">
+        <img class = "thumbnail"/>
+        <div layout = "column">
+          <h3> {{result.displayName}} </h3>
+          <h4> {{result.email}} </h4>
+        </div>
+        <span flex></span>
+        <div layout = "column">
+          <span flex></span>
+          <h4>Add as friend</h4>
+          <span flex></span>
+        </div>
+        </md-card-content>
+      </md-card>
+    </div>
+  <span flex></span>
+  </div>
+
 </md-content>
