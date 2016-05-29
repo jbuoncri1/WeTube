@@ -34,7 +34,7 @@ angular.module('services', [])
 	})
 
 	.factory('userData', function ($http) {
-		var userData = {}
+		var userData = {displayName:"a"}
 
 		var createUser = function(userData){
 			return $http({
@@ -109,7 +109,7 @@ angular.module('services', [])
 		};
 
 		var host = false; 
-		var videoId = '';
+		var currentVideo = '';
 		var messages = [];
 
 		//at the end of setupPlayer onYouTubeIframeAPIReady is automatically called
@@ -140,26 +140,34 @@ angular.module('services', [])
 		}
 
 			//sets up the socket stream and events
-		var submitRoom = function(videoId, videoTitle, host){
+		var submitRoom = function(videoId, videoTitle, host, roomId){
+
 			$window.socket = io.connect('http://localhost:8001');
+			currentVideo = videoId
 
-
-			var displayName = userData.getUserData().displayName
+			var displayName = userData.getUserData().displayName 
 
 			if(host){
 				bcrypt.hash(displayName, 8, function(err, hash) {
+					console.log("hash", hash)
 					socket.emit('createRoom',{room : hash, roomTitle : videoTitle});
 					$state.go("home.stream", {roomId: hash, currentVideo:videoId, host:true})
 
 					setupPlayer(videoId, true)
 
 					socket.on('newViewer', function(data){
+						console.log("newViewer")
+						socket.emit('currentVideo',{
+							currentVideo: currentVideo,
+							roomId : hash
+						});
+
 						if($window.youtubePlayer.getCurrentTime() > 0)
 						socket.emit('hostPlayerState',
 						{
 							currentTime: $window.youtubePlayer.getCurrentTime(),
 							currentState: $window.youtubePlayer.getPlayerState(),
-							room : videoId
+							room : hash
 						});
 					})
 				});
@@ -169,7 +177,12 @@ angular.module('services', [])
 			//recieves this event from the server when the server hears the hostPlayerState
 			//even
 			if(!host){
-				socket.emit ('joinRoom', {room: videoId});
+				socket.emit ('joinRoom', {room: roomId});
+
+				socket.on("currentVideo", function(data){
+					console.log("got data", data)
+					setupPlayer(data.currentVideo, false)
+				})
 
 				socket.on("hostPlayerSync", function(data){
 					console.log(data, "hostPlayerSync -- viewer")

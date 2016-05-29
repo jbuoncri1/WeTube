@@ -16,7 +16,7 @@ app.config(function($routeProvider,$stateProvider, $urlRouterProvider, $sceDeleg
        return deferred.promise;
      };
 
-  $urlRouterProvider.otherwise("/")
+  $urlRouterProvider.otherwise("/login")
 
 	$stateProvider
     .state("home", {

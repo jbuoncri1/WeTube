@@ -11,7 +11,10 @@ angular.module('stream', [])
 
 		if($stateParams.host){
 			getVideo.setupPlayer($stateParams.currentVideo, true)
+		} else {
+			getVideo.submitRoom('', '', false, $stateParams.roomId)
 		}
+		console.log("params", $stateParams)
 
 		$scope.clearUrl = function(){
 			$scope.url = ''

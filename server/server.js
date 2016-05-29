@@ -117,6 +117,11 @@ io.on('connection', function (socket) {
     socket.join(data.room);
   })
 
+  socket.on('currentVideo', function(data){
+    console.log(data, "currentVideo")
+    io.to(data.roomId).emit('currentVideo', data)
+  })
+
   socket.on('joinRoom', function(data) {
     socket.join(data.room);
     io.to(data.room).emit('newViewer', data);
