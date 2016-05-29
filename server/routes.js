@@ -106,6 +106,29 @@ module.exports = function(app, express){
     });
   })
 
+  app.get("/searchByEmail/:searchQuery", function (req, res){
+    var searchQuery = req.params.searchQuery
+    controllers.findUserByEmail(searchQuery, function (err, response){
+      if(err){
+        console.log("error in routes finding user by email", err)
+        res.send(500)
+      } else {
+        res.send(response)
+      }
+    })
+  })
+  app.get("/searchByDisplayName/:searchQuery", function (req, res){
+    var searchQuery = req.params.searchQuery
+    controllers.findUserByDisplayName(searchQuery, function (err, response){
+      if(err){
+        console.log("error in routes finding user by display name", err)
+        res.send(500)
+      } else {
+        res.send(response)
+      }
+    })
+  })
+
   app.get('/auth/google', passport.authenticate('google', {scope: [
           'https://www.googleapis.com/auth/plus.login',
           'https://www.googleapis.com/auth/plus.profile.emails.read']

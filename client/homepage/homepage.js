@@ -1,13 +1,8 @@
 angular.module("homepage", [])
 
-.controller("HomepageController", function ($scope, $state, search){
+.controller("HomepageController", function ($scope, $state, searchFactory){
   $scope.friends = [{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"}]
 
-
-  $scope.changeSelected = function(){
-    $scope.searchOptions = ["in people", "by email", "on youtube", "by youtube url"]
-
-  }
 
   $scope.displayOptions = function(){
     if($scope.searchQuery.length){

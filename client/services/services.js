@@ -73,7 +73,7 @@ angular.module('services', [])
 		}
 	})
 
-	.factory('search', function($http){
+	.factory('searchFactory', function($http){
 		var searchYoutube = function(searchQuery){
 			return $http({
 				method: "GET",
@@ -83,19 +83,41 @@ angular.module('services', [])
 			})
 		}
 
+		var searchByEmail = function(searchQuery){
+			return $http({
+				method: "GET",
+				url :"searchByEmail/" + searchQuery
+			}).then(function(response){
+				return response.data
+			})			
+		}
+
+		var searchByDisplayName = function(searchQuery){
+			return $http({
+				method: "GET",
+				url :"searchByDisplayName/" + searchQuery
+			}).then(function(response){
+				return response.data
+			})			
+		}
+
 		return{
-			searchYoutube: searchYoutube
+			searchYoutube: searchYoutube,
+			searchByEmail: searchByEmail,
+			searchByDisplayName: searchByDisplayName
 		}
 	})
 
 	.factory('getVideo', function ($window, $interval, $rootScope, bcrypt, userData, $state) {
+
+		var roomId;
 
 		var onYoutubeStateChange = function() {
 			console.log('state change!')
 
 			socket.emit('clientPlayerStateChange', {
 				stateChange: $window.youtubePlayer.getPlayerState(),
-				room: videoId
+				room: roomId
 			});
 
 			if(host){
@@ -103,7 +125,7 @@ angular.module('services', [])
 				{
 					currentTime: $window.youtubePlayer.getCurrentTime(),
 					currentState: $window.youtubePlayer.getPlayerState(),
-					room : videoId
+					room : roomId
 				});
 			}
 		};
@@ -149,9 +171,9 @@ angular.module('services', [])
 
 			if(host){
 				bcrypt.hash(displayName, 8, function(err, hash) {
-					console.log("hash", hash)
-					socket.emit('createRoom',{room : hash, roomTitle : videoTitle});
-					$state.go("home.stream", {roomId: hash, currentVideo:videoId, host:true})
+					roomId = hash
+					socket.emit('createRoom',{room : room, roomTitle : videoTitle});
+					$state.go("home.stream", {roomId: room, currentVideo:videoId, host:true})
 
 					setupPlayer(videoId, true)
 
@@ -159,7 +181,7 @@ angular.module('services', [])
 						console.log("newViewer")
 						socket.emit('currentVideo',{
 							currentVideo: currentVideo,
-							roomId : hash
+							roomId : room
 						});
 
 						if($window.youtubePlayer.getCurrentTime() > 0)
@@ -167,7 +189,7 @@ angular.module('services', [])
 						{
 							currentTime: $window.youtubePlayer.getCurrentTime(),
 							currentState: $window.youtubePlayer.getPlayerState(),
-							room : hash
+							room : room
 						});
 					})
 				});
@@ -222,7 +244,7 @@ angular.module('services', [])
 				"user" : username,
 				"message" : message,
 				"userImage" : userImage,
-				"room": videoId
+				"room": roomId
 			});
 		}
 

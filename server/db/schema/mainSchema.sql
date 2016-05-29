@@ -3,13 +3,12 @@
 USE weTubeMainDb;
 
 CREATE TABLE users (
-  /* a user table */
+  -- a user table
   id int NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (ID),
   displayName varchar(200) NOT NULL,
-  userName varchar(200) NOT NULL,
   password varchar(200),
-  email varchar(200),
+  email varchar(200) NOT NULL,
   profile_photo varchar(300)
 );
 

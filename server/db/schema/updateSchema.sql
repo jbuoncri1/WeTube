@@ -1,9 +1,12 @@
 -- current update
-USE weTubeMainDb;
+-- USE weTubeMainDb;
+USE weTubeSessions
 
-ALTER TABLE users DROP COLUMN email;
+ALTER TABLE userSessions ADD COLUMN currentlyWatching varchar (200);
 
-ALTER TABLE users CHANGE userName email varchar(200);
+-- ALTER TABLE users DROP COLUMN email;
+
+-- ALTER TABLE users CHANGE userName email varchar(200);
 
 
 -- ALTER TABLE users DROP COLUMN name;

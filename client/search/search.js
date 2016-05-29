@@ -1,15 +1,39 @@
 angular.module("search", [])
 
-.controller("SearchController", function ($scope, $stateParams, search, $state, getVideo){
+.controller("SearchController", function ($scope, $stateParams, searchFactory, $state, getVideo){
   $scope.searchResults;
-  console.log($stateParams, "search params")
+  var initialize = function(){
+    if($stateParams.searchType){
+      search[$stateParams.searchType]($stateParams.searchQuery)
+    }
+  }
   
-  search.searchYoutube($stateParams.searchQuery).then(function (searchResults){
-    console.log(searchResults)
-    $scope.searchResults = searchResults
-  })
+
+  var search = {
+    "people" : function(searchQuery){
+      searchFactory.searchByDisplayName(searchQuery)
+      .then(function(searchResults){
+        console.log(searchResults)
+      })
+    },
+    "youtube" : function(searchQuery){
+      
+      searchFactory.searchYoutube(searchQuery).then(function (searchResults){
+        console.log(searchResults)
+        $scope.searchResults = searchResults
+      })
+    },
+    "email" : function(searchQuery){
+      searchFactory.searchByEmail(searchQuery)
+      .then(function (searchResults){
+        console.log(searchResults)
+      })
+    }
+  }
 
   $scope.buildRoom = function(videoId, videoTitle){
     getVideo.submitRoom(videoId, videoTitle, true)
   }
+
+  initialize()
 })

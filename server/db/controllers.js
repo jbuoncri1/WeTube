@@ -48,7 +48,8 @@ var findUser = function(name, password, callback){
 }
 
 var findUserByEmail = function(email, callback){
-  connection.query('SELECT * FROM users where email=?', [email], function(err, rows){
+  connection.query('SELECT * FROM users where email LIKE ?', email, function(err, rows){
+    email += "%"
     if(err){
       console.log("Error in controllers.js finding user by email :", err)
       callback(err, null);
@@ -60,9 +61,9 @@ var findUserByEmail = function(email, callback){
 //<h3>findUserByPartial</h3>
 
 //Finds a user by providing partial name information. Used in search
-var findUsersByPartial = function(string, callback){
+var findUserByDisplayName = function(string, callback){
   string+= "%"
-  connection.query('SELECT * FROM users WHERE name LIKE ?', string, function(err, rows){
+  connection.query('SELECT * FROM users WHERE displayName LIKE ?', string, function(err, rows){
     // just do callback(err, user)
     if(err){
       console.log("Error finding user by partial :", err)
@@ -215,5 +216,6 @@ module.exports = {
   findUserById: findUserById,
   updateUser: updateUser,
   deleteUser: deleteUser,
-  findUserByEmail : findUserByEmail
+  findUserByEmail: findUserByEmail,
+  findUserByDisplayName: findUserByDisplayName
 };
