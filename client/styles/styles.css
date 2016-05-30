@@ -99,9 +99,24 @@ md-toolbar{
 }
 
 .chatBox{
-  height: 300px;
-  width: 200px;
+  height: 250px;
+  width: 250px;
+  margin-top: -250px;
+  background-color: rgba(240,240,240, 0.8);
+  border: 1px solid gray;
+  overflow: hidden;
 }
+
+.chatBoxHeader{
+  height:30px;
+  background-color: rgb(63,81,181);
+  color:white;
+}
+.chatBoxMessages{
+  height:350px;
+}
+
+
 
 .searchResult{
   width: 300px;
@@ -133,4 +148,6 @@ md-toolbar{
 .personResult:hover{
   background-color: rgb(180,180,180);
 };
+
+
 

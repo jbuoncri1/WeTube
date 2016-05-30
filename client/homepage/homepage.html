@@ -94,10 +94,23 @@
 
       <div ui-view flex></div>
       <div layout = "row" style = "z-index:3">
-        <md-card class = "chatBox">
-          <md-card-content >
-          </md-card-content>
-        </md-card>
+          <md-content class = "chatBox" layout = "column">
+            <div class="chatBoxHeader" layout = "column">
+              <span flex></span>
+              <div layout = "row">
+                <span flex></span>
+                <label>Hi</label>
+                <span flex></span>
+              </div>
+              <span flex></span>
+            </div>
+            <div class = "chatBoxMessages">
+              <p>message</p>
+              <p>message</p>
+              <p>message</p>
+            </div>
+            <input>
+          </md-content>
       </div>
     </div>
 
