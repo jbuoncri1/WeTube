@@ -7,7 +7,7 @@
     </md-card-content>
   </md-card>
 
-  <div ng-show = "searchType === 'people' || 'email'" layout = "row">
+  <div ng-show = "searchType === 'people' || searchType === 'email'" layout = "row">
     <span flex></span>
     <div layout = "column">
       <md-card ng-repeat = "result in searchResults" class = "personResult">
