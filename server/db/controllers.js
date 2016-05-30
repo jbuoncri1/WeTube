@@ -216,8 +216,9 @@ var getFriendRequests = function (userId, callback){
             callback(null, response)
           }
         })
+      } else {
+        callback(null, requestIds)
       }
-      callback(null, requestIds)
     }
   })
 }

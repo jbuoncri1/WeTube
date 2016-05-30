@@ -31,6 +31,8 @@ module.exports = function(app, express){
         if(response.length){
           res.send({created:false, message: "I'm sorry that User Name is already taken"})
         } else {
+          req.body.profile_photo = req.body.profile_photo || "/styles/no-pic.png"
+
           bcrypt.hash(req.body.password, 13, function(err, hash) {
             if(err){
               console.log("Error hashing password", err)
@@ -110,12 +112,21 @@ module.exports = function(app, express){
     controllers.addFriendRequest(req.body.userData.id, req.body.id, function (err, response){
       if(err) {
         console.log("Error adding friendrequest at router", err)
+      } else {
+        res.status(201).send({message: "Friend request sent"})
       }
     })    
   })
 
-  app.get("friendRequests", function (req, res){
-    controllers.getFriendRequests()
+  app.get("/friendRequests/:id", function (req, res){
+    var id = req.params.id
+    controllers.getFriendRequests(id, function (err, response){
+      if(err){
+        console.log("Error in router getting friend Requests", err)
+      } else {
+        res.send(response)
+      }
+    })
   })
 
   app.get("/searchYoutube/:searchQuery", function (req, res){

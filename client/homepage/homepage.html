@@ -30,30 +30,38 @@
     <span flex = "5"></span>
   </md-toolbar>
 
-
   <div layout = "row" flex style = "z-index:2">
-    <md-sidenav md-is-locked-open = "true" class = "sidenav background shadow" flex = "20" layout = "column">
+    <md-sidenav md-is-locked-open = "true" md-component-id="left" class = "sidenav background shadow" flex = "20" layout = "column">
 
-      <md-toolbar layout = "row" ng-show = "friendRequests.length" ng-click = "displayRequests = !displayRequests;">
+      <md-toolbar layout = "row" ng-show = "friendRequests.length" ng-click = "displayRequests = !displayRequests;" class = "sidenav">
         <span flex></span>
         <h3> Friend Requests </h3>
         <span flex></span>
+        <div layout = "column">
+          <!-- <img src="styles/backArrow.png" class = "button" ng-click = "toggleSideNav()"> -->
+          <span flex></span>
+        </div>
       </md-toolbar>
 
       <md-content ng-show = "displayRequests">
-        <md-card ng-repeat = "request in friendRequests" class = "friend">
+        <md-card ng-repeat = "request in friendRequests" class = "friendRequest">
           <md-card-content layout = "row">
 
-          <img class = "smallThumbnail" ng-src = "{{request.profile_photo || '/styles/no-pic.png'}}"/>
+          <img class = "smallThumbnail" ng-src = "{{request.profile_photo}}"/>
 
           <div layout = "column">
             <label> {{request.displayName}} </label>
             <label> {{request.email}} </label>
             <div layout = "row">
-            <label ng-click = "addFriend(request.id">Confirm</label>
-            <!-- flex property wasn't working here for some reason -->
-            <span style = "width:20px"></span>
-            <label ng-click = "cancelRequest(request.id)">Deny</label>
+              <!-- can't seem to select things properly here, using inline styling -->
+              <div flex style = "width:100px" class = "md-button" ng-click = "addFriend(request.id)">
+                <img src="/styles/check.png">
+              </div>
+              <!-- flex property wasn't working here for some reason -->
+              <div flex class = "md-button" ng-click = "cancelRequest(request.id)">
+                <img  src="/styles/cancel.png">
+
+              </div>
             </div>
           </div>
           </md-card-content>
@@ -63,13 +71,13 @@
 
 
       <div style = "z-index:1">
-      <md-toolbar layout = "row" >
+      <md-toolbar layout = "row" ng-click = "hideFriends = !hideFriends" >
         <span flex></span>
         <h3> Friends </h3>
         <span flex></span>
       </md-toolbar>
       </div>
-      <md-content flex>
+      <md-content flex ng-hide = "hideFriends">
         <md-card ng-repeat = "friend in friends" class = "friend">
           <md-card-content>
             <div layout = "row">
@@ -82,7 +90,18 @@
       </md-content>
     </md-sidenav>
 
+    <div flex layout = "column">
 
-    <div ui-view flex></div>
+      <div ui-view flex></div>
+      <div layout = "row" style = "z-index:3">
+        <md-card class = "chatBox">
+          <md-card-content >
+          </md-card-content>
+        </md-card>
+      </div>
+    </div>
+
+
   </div>
+
 </md-content>  

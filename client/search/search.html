@@ -12,7 +12,7 @@
     <div layout = "column">
       <md-card ng-repeat = "result in searchResults" class = "personResult">
         <md-card-content layout = "row">
-        <img class = "thumbnail"/>
+        <img class = "thumbnail" src = "{{result.profile_photo}}"/>
         <div layout = "column">
           <label> {{result.displayName}} </label>
           <h4> {{result.email}} </h4>
@@ -20,11 +20,9 @@
         <span flex></span>
         <div layout = "column" >
           <span flex></span>
-          <h4 ng-click = "friendRequest(result.id)">
-            <label>
-            Friend Request
-            </label>
-          </h4>
+          <md-button "friendRequest(result.id)">
+          Add Friend
+          </md-button>
           <span flex></span>
         </div>
         </md-card-content>

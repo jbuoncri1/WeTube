@@ -1,9 +1,18 @@
 angular.module("homepage", [])
 
-.controller("HomepageController", function ($scope, $state, searchFactory, userData){
+.controller("HomepageController", function ($scope, $state, searchFactory, userData, $mdSidenav){
+  $scope.showSideNav = true;
+
   $scope.friends = [{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"}]
 
   $scope.friendRequests = [{displayName:"bob", email:"bob", profile_photo: "/styles/no-pic.png"},{displayName:"bob", email:"bob"},{displayName:"bob", email:"bob"},{displayName:"bob", email:"bob"}]
+    
+  var initialize = function(){
+    userData.getFriendRequests()
+    .then(function (friendRequests){
+      $scope.friendRequests = friendRequests
+    })
+  }
 
   $scope.displayOptions = function(){
     if($scope.searchQuery.length){
@@ -47,5 +56,11 @@ angular.module("homepage", [])
   $scope.addFriend = function (targetId){
     userData.addFriend(targetId)
   }
+
+  $scope.toggleSideNav = function(){
+    $mdSidenav('left').toggle()
+  }
+
+  initialize()
 
 })

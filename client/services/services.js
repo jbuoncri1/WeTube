@@ -93,13 +93,23 @@ angular.module('services', [])
 			})
 		}
 
+		var getFriendRequests = function(){
+			return $http({
+				method: 'GET',
+				url: "friendRequests/" + userData.id
+			}).then(function (response){
+				return response.data
+			})	
+		}
+
 		return {
 			createUser: createUser,
 			loginUser: loginUser,
 			updateUserData: updateUserData,
 			getUserData: getUserData,
 			addFriend: addFriend,
-			friendRequest: friendRequest
+			friendRequest: friendRequest,
+			getFriendRequests: getFriendRequests
 		}
 	})
 

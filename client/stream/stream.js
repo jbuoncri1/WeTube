@@ -34,16 +34,8 @@ angular.module('stream', [])
 		};
 
 		$scope.addVideo = function(videoId){
-			getVideo.setupPlayer(videoId, true);
 		}
 
-		$scope.submitUrl = function(url){
-			url = url.split("v=")
-			//grabs the youtube video id
-			$scope.videoId += url[1] 
-			//pass in true since they are the host
-			getVideo.setupPlayer($scope.videoId, true)			
-		};
 		
 		$scope.logout = function() {
 			return $http({

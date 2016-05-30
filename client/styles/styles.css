@@ -43,7 +43,8 @@ md-toolbar{
 }
 
 .sidenav {
-  min-width: 170px;
+  min-width: 300px;
+  min-height: 80px;
 }
 
 .background, md-content{
@@ -57,6 +58,14 @@ md-toolbar{
 .toolbar{
   max-height: 48px; 
   margin-top:-5px;
+}
+
+.friendRequest {
+  min-height: 50px;
+  max-height: 100px;
+  background-color: rgb(240,240,240);
+  transition:background-color .3s ease-in-out;
+  overflow: hidden;
 }
 
 .friend {
@@ -89,6 +98,11 @@ md-toolbar{
   background-color: rgb(180,180,180);
 }
 
+.chatBox{
+  height: 300px;
+  width: 200px;
+}
+
 .searchResult{
   width: 300px;
   height: 130px;
@@ -108,6 +122,15 @@ md-toolbar{
   transition:background-color .3s ease-in-out;
 }
 
+.button{
+  transition:background-color .3s ease-in-out;
+}
+
+.button:hover{
+  background-color: rgb(180,180,180);
+}
+
 .personResult:hover{
   background-color: rgb(180,180,180);
 };
+
