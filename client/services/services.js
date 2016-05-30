@@ -33,8 +33,34 @@ angular.module('services', [])
 
 	})
 
-	.factory('userData', function ($http) {
+	.factory('userData', function ($http, $window, $rootScope) {
+		/*conversations obj note - messages will be lost upon refresh
+		{ id: 
+			{
+				userData :	userData,
+				messages : []
+	
+			}
+		}
+		*/ 
+		var conversations = {}
+		var messageBoxes = []
 		var userData = {displayName:"kyle", id:1, profile_photo: "/styles/no-pic.png"}
+		$window.socket = io.connect('http://localhost:8001');
+
+
+		socket.on('newMessage', function (data) {
+			console.log(data)
+			if(!conversations[data.userData.id]){
+				conversations[data.userData.id].messages = [data.message]
+				conversations[data.userData.id].userData = data.userData
+				messageBoxes.unshift(conversations[data.userData.id])
+			} else {
+
+				conversations[data.userData.id].messages.push(data.message)
+			}
+			$rootScope.$apply()
+		})
 
 		var createUser = function(userData){
 			return $http({
@@ -54,6 +80,19 @@ angular.module('services', [])
 				data: userData
 			}).then(function (response){
 				return response.data
+			})
+		}
+
+		var buildOwnRoom = function (){
+			socket.emit('createRoom',{room : userData.id, roomTitle : userData.id});
+			
+		}()
+
+		var peerToPeerMessage = function (targetUser, userData, message){
+			socket.emit('newMessage', {
+				room: targetUser, 
+				userData: userData, 
+				message: message
 			})
 		}
 
@@ -109,7 +148,8 @@ angular.module('services', [])
 			getUserData: getUserData,
 			addFriend: addFriend,
 			friendRequest: friendRequest,
-			getFriendRequests: getFriendRequests
+			getFriendRequests: getFriendRequests,
+			peerToPeerMessage: peerToPeerMessage
 		}
 	})
 
@@ -204,7 +244,7 @@ angular.module('services', [])
 			//sets up the socket stream and events
 		var submitRoom = function(videoId, videoTitle, host, roomId){
 
-			$window.socket = io.connect('http://localhost:8001');
+
 			currentVideo = videoId
 
 			var displayName = userData.getUserData().displayName 

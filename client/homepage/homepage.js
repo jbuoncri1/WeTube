@@ -8,6 +8,7 @@ angular.module("homepage", [])
   $scope.friendRequests = [{displayName:"bob", email:"bob", profile_photo: "/styles/no-pic.png"},{displayName:"bob", email:"bob"},{displayName:"bob", email:"bob"},{displayName:"bob", email:"bob"}]
     
   var initialize = function(){
+    $scope.userData = userData.getUserData()
     userData.getFriendRequests()
     .then(function (friendRequests){
       $scope.friendRequests = friendRequests
@@ -59,6 +60,10 @@ angular.module("homepage", [])
 
   $scope.toggleSideNav = function(){
     $mdSidenav('left').toggle()
+  }
+
+  $scope.sendMessage = function (){
+    userData.peerToPeerMessage(1, $scope.userData, "hi")
   }
 
   initialize()

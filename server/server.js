@@ -87,7 +87,7 @@ app.use( passport.session());
 
 
 
-var PORT = 8001;
+var PORT = 8001 ;
 
 var io = require('socket.io').listen(app.listen(PORT));
 
@@ -109,9 +109,8 @@ io.on('connection', function (socket) {
              'suggestedQuality': 'large'});
 
   socket.on('createRoom', function(data) {
-    uniqueId++;
-
-    rooms[uniqueId] = {room : data.room, roomTitle : data.roomTitle};
+    //maybe usefull for public rooms
+    // rooms[data.room] = {roomTitle : data.roomTitle};
     console.log("creating room", rooms);
     //joining room
     socket.join(data.room);
