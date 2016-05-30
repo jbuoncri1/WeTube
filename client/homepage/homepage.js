@@ -44,4 +44,8 @@ angular.module("homepage", [])
     $state.go('home.search', {searchQuery: $scope.searchQuery, searchType: searchType})
   }
 
+  $scope.addFriend = function (targetId){
+    userData.addFriend(targetId)
+  }
+
 })

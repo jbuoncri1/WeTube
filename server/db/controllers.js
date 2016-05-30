@@ -198,6 +198,30 @@ var addFriendRequest = function(userId1, userId2, callback) {
   })
 }
 
+var getFriendRequests = function (userId, callback){
+  connection.query('SELECT userId1 FROM friendRequests WHERE userId2 =?',userId, function (err, response){
+    if(err){
+      console.log("Error in controller getting friendRequests", err)
+      callback(err, null)
+    } else {
+      var requestIds = response.map(function(el){
+        return el.userId1
+      })
+      if(response.length){
+        connection.query('SELECT id, displayName, email, profile_photo FROM users WHERE id IN (?)', [requestIds], function (err, response){
+          if(err){
+            console.log("Error in controller getting request profiles", err)
+            callback(err, null)
+          } else {
+            callback(null, response)
+          }
+        })
+      }
+      callback(null, requestIds)
+    }
+  })
+}
+
 module.exports = {
   connection: connection,
   //user methods
@@ -209,5 +233,6 @@ module.exports = {
   findUserByEmail: findUserByEmail,
   findUserByDisplayName: findUserByDisplayName,
   addFriendship: addFriendship,
-  addFriendRequest: addFriendRequest
+  addFriendRequest: addFriendRequest,
+  getFriendRequests: getFriendRequests
 };

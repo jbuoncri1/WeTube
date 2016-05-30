@@ -114,6 +114,10 @@ module.exports = function(app, express){
     })    
   })
 
+  app.get("friendRequests", function (req, res){
+    controllers.getFriendRequests()
+  })
+
   app.get("/searchYoutube/:searchQuery", function (req, res){
     var searchQuery = req.params.searchQuery
     youTube.search(searchQuery, 25, function(error, result) {
