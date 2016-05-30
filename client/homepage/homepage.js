@@ -1,6 +1,8 @@
 angular.module("homepage", [])
 
 .controller("HomepageController", function ($scope, $state, searchFactory, userData, $mdSidenav){
+
+  $scope.messageBoxes = userData.getMessageBoxes()
   $scope.showSideNav = true;
 
   $scope.friends = [{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"}]
@@ -62,8 +64,8 @@ angular.module("homepage", [])
     $mdSidenav('left').toggle()
   }
 
-  $scope.sendMessage = function (){
-    userData.peerToPeerMessage(1, $scope.userData, "hi")
+  $scope.sendMessage = function (targetId, message){
+    userData.peerToPeerMessage(targetId, message)
   }
 
   initialize()

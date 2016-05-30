@@ -50,9 +50,11 @@ angular.module('services', [])
 
 
 		socket.on('newMessage', function (data) {
-			console.log(data)
+			console.log(messageBoxes)
 			if(!conversations[data.userData.id]){
-				conversations[data.userData.id].messages = [data.message]
+				var conversation = conversations[data.userData.id] = {}
+				console.log(conversation, "convo")
+				conversation.messages = [data.message]
 				conversations[data.userData.id].userData = data.userData
 				messageBoxes.unshift(conversations[data.userData.id])
 			} else {
@@ -88,7 +90,7 @@ angular.module('services', [])
 			
 		}()
 
-		var peerToPeerMessage = function (targetUser, userData, message){
+		var peerToPeerMessage = function (targetUser, message){
 			socket.emit('newMessage', {
 				room: targetUser, 
 				userData: userData, 
@@ -102,6 +104,10 @@ angular.module('services', [])
 
 		var getUserData = function(){
 			return userData
+		}
+
+		var getMessageBoxes = function (){
+			return messageBoxes
 		}
 
 		var addFriend = function(id){
@@ -149,7 +155,8 @@ angular.module('services', [])
 			addFriend: addFriend,
 			friendRequest: friendRequest,
 			getFriendRequests: getFriendRequests,
-			peerToPeerMessage: peerToPeerMessage
+			peerToPeerMessage: peerToPeerMessage,
+			getMessageBoxes: getMessageBoxes
 		}
 	})
 
@@ -301,15 +308,7 @@ angular.module('services', [])
 					$window.youtubePlayer.playVideo();
 				}
 			});
-			//all users should be listening for and sending messages
-			socket.on('newMessage', function(data) {
-				console.log("message Recieved", data)
-				messages.unshift({user : data.user, message : data.message, "userImage" : data.userImage})
-				//force the scope to update, solved a strange error where
-				//viewer messages weren't updating
-				$rootScope.$apply()
-				console.log($rootScope.user)
-			});
+
 		};
 
 		//submits the message through socket IO whenever one is made
