@@ -56,12 +56,14 @@ angular.module('services', [])
 				console.log(conversation, "convo")
 				conversation.messages = [data.message]
 				conversations[data.userData.id].userData = data.userData
+			$rootScope.$apply(
 				messageBoxes.unshift(conversations[data.userData.id])
+				)
+			console.log('boxes', messageBoxes)
 			} else {
 
 				conversations[data.userData.id].messages.push(data.message)
 			}
-			$rootScope.$apply()
 		})
 
 		var createUser = function(userData){
@@ -156,7 +158,8 @@ angular.module('services', [])
 			friendRequest: friendRequest,
 			getFriendRequests: getFriendRequests,
 			peerToPeerMessage: peerToPeerMessage,
-			getMessageBoxes: getMessageBoxes
+			getMessageBoxes: getMessageBoxes,
+			messageBoxes: messageBoxes
 		}
 	})
 

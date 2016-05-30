@@ -2,7 +2,7 @@ angular.module("homepage", [])
 
 .controller("HomepageController", function ($scope, $state, searchFactory, userData, $mdSidenav){
 
-  $scope.messageBoxes = userData.getMessageBoxes()
+  $scope.messageBoxes = userData.messageBoxes
   $scope.showSideNav = true;
 
   $scope.friends = [{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"}]
