@@ -66,10 +66,12 @@ module.exports = function(app, express){
         if(response.length){
           var userData = response[0]
           //will be a bcrypt check
+          console.log(req.body.password, "pass")
+          console.log(userData.password, "passed")
           bcrypt.compare(req.body.password, userData.password, function(err, bcryptResponse){
             delete userData["password"]
             if(err){
-              console.log("Error in login comparing passwords")
+              console.log("Error in login comparing passwords", err)
             } else {
               if(bcryptResponse){
                 //create the session
@@ -92,6 +94,24 @@ module.exports = function(app, express){
         }
       }
     })  
+  })
+
+  app.post("/addFriend", function (req, res){
+    controllers.addFriendship(req.body.userData.id, req.body.id, function (err, response){
+      if(err) {
+        console.log("Error adding friendship at router", err)
+      } else {
+        res.send(201,{message:"Friend Added"})
+      }
+    })
+  })
+
+  app.post("/friendRequest", function (req, res){
+    controllers.addFriendRequest(req.body.userData.id, req.body.id, function (err, response){
+      if(err) {
+        console.log("Error adding friendrequest at router", err)
+      }
+    })    
   })
 
   app.get("/searchYoutube/:searchQuery", function (req, res){
@@ -117,6 +137,7 @@ module.exports = function(app, express){
       }
     })
   })
+
   app.get("/searchByDisplayName/:searchQuery", function (req, res){
     var searchQuery = req.params.searchQuery
     controllers.findUserByDisplayName(searchQuery, function (err, response){

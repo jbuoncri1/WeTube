@@ -14,13 +14,17 @@
         <md-card-content layout = "row">
         <img class = "thumbnail"/>
         <div layout = "column">
-          <h3> {{result.displayName}} </h3>
+          <label> {{result.displayName}} </label>
           <h4> {{result.email}} </h4>
         </div>
         <span flex></span>
-        <div layout = "column">
+        <div layout = "column" >
           <span flex></span>
-          <h4>Add as friend</h4>
+          <h4 ng-click = "friendRequest(result.id)">
+            <label>
+            Friend Request
+            </label>
+          </h4>
           <span flex></span>
         </div>
         </md-card-content>

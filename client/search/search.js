@@ -1,6 +1,6 @@
 angular.module("search", [])
 
-.controller("SearchController", function ($scope, $stateParams, searchFactory, $state, getVideo){
+.controller("SearchController", function ($scope, $stateParams, searchFactory, $state, getVideo, userData){
   $scope.searchResults;
   $scope.searchType;
 
@@ -18,11 +18,10 @@ angular.module("search", [])
       .then(function(searchResults){
         console.log(searchResults)
         $scope.searchResults = searchResults
-        
+
       })
     },
     "youtube" : function(searchQuery){
-      
       searchFactory.searchYoutube(searchQuery).then(function (searchResults){
         console.log(searchResults)
         $scope.searchResults = searchResults
@@ -39,6 +38,10 @@ angular.module("search", [])
 
   $scope.buildRoom = function(videoId, videoTitle){
     getVideo.submitRoom(videoId, videoTitle, true)
+  }
+
+  $scope.friendRequest = function(id){
+    userData.friendRequest(id)
   }
 
   initialize()

@@ -1,5 +1,5 @@
-<md-content layout = "column" style = "height:100vh" ng-keydown="changeSelected()">  
-  <md-toolbar layout = "row">
+<md-content layout = "column" style = "height:100vh;" ng-keydown="changeSelected()">  
+  <md-toolbar layout = "row" style = "z-index:3">
     <span flex = "5"></span><h1>WeTube</h1>
     <span flex></span>
     <div layout = "column">
@@ -31,14 +31,45 @@
   </md-toolbar>
 
 
-  <div layout = "row" flex style = "z-index:1">
-    <md-sidenav md-is-locked-open = "true" class = "sidenav background shadow" flex = "20">
-      <md-toolbar layout = "row">
+  <div layout = "row" flex style = "z-index:2">
+    <md-sidenav md-is-locked-open = "true" class = "sidenav background shadow" flex = "20" layout = "column">
+
+      <md-toolbar layout = "row" ng-show = "friendRequests.length" ng-click = "displayRequests = !displayRequests;">
         <span flex></span>
-        <h4 class = "center"> Friends </h4>
+        <h3> Friend Requests </h3>
         <span flex></span>
       </md-toolbar>
-      <md-content>
+
+      <md-content ng-show = "displayRequests">
+        <md-card ng-repeat = "request in friendRequests" class = "friend">
+          <md-card-content layout = "row">
+
+          <img class = "smallThumbnail" ng-src = "{{request.profile_photo || '/styles/no-pic.png'}}"/>
+
+          <div layout = "column">
+            <label> {{request.displayName}} </label>
+            <label> {{request.email}} </label>
+            <div layout = "row">
+            <label ng-click = "addFriend(request.id">Confirm</label>
+            <!-- flex property wasn't working here for some reason -->
+            <span style = "width:20px"></span>
+            <label ng-click = "cancelRequest(request.id)">Deny</label>
+            </div>
+          </div>
+          </md-card-content>
+        </md-card>
+      </md-content>
+
+
+
+      <div style = "z-index:1">
+      <md-toolbar layout = "row" >
+        <span flex></span>
+        <h3> Friends </h3>
+        <span flex></span>
+      </md-toolbar>
+      </div>
+      <md-content flex>
         <md-card ng-repeat = "friend in friends" class = "friend">
           <md-card-content>
             <div layout = "row">

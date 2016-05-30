@@ -21,3 +21,12 @@ CREATE TABLE friendships (
   userId2 int,
   FOREIGN KEY(userId2) REFERENCES users(id)
 )
+
+CREATE TABLE friendRequests (
+  id int NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (ID),
+  userId1 int,
+  FOREIGN KEY(userId1) REFERENCES users(id),
+  userId2 int,
+  FOREIGN KEY(userId2) REFERENCES users(id)  
+)

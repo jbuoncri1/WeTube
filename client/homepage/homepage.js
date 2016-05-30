@@ -1,8 +1,9 @@
 angular.module("homepage", [])
 
-.controller("HomepageController", function ($scope, $state, searchFactory){
+.controller("HomepageController", function ($scope, $state, searchFactory, userData){
   $scope.friends = [{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"}]
 
+  $scope.friendRequests = [{displayName:"bob", email:"bob", profile_photo: "/styles/no-pic.png"},{displayName:"bob", email:"bob"},{displayName:"bob", email:"bob"},{displayName:"bob", email:"bob"}]
 
   $scope.displayOptions = function(){
     if($scope.searchQuery.length){
@@ -42,4 +43,5 @@ angular.module("homepage", [])
     $scope.searchOptions = []
     $state.go('home.search', {searchQuery: $scope.searchQuery, searchType: searchType})
   }
+
 })

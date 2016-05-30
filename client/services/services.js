@@ -34,7 +34,7 @@ angular.module('services', [])
 	})
 
 	.factory('userData', function ($http) {
-		var userData = {displayName:"a"}
+		var userData = {displayName:"kyle", id:1, profile_photo: "/styles/no-pic.png"}
 
 		var createUser = function(userData){
 			return $http({
@@ -52,7 +52,7 @@ angular.module('services', [])
 				method: "POST",
 				url: "/login",
 				data: userData
-			}).then(function(response){
+			}).then(function (response){
 				return response.data
 			})
 		}
@@ -65,11 +65,41 @@ angular.module('services', [])
 			return userData
 		}
 
+		var addFriend = function(id){
+			console.log("service", id)
+			return $http({
+				method: "POST",
+				url: "/addFriend",
+				data: {
+					userData : userData,
+					id : id
+				}
+			}).then(function (response){
+				return response.data
+			})
+		}
+
+		var friendRequest = function(id){
+			console.log("service", id)
+			return $http({
+				method: "POST",
+				url: "/friendRequest",
+				data: {
+					userData : userData,
+					id : id
+				}
+			}).then(function (response){
+				return response.data
+			})
+		}
+
 		return {
 			createUser: createUser,
 			loginUser: loginUser,
 			updateUserData: updateUserData,
-			getUserData: getUserData
+			getUserData: getUserData,
+			addFriend: addFriend,
+			friendRequest: friendRequest
 		}
 	})
 

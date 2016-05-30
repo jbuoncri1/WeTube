@@ -136,20 +136,6 @@ var getAllUsers = function(callback){
   })
 }
 
-//<h3>getTopUsers</h3>
-
-// Returns array of top n users, ranked by current score
-var getTopUsers = function(limit, callback) {
-  connection.query('SELECT * FROM users ORDER BY currentScore DESC LIMIT ?',limit, function(err, res) {
-    if (err) {
-      console.log('Error finding all users sorted by current score');
-      callback(err, null);
-    } else {
-      callback(null, res);
-    }
-  })
-}
-
 //<h3>updateUser</h3>
 
 //Even though this leverages two controller methods since it is
@@ -173,24 +159,6 @@ var updateUser = function(newUserObj, callback){
   })
 }
 
-//<h3>updateKarma</h3>
-
-//Updates the karma of a specified user this is kept as a
-//seperate function because it utilized the difference rather
-//than just overwriting the property, this leads to fewer
-//db interactions. It CAN accept a negative value for karmaChange
-var updateKarma = function(userId, karmaChange, callback){
-  connection.query('UPDATE users SET karma = karma +? Where ID = ?',[karmaChange, userId], function (err, result) {
-      if (err){
-        console.log("Error updating Karma of userId " + userId)
-        callback(err, null)
-      } else{
-        console.log('Changed user ' + userId + '\'s karma by ' + karmaChange);
-        callback(null, userId);
-      }
-    }
-  );
-}
 
 //<h3>deleteUser</h3>
 //Deletes a user specified by a userId
@@ -206,7 +174,29 @@ var deleteUser = function(userId, callback){
   });
 }
 
+var addFriendship = function(userId1, userId2, callback) {
+  var newFriendship = {"userId1" : userId1, "userId2" : userId2}
+  connection.query('INSERT INTO friendships SET ?', newFriendship, function (err, response) {
+    if(err){
+      console.log("Error inserting new frienship at controllers", err)
+    } else {
+      console.log("inserted friendship #:", response)
+      callback(null, response)
+    }
+  })
+}
 
+var addFriendRequest = function(userId1, userId2, callback) {
+  var newFriendship = {"userId1" : userId1, "userId2" : userId2}
+  connection.query('INSERT INTO friendRequests SET ?', newFriendship, function (err, response) {
+    if(err){
+      console.log("Error inserting new frienship at controllers", err)
+    } else {
+      console.log("inserted friend request #:", response)
+      callback(null, response)
+    }
+  })
+}
 
 module.exports = {
   connection: connection,
@@ -217,5 +207,7 @@ module.exports = {
   updateUser: updateUser,
   deleteUser: deleteUser,
   findUserByEmail: findUserByEmail,
-  findUserByDisplayName: findUserByDisplayName
+  findUserByDisplayName: findUserByDisplayName,
+  addFriendship: addFriendship,
+  addFriendRequest: addFriendRequest
 };
