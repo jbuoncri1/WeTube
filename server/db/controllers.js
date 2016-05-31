@@ -186,7 +186,8 @@ var addFriendship = function(userId1, userId2, callback) {
       if(response.affectedRows){
         connection.query('INSERT INTO friendships SET ?', newFriendship, function (err, response) {
           if(err){
-            serverLog.log("Error inserting new frienship at controllers", err)
+            serverLog.log("Error inserting new friendship at controllers", err)
+            callback(err, null)
           } else {
             callback(null, response)
           }

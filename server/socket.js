@@ -1,9 +1,10 @@
-module.exports = function(app, PORT, express){
+module.exports = function(app, PORT, express, routes){
   var io = require('socket.io').listen(app.listen(PORT));
 
 
   //socket stuff (to be abstracted)
   io.on('connection', function (socket) {
+    routes(app, express, socket, io)
     var connectedClients = [];
     connectedClients.push(socket);
     socket.emit('playerDetails', {'videoId': 'TRrL5j3MIvo',

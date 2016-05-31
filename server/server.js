@@ -9,15 +9,13 @@ var controllers = require('./db/controllers')
 var bodyParser = require('body-parser');
 var weTubeSession = require('./db/userSessionController')
 var routes = require('./routes')
-
+var PORT = process.env.PORT || 8001;
 
 var app = express();
 app.use(bodyParser.json());
 app.use(session({secret: "abstractedChalupas", cookie: {}, resave: false, saveUninitialized: false }));
 
-
 // "1082022701969-rdl6108k798kf2apth302dcuornld9pg.apps.googleusercontent.com"
-
 /* GOOGLE AUTHENTICATION */
 
 var GOOGLE_CLIENT_ID = "1082022701969-rdl6108k798kf2apth302dcuornld9pg";
@@ -82,26 +80,8 @@ app.use(cors());
 app.use( passport.initialize());
 app.use( passport.session());
 
-
-
-
-
-
-var PORT = process.env.PORT || 8001;
-
-
-
-
-
 app.use(express.static(__dirname+"/../client"));
-
-
-var uniqueId = 0
-
 // routes are called inside of socket
 require('./socket')(app, PORT, express, routes)
-
-
-
 
 module.exports = app;

@@ -50,20 +50,20 @@ angular.module('services', [])
 
 
 		socket.on('newMessage', function (data) {
-			console.log(messageBoxes)
 			if(!conversations[data.userData.id]){
 				var conversation = conversations[data.userData.id] = {}
-				console.log(conversation, "convo")
 				conversation.messages = [data.message]
 				conversations[data.userData.id].userData = data.userData
 			$rootScope.$apply(
 				messageBoxes.unshift(conversations[data.userData.id])
 				)
-			console.log('boxes', messageBoxes)
 			} else {
-
 				conversations[data.userData.id].messages.push(data.message)
 			}
+		})
+
+		socket.on("friendAdded", function (data){
+			console.log(data, "newFriend")
 		})
 
 		var createUser = function(userData){
