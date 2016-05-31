@@ -72,12 +72,15 @@ angular.module("homepage", [])
   }
 
   $scope.sendMessage = function (targetId, message){
-    userData.peerToPeerMessage(targetId, message)
+    if(event.keyCode === 13){
+      console.log(targetId, message)
+      userData.peerToPeerMessage(targetId, message)
+      
+    }
   }
 
   $scope.newMessageBox = function(targetData){
     userData.tryNewMessageBox(targetData)
-    console.log(targetData)
   } 
 
   initialize()

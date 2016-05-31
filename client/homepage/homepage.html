@@ -1,4 +1,4 @@
-<md-content layout = "column" style = "height:100vh;" ng-keydown="changeSelected()">  
+<md-content layout = "column" style = "height:100vh;">  
   <md-toolbar layout = "row" style = "z-index:3">
     <span flex = "5"></span><h1>WeTube</h1>
     <span flex></span>
@@ -9,7 +9,7 @@
         <!-- search bar -->
         <div layout = "column">
           <span flex></span>
-          <div layout = "row">
+          <div layout = "row" ng-keydown="changeSelected()">
             <input ng-model = "searchQuery" ng-change = "displayOptions()" >
             <img layout-align = "center" class="material-icons toolbar" src = "/styles/search.png">
           </div>
@@ -114,12 +114,14 @@
                   <span flex></span>
                   <label>{{message.userData.displayName}}</label>
                   <span flex></span>
+                  <img src="/styles/minimize.png" class = "cornerButton" ng-click = "minimize = !minimize">
+                  <img src="/styles/close.png" class = "cornerButton">
                 </div>
                 <span flex></span>
               </div>
-              <div class = "chatBoxMessages">
+              <div class = "chatBoxMessages" ng-hide = "minimize">
               </div>
-              <input>
+              <input ng-hide = "minimize" ng-keypress="sendMessage(message.userData.id, newMessage)" ng-model = "newMessage">
             </md-content>
         </div>
       </div>

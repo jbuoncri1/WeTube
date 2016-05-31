@@ -99,9 +99,7 @@ md-toolbar{
 }
 
 .chatBox{
-  height: 250px;
   width: 250px;
-  margin-top: -250px;
   margin-right: 5px;
   background-color: rgba(240,240,240, 0.8);
   border: 1px solid gray;
@@ -151,6 +149,16 @@ md-toolbar{
   background-color: rgb(180,180,180);
 }
 
+.cornerButton {
+  border: 1px black solid;
+  width: 15px;
+  height:15px;
+  margin-left: 2px;
+}
+
+.cornerButton:active{
+  background-color: rgb(240,240,240)
+}
 
 
 
