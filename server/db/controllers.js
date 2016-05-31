@@ -1,5 +1,6 @@
 var mysql = require('mysql');
 var _ = require('underscore');
+var log = require('../serverLog').log
 
 var connection = mysql.createConnection({
   user: "root",
@@ -9,10 +10,10 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err){
   if(err){
-    console.log("error connection to Main Db");
+    log("error connection to Main Db");
     return;
   }
-  console.log('Connected to Main Db')
+  log('Connected to Main Db')
 });
 
 //<h2> User database functions </h2>
@@ -23,10 +24,10 @@ connection.connect(function(err){
 var addUser = function (userObj, callback) {
   connection.query('INSERT INTO users SET ?', userObj, function(err, res){
     if(err){
-      console.log("error inserting into users", err)
+      log("error inserting into users", err)
       callback(err, null)
     } else{
-      console.log("last inserted Id: ", res.insertId);
+      log("last inserted Id: ", res.insertId);
       callback(null, res.insertId)
     }
   })
@@ -39,7 +40,7 @@ var addUser = function (userObj, callback) {
 var findUser = function(name, password, callback){
   connection.query('SELECT * FROM users where name=? and password=?', [name, password], function(err, rows){
     if(err){
-      console.log("Error finding user by name :", err)
+      log("Error finding user by name :", err)
       callback(err, null);
     } else{
       callback(null, rows);
@@ -51,7 +52,7 @@ var findUserByEmail = function(email, callback){
   connection.query('SELECT * FROM users where email LIKE ?', email, function(err, rows){
     email += "%"
     if(err){
-      console.log("Error in controllers.js finding user by email :", err)
+      log("Error in controllers.js finding user by email :", err)
       callback(err, null);
     } else{
       callback(null, rows);
@@ -66,7 +67,7 @@ var findUserByDisplayName = function(string, callback){
   connection.query('SELECT * FROM users WHERE displayName LIKE ?', string, function(err, rows){
     // just do callback(err, user)
     if(err){
-      console.log("Error finding user by partial :", err)
+      log("Error finding user by partial :", err)
       callback(err, null);
     } else{
       callback(null, rows);
@@ -81,7 +82,7 @@ var findUserByDisplayName = function(string, callback){
 var findUserById = function(userId, callback){
   connection.query('SELECT * FROM users WHERE id=?', [userId], function(err, rows){
     if(err){
-      console.log("Error finding user by id :", err)
+      log("Error finding user by id :", err)
       callback(err,null);
     } else {
       callback(null,rows);
@@ -96,7 +97,7 @@ var findUserById = function(userId, callback){
 var findUserByFbKey = function(fbKey, callback){
   connection.query('SELECT * FROM users WHERE facebookKey=?', [fbKey], function(err, rows){
     if(err){
-      console.log("Error finding user by facebookKey :", err)
+      log("Error finding user by facebookKey :", err)
       callback(err,null);
     } else {
       callback(null,rows);
@@ -110,7 +111,7 @@ var findUserByFbKey = function(fbKey, callback){
 var countUsers = function(callback){
   connection.query('select count(*) from users', function(err, count){
     if(err){
-      console.log("Error counting users :", err)
+      log("Error counting users :", err)
       callback(err, null)
     } else{
       // Response is an array of objects with the "count(*)" key
@@ -126,7 +127,7 @@ var countUsers = function(callback){
 var getAllUsers = function(callback){
   connection.query('select * from users', function(err, users){
     if(err){
-      console.log("Error collecting users :", err)
+      log("Error collecting users :", err)
       callback(err, null)
     } else{
       // Response is an array of objects with the "count(*)" key
@@ -148,10 +149,10 @@ var updateUser = function(newUserObj, callback){
     _.extend(userObj, newUserObj)
     connection.query('UPDATE users SET ? Where ID = ?',[userObj, user_id], function (err, result) {
         if (err){
-          console.log("Error updating user # " + user_id)
+          log("Error updating user # " + user_id)
           callback(err, null)
         } else{
-          console.log('Updated user ' + user_id);
+          log('Updated user ' + user_id);
           callback(null, userObj);
         }
       }
@@ -165,10 +166,10 @@ var updateUser = function(newUserObj, callback){
 var deleteUser = function(userId, callback){
   connection.query('DELETE FROM users WHERE id = ?',userId, function (err, response) {
     if (err) {
-      console.log("error deleting user " + userId, err)
+      log("error deleting user " + userId, err)
       callback(err, null)
     }else{
-      console.log('Deleted user number ' + userId);
+      log('Deleted user number ' + userId);
       callback(null, response);
     }
   });
@@ -176,11 +177,20 @@ var deleteUser = function(userId, callback){
 
 var addFriendship = function(userId1, userId2, callback) {
   var newFriendship = {"userId1" : userId1, "userId2" : userId2}
+  connection.query('SELECT * FROM friendRequests WHERE userId1 = ? and userId2 = ?', [userId1, userId2], function (err, response){
+
+    if(err){
+      log(err)
+    } else {
+
+    }
+
+  })
   connection.query('INSERT INTO friendships SET ?', newFriendship, function (err, response) {
     if(err){
-      console.log("Error inserting new frienship at controllers", err)
+      log("Error inserting new frienship at controllers", err)
     } else {
-      console.log("inserted friendship #:", response)
+      log("inserted friendship #:", response)
       callback(null, response)
     }
   })
@@ -190,9 +200,9 @@ var addFriendRequest = function(userId1, userId2, callback) {
   var newFriendship = {"userId1" : userId1, "userId2" : userId2}
   connection.query('INSERT INTO friendRequests SET ?', newFriendship, function (err, response) {
     if(err){
-      console.log("Error inserting new frienship at controllers", err)
+      log("Error inserting new frienship at controllers", err)
     } else {
-      console.log("inserted friend request #:", response)
+      log("inserted friend request #:", response)
       callback(null, response)
     }
   })
@@ -201,7 +211,7 @@ var addFriendRequest = function(userId1, userId2, callback) {
 var getFriendRequests = function (userId, callback){
   connection.query('SELECT userId1 FROM friendRequests WHERE userId2 =?',userId, function (err, response){
     if(err){
-      console.log("Error in controller getting friendRequests", err)
+      log("Error in controller getting friendRequests", err)
       callback(err, null)
     } else {
       var requestIds = response.map(function(el){
@@ -210,7 +220,7 @@ var getFriendRequests = function (userId, callback){
       if(response.length){
         connection.query('SELECT id, displayName, email, profile_photo FROM users WHERE id IN (?)', [requestIds], function (err, response){
           if(err){
-            console.log("Error in controller getting request profiles", err)
+            log("Error in controller getting request profiles", err)
             callback(err, null)
           } else {
             callback(null, response)
