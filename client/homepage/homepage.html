@@ -110,7 +110,7 @@
 
       <div layout = "row">
         <div layout = "row" style = "z-index:3"  ng-repeat = "messageBox in messageBoxes">
-            <divmd-content class = "chatBox" layout = "column">
+            <div class = "chatBox" ng-class = "{minimize:minimize}"  layout = "column">
               <div class="chatBoxHeader" layout = "column">
                 <span flex></span>
                 <div layout = "row">
