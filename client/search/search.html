@@ -1,6 +1,6 @@
 <md-content class = "subView">
-
-  <md-card ng-show = "searchType === 'youtube'" ng-repeat = "result in searchResults" class = "searchResult" ng-click = "buildRoom(result.id.videoId, result.snippet.title)" >
+<!-- ng-click = "buildRoom(result.id.videoId, result.snippet.title)" -->
+  <md-card ng-show = "searchType === 'youtube'" ng-repeat = "result in searchResults" class = "searchResult"  >
     <md-card-content layout = "row">
       <img class = "thumbnail" src="{{result.snippet.thumbnails.default.url}}">
       <p>{{result.snippet.title}}</p>
@@ -20,7 +20,7 @@
         <span flex></span>
         <div layout = "column" >
           <span flex></span>
-          <md-button "friendRequest(result.id)">
+          <md-button ng-click = "friendRequest(result.id)">
           Add Friend
           </md-button>
           <span flex></span>

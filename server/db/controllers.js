@@ -177,24 +177,26 @@ var deleteUser = function(userId, callback){
 
 var addFriendship = function(userId1, userId2, callback) {
   var newFriendship = {"userId1" : userId1, "userId2" : userId2}
-  connection.query('SELECT * FROM friendRequests WHERE userId1 = ? and userId2 = ?', [userId1, userId2], function (err, response){
-
+  //need to reverse the order of userId1 and 2 becuase the request was originally asked in the other direction. Maybe nomenclature change would be good here to avoid confusion. change userId1 and 2 on table -- issue opened
+  connection.query('DELETE FROM friendRequests WHERE userId1=? AND userId2 = ?', [userId2, userId1,userId2, userId1], function (err, response){
     if(err){
-      log(err)
+      log("failed to find and delete friendRequest in controllers" ,err)
+      callback(err, null)
     } else {
-
+      if(response.affectedRows){
+        connection.query('INSERT INTO friendships SET ?', newFriendship, function (err, response) {
+          if(err){
+            log("Error inserting new frienship at controllers", err)
+          } else {
+            callback(null, response)
+          }
+        })
+      } else {
+        callback({"message": "request not found"}, null)
+      }
     }
-
   })
-  connection.query('INSERT INTO friendships SET ?', newFriendship, function (err, response) {
-    if(err){
-      log("Error inserting new frienship at controllers", err)
-    } else {
-      log("inserted friendship #:", response)
-      callback(null, response)
-    }
-  })
-}
+};
 
 var addFriendRequest = function(userId1, userId2, callback) {
   var newFriendship = {"userId1" : userId1, "userId2" : userId2}
