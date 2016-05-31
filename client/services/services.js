@@ -117,8 +117,8 @@ angular.module('services', [])
 			}
 		}
 
-		var addMessageBox = function(targetData){
-
+		var closeMessageBox = function(index){
+			messageBoxes.splice(index,1)
 		}
 
 		var peerToPeerMessage = function (targetUser, message){
@@ -205,7 +205,8 @@ angular.module('services', [])
 			peerToPeerMessage: peerToPeerMessage,
 			getMessageBoxes: getMessageBoxes,
 			messageBoxes: messageBoxes,
-			tryNewMessageBox: tryNewMessageBox
+			tryNewMessageBox: tryNewMessageBox,
+			closeMessageBox: closeMessageBox
 		}
 	})
 

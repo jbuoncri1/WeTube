@@ -109,7 +109,7 @@
       <span flex></span>
 
       <div layout = "row">
-        <div layout = "row" style = "z-index:3"  ng-repeat = "messageBox in messageBoxes">
+        <div layout = "row" style = "z-index:3"  ng-repeat = "messageBox in messageBoxes track by $index">
             <div class = "chatBox" ng-class = "{minimize:minimize}"  layout = "column">
               <div class="chatBoxHeader" layout = "column">
                 <span flex></span>
@@ -117,8 +117,9 @@
                   <span flex></span>
                   <label>{{messageBox.userData.displayName}}</label>
                   <span flex></span>
-                  <img src="/styles/minimize.png" class = "cornerButton" ng-click = "minimize = !minimize">
-                  <img src="/styles/close.png" class = "cornerButton" ng-click = "closeMessageBox">
+                  <img src="/styles/maximize.png" ng-show = "minimize" class = "cornerButton" ng-click = "minimize = !minimize">
+                  <img src="/styles/minimize.png" ng-hide = "minimize" class = "cornerButton" ng-click = "minimize = !minimize">
+                  <img src="/styles/close.png" class = "cornerButton" ng-click = "closeMessageBox($index)">
                 </div>
                 <span flex></span>
               </div>
