@@ -8,6 +8,7 @@ var bcrypt = require('bcrypt');
 var controllers = require('./db/controllers')
 var bodyParser = require('body-parser');
 var weTubeSession = require('./db/userSessionController')
+var routes = require('./routes')
 
 
 var app = express();
@@ -21,7 +22,6 @@ app.use(session({secret: "abstractedChalupas", cookie: {}, resave: false, saveUn
 
 var GOOGLE_CLIENT_ID = "1082022701969-rdl6108k798kf2apth302dcuornld9pg";
 var GOOGLE_CLIENT_SECRET = "rf5SxZAdcpha9sNXcN-QD3uq";
-var rooms = {};
 
 // identify which property defines user. this is the users google id or sql id which are integers
 passport.serializeUser(function(user, done) {
@@ -87,9 +87,7 @@ app.use( passport.session());
 
 
 
-var PORT = 8001 ;
-
-var io = require('socket.io').listen(app.listen(PORT));
+var PORT = process.env.PORT || 8001;
 
 
 
@@ -99,59 +97,11 @@ app.use(express.static(__dirname+"/../client"));
 
 
 var uniqueId = 0
-//socket stuff (to be abstracted)
-io.on('connection', function (socket) {
-  var connectedClients = [];
-  connectedClients.push(socket);
-  socket.emit('playerDetails', {'videoId': 'TRrL5j3MIvo',
-             'startSeconds': 5,
-             'endSeconds': 60,
-             'suggestedQuality': 'large'});
 
-  socket.on('createRoom', function(data) {
-    //maybe usefull for public rooms
-    // rooms[data.room] = {roomTitle : data.roomTitle};
-    console.log("creating room", rooms);
-    //joining room
-    socket.join(data.room);
-  })
-
-  socket.on('currentVideo', function(data){
-    console.log(data, "currentVideo")
-    io.to(data.roomId).emit('currentVideo', data)
-  })
-
-  socket.on('joinRoom', function(data) {
-    socket.join(data.room);
-    io.to(data.room).emit('newViewer', data);
-  });
-
-  socket.on('disconnect', function(data){
-    console.log('user disconnected', data);
-  });
-
-  //on hearing this event the server return sync data to all viewers
-  socket.on('hostPlayerState', function (data) {
-    console.log(data.room, "hostPlayerSync");
-    io.to(data.room).emit('hostPlayerSync', data);
-    //socket.broadcast.emit('hostPlayerSync', data)
-  });
-
-  socket.on('newMessage', function (data) {
-    console.log(data);
-    io.to(data.room).emit('newMessage', data);
-    // socket.broadcast.emit('newMessage', data)
-  });
-
-  socket.on('clientPlayerStateChange', function(data) {
-    console.log('client changed state!, server broadcast', data.stateChange);
-    io.to(data.room).emit('serverStateChange', data.stateChange);
-    // socket.broadcast.emit('serverStateChange', data.stateChange);
-  });
-});
+// routes are called inside of socket
+require('./socket')(app, PORT, express, routes)
 
 
 
-require('./routes')(app,express)
 
 module.exports = app;

@@ -9,7 +9,7 @@ var serverLog = require('./serverLog')
 youTube.setKey('AIzaSyARHBM4uwgROfl_b5yKrHTI8LdaIoO94Y0');
 youTube.addParam('type', 'video')
 
-module.exports = function(app, express){
+module.exports = function(app, express, socket){
   app.get('/api/loggedin', function (req, res) {
     var auth = req.isAuthenticated();
     if (auth) {
@@ -103,14 +103,14 @@ module.exports = function(app, express){
     controllers.addFriendship(req.body.userData.id, req.body.id, function (err, response){
       if(err) {
         if(err.message = serverLog.errorMessages.reqNotFound){
-          res.send(400)
+          res.sendStatus(400)
         } else {
-          res.send(500)
+          res.sendStatus(500)
         }
 
         serverLog.log("Error adding friendship at router", err)
       } else {
-        res.send(201,{message:"Friend Added"})
+        res.sendStatus(201).send({message:"Friend Added"})
       }
     })
   })

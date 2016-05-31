@@ -7,7 +7,7 @@ angular.module("homepage", [])
 
   $scope.friends = [{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"}]
 
-  $scope.friendRequests = [{displayName:"bob", email:"bob", profile_photo: "/styles/no-pic.png"},{displayName:"bob", email:"bob"},{displayName:"bob", email:"bob"},{displayName:"bob", email:"bob"}]
+  $scope.friendRequests;
     
   var initialize = function(){
     $scope.userData = userData.getUserData()
