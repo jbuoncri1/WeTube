@@ -46,7 +46,8 @@ angular.module('services', [])
 		var conversations = {}
 		var messageBoxes = []
 		// displayName:"kyle", id:1, profile_photo: "/styles/no-pic.png"
-		var userData = $cookies.getObject("userData") || {}
+		var userData = {}
+
 		$window.socket = io.connect('http://localhost:8001');
 
 
@@ -187,6 +188,11 @@ angular.module('services', [])
 			})	
 		}
 
+		if($cookies.getObject("userData")){
+			var userData = $cookies.getObject("userData")
+			buildOwnRoom()
+		}
+		
 		return {
 			createUser: createUser,
 			loginUser: loginUser,
