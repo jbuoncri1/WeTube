@@ -83,6 +83,9 @@ angular.module("homepage", [])
     userData.tryNewMessageBox(targetData)
   } 
 
+  $scope.closeMessageBox = function(){
+  }
+
   initialize()
 
 })

@@ -45,13 +45,16 @@ angular.module('services', [])
 		*/ 
 		var conversations = {}
 		var messageBoxes = []
-		var userData = {displayName:"kyle", id:1, profile_photo: "/styles/no-pic.png"}
+		// displayName:"kyle", id:1, profile_photo: "/styles/no-pic.png"
+		var userData = userData || {}
 		$window.socket = io.connect('http://localhost:8001');
 
 
 		socket.on('newMessage', function (data) {
-			if(!tryNewMessageBox(data.userData)){
-			 	conversations[data.userData.id].messages.push(data.message)
+			if(!tryNewMessageBox(data.userData, data.message)){
+				$rootScope.$apply(
+				 	conversations[data.userData.id].messages.push(data.message)
+					)
 			}
 		})
 
@@ -70,12 +73,16 @@ angular.module('services', [])
 
 		}
 
-		var loginUser = function(userData){
+		var loginUser = function(loginUserData){
 			return $http({
 				method: "POST",
 				url: "/login",
-				data: userData
+				data: loginUserData
 			}).then(function (response){
+				if(response.data.loggedin){
+					userData = response.data.userData
+					buildOwnRoom()
+				}
 				return response.data
 			})
 		}
@@ -83,21 +90,23 @@ angular.module('services', [])
 		var buildOwnRoom = function (){
 			socket.emit('createRoom',{room : userData.id, roomTitle : userData.id});
 			
-		}()
+		}
 
-		var tryNewMessageBox = function (targetData){
+		var tryNewMessageBox = function (targetData, message){
 			console.log(messageBoxes)
 
 			if(!conversations[targetData.id]){
 				var conversation = conversations[targetData.id] = {}
 				//if there is a message attached then the data is coming from socket.io and needs to be added to the digest cycle
 				conversations[targetData.id].userData = targetData
-				if(targetData.message){
-					conversation.messages = [targetData.message]
-				$rootScope.$apply(
-					messageBoxes.unshift(conversations[targetData.id])
-					)
+				console.log("targetData", targetData)
+				if(message){
+					$rootScope.$apply(
+						conversation.messages = [message],
+						messageBoxes.unshift(conversations[targetData.id])
+						)
 				} else {
+					conversations[targetData.id].messages = []
 					messageBoxes.unshift(conversations[targetData.id])
 				}
 				

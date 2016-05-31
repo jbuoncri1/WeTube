@@ -99,6 +99,7 @@ md-toolbar{
 }
 
 .chatBox{
+  max-height: 400px;
   width: 250px;
   margin-right: 5px;
   background-color: rgba(240,240,240, 0.8);

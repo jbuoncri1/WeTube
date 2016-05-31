@@ -103,26 +103,30 @@
     </md-sidenav>
 
     <div flex layout = "column">
-<!-- ng-click = "sendMessage(1, 'hi')" -->
+
+
       <div ui-view flex ></div>
+      <span flex></span>
+
       <div layout = "row">
-        <div layout = "row" style = "z-index:3"  ng-repeat = "message in messageBoxes">
-            <md-content class = "chatBox" layout = "column">
+        <div layout = "row" style = "z-index:3"  ng-repeat = "messageBox in messageBoxes">
+            <divmd-content class = "chatBox" layout = "column">
               <div class="chatBoxHeader" layout = "column">
                 <span flex></span>
                 <div layout = "row">
                   <span flex></span>
-                  <label>{{message.userData.displayName}}</label>
+                  <label>{{messageBox.userData.displayName}}</label>
                   <span flex></span>
                   <img src="/styles/minimize.png" class = "cornerButton" ng-click = "minimize = !minimize">
-                  <img src="/styles/close.png" class = "cornerButton">
+                  <img src="/styles/close.png" class = "cornerButton" ng-click = "closeMessageBox">
                 </div>
                 <span flex></span>
               </div>
               <div class = "chatBoxMessages" ng-hide = "minimize">
+                <p ng-repeat = "message in messageBox.messages track by $index">{{message}}</p>
               </div>
-              <input ng-hide = "minimize" ng-keypress="sendMessage(message.userData.id, newMessage)" ng-model = "newMessage">
-            </md-content>
+              <input ng-hide = "minimize" ng-keypress="sendMessage(messageBox.userData.id, newMessage)" ng-model = "newMessage">
+            </div>
         </div>
       </div>
     </div>
