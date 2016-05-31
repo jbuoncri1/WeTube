@@ -236,6 +236,17 @@ var getFriendRequests = function (userId, callback){
   })
 }
 
+var getFriends = function (userId, callback){
+  connection.query('(SELECT userId1 FROM friendships WHERE userId2=?) UNION ALL (SELECT userId2 FROM friendships WHERE userId1=?)', [userId,userId], function (err, response){
+    if(err){
+      serverLog.log(err)
+      callback(err, null)
+    } else {
+      callback(null, response)
+    }
+  })
+}
+
 module.exports = {
   connection: connection,
   //user methods
@@ -248,5 +259,6 @@ module.exports = {
   findUserByDisplayName: findUserByDisplayName,
   addFriendship: addFriendship,
   addFriendRequest: addFriendRequest,
-  getFriendRequests: getFriendRequests
+  getFriendRequests: getFriendRequests,
+  getFriends: getFriends
 };
