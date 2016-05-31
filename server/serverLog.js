@@ -11,6 +11,12 @@ var log = function(){
   }
 }
 
+var errorMessages = {
+  reqNotFound: "request not found"
+}
+
+
 module.exports = {
-  log: log
+  log: log,
+  errorMessages: errorMessages
 }

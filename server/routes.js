@@ -4,6 +4,7 @@ var controllers = require('./db/controllers')
 var YouTube = require('youtube-node');
 
 var youTube = new YouTube();
+var serverLog = require('./serverLog')
 
 youTube.setKey('AIzaSyARHBM4uwgROfl_b5yKrHTI8LdaIoO94Y0');
 youTube.addParam('type', 'video')
@@ -26,7 +27,7 @@ module.exports = function(app, express){
   app.post('/createUser', function (req, res) {
     controllers.findUserByEmail(req.body.email, function (err, response){
       if(err){
-        console.log("Error in router finding user by email")
+        serverLog.log("Error in router finding user by email")
       } else {
         if(response.length){
           res.send({created:false, message: "I'm sorry that User Name is already taken"})
@@ -35,12 +36,12 @@ module.exports = function(app, express){
 
           bcrypt.hash(req.body.password, 13, function(err, hash) {
             if(err){
-              console.log("Error hashing password", err)
+              serverLog.log("Error hashing password", err)
             } else {
               req.body.password = hash
               controllers.addUser(req.body, function (err, response){
                 if(err){
-                  console.log("Error in router creating new user", req.body)
+                  serverLog.log("Error in router creating new user", req.body)
                 } else {
                   res.send({created:true})
                 }
@@ -57,29 +58,29 @@ module.exports = function(app, express){
   // // bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
   // bcrypt.hash(myPlaintextPassword, 10, function(err, hash) {
   //   bcrypt.compare(myPlaintextPassword, hash, function(err, res){
-  //     console.log(res)
+  //     serverLog.log(res)
   //   })
   // });
   app.post('/login', function (req, res) {
     controllers.findUserByEmail(req.body.email, function (err, response) {
       if(err){
-        console.log("Error in login router finding user by email", err)
+        serverLog.log("Error in login router finding user by email", err)
       } else {
         if(response.length){
           var userData = response[0]
           //will be a bcrypt check
-          console.log(req.body.password, "pass")
-          console.log(userData.password, "passed")
+          serverLog.log(req.body.password, "pass")
+          serverLog.log(userData.password, "passed")
           bcrypt.compare(req.body.password, userData.password, function(err, bcryptResponse){
             delete userData["password"]
             if(err){
-              console.log("Error in login comparing passwords", err)
+              serverLog.log("Error in login comparing passwords", err)
             } else {
               if(bcryptResponse){
                 //create the session
                 req.login(userData, function(err){
                   if(err){
-                    console.log("Error logging in at login", err)
+                    serverLog.log("Error logging in at login", err)
                   } else {
                     req.session.passport.user = userData.id
                     req.session.lastLocation = ["Homepage", new Date]
@@ -101,7 +102,13 @@ module.exports = function(app, express){
   app.post("/addFriend", function (req, res){
     controllers.addFriendship(req.body.userData.id, req.body.id, function (err, response){
       if(err) {
-        console.log("Error adding friendship at router", err)
+        if(err.message = serverLog.errorMessages.reqNotFound){
+          res.send(400)
+        } else {
+          res.send(500)
+        }
+
+        serverLog.log("Error adding friendship at router", err)
       } else {
         res.send(201,{message:"Friend Added"})
       }
@@ -111,7 +118,7 @@ module.exports = function(app, express){
   app.post("/friendRequest", function (req, res){
     controllers.addFriendRequest(req.body.userData.id, req.body.id, function (err, response){
       if(err) {
-        console.log("Error adding friendrequest at router", err)
+        serverLog.log("Error adding friendrequest at router", err)
       } else {
         res.status(201).send({message: "Friend request sent"})
       }
@@ -122,7 +129,7 @@ module.exports = function(app, express){
     var id = req.params.id
     controllers.getFriendRequests(id, function (err, response){
       if(err){
-        console.log("Error in router getting friend Requests", err)
+        serverLog.log("Error in router getting friend Requests", err)
       } else {
         res.send(response)
       }
@@ -133,7 +140,7 @@ module.exports = function(app, express){
     var searchQuery = req.params.searchQuery
     youTube.search(searchQuery, 25, function(error, result) {
       if (error) {
-        console.log(error);
+        serverLog.log(error);
       }
       else {
         res.send(200, result);
@@ -145,7 +152,7 @@ module.exports = function(app, express){
     var searchQuery = req.params.searchQuery
     controllers.findUserByEmail(searchQuery, function (err, response){
       if(err){
-        console.log("error in routes finding user by email", err)
+        serverLog.log("error in routes finding user by email", err)
         res.send(500)
       } else {
         res.send(response)
@@ -157,7 +164,7 @@ module.exports = function(app, express){
     var searchQuery = req.params.searchQuery
     controllers.findUserByDisplayName(searchQuery, function (err, response){
       if(err){
-        console.log("error in routes finding user by display name", err)
+        serverLog.log("error in routes finding user by display name", err)
         res.send(500)
       } else {
         res.send(response)
