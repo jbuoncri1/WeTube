@@ -75,6 +75,11 @@ angular.module("homepage", [])
     userData.peerToPeerMessage(targetId, message)
   }
 
+  $scope.newMessageBox = function(targetData){
+    userData.tryNewMessageBox(targetData)
+    console.log(targetData)
+  } 
+
   initialize()
 
 })

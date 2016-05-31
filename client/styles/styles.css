@@ -102,9 +102,11 @@ md-toolbar{
   height: 250px;
   width: 250px;
   margin-top: -250px;
+  margin-right: 5px;
   background-color: rgba(240,240,240, 0.8);
   border: 1px solid gray;
   overflow: hidden;
+
 }
 
 .chatBoxHeader{
@@ -138,7 +140,11 @@ md-toolbar{
 }
 
 .button{
+  padding: 2px;
   transition:background-color .3s ease-in-out;
+  border: 1px solid gray;
+  border-radius: 5px;
+
 }
 
 .button:hover{

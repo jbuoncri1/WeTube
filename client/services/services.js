@@ -50,15 +50,8 @@ angular.module('services', [])
 
 
 		socket.on('newMessage', function (data) {
-			if(!conversations[data.userData.id]){
-				var conversation = conversations[data.userData.id] = {}
-				conversation.messages = [data.message]
-				conversations[data.userData.id].userData = data.userData
-			$rootScope.$apply(
-				messageBoxes.unshift(conversations[data.userData.id])
-				)
-			} else {
-				conversations[data.userData.id].messages.push(data.message)
+			if(!tryNewMessageBox(data.userData)){
+			 	conversations[data.userData.id].messages.push(data.message)
 			}
 		})
 
@@ -91,6 +84,32 @@ angular.module('services', [])
 			socket.emit('createRoom',{room : userData.id, roomTitle : userData.id});
 			
 		}()
+
+		var tryNewMessageBox = function (targetData){
+			console.log(messageBoxes)
+
+			if(!conversations[targetData.id]){
+				var conversation = conversations[targetData.id] = {}
+				//if there is a message attached then the data is coming from socket.io and needs to be added to the digest cycle
+				conversations[targetData.id].userData = targetData
+				if(targetData.message){
+					conversation.messages = [targetData.message]
+				$rootScope.$apply(
+					messageBoxes.unshift(conversations[targetData.id])
+					)
+				} else {
+					messageBoxes.unshift(conversations[targetData.id])
+				}
+				
+				return true
+			} else {
+				return false
+			}
+		}
+
+		var addMessageBox = function(targetData){
+
+		}
 
 		var peerToPeerMessage = function (targetUser, message){
 			socket.emit('newMessage', {
@@ -168,7 +187,8 @@ angular.module('services', [])
 			getFriends: getFriends,
 			peerToPeerMessage: peerToPeerMessage,
 			getMessageBoxes: getMessageBoxes,
-			messageBoxes: messageBoxes
+			messageBoxes: messageBoxes,
+			tryNewMessageBox: tryNewMessageBox
 		}
 	})
 
