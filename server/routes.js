@@ -140,6 +140,17 @@ module.exports = function(app, express, socket, io){
     })
   })
 
+  app.get("/friends/:id", function (req, res){
+    var id = req.params.id
+    controllers.getFriends(id, function (err, response){
+      if(err){
+        serverLog.log("Error getting friends in router", err)
+      } else {
+        res.send(response)
+      }
+    })
+  })
+
   app.get("/searchYoutube/:searchQuery", function (req, res){
     var searchQuery = req.params.searchQuery
     youTube.search(searchQuery, 25, function(error, result) {

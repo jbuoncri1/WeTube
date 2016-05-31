@@ -148,6 +148,14 @@ angular.module('services', [])
 				return response.data
 			})	
 		}
+		var getFriends = function(){
+			return $http({
+				method: 'GET',
+				url: "friends/" + userData.id
+			}).then(function (response){
+				return response.data
+			})	
+		}
 
 		return {
 			createUser: createUser,
@@ -157,6 +165,7 @@ angular.module('services', [])
 			addFriend: addFriend,
 			friendRequest: friendRequest,
 			getFriendRequests: getFriendRequests,
+			getFriends: getFriends,
 			peerToPeerMessage: peerToPeerMessage,
 			getMessageBoxes: getMessageBoxes,
 			messageBoxes: messageBoxes

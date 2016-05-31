@@ -11,9 +11,15 @@ angular.module("homepage", [])
     
   var initialize = function(){
     $scope.userData = userData.getUserData()
+    
     userData.getFriendRequests()
     .then(function (friendRequests){
       $scope.friendRequests = friendRequests
+    })
+
+    userData.getFriends()
+    .then(function (friends){
+      $scope.friends = friends
     })
   }
 
