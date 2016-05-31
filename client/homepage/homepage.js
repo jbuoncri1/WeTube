@@ -4,14 +4,12 @@ angular.module("homepage", [])
 
   $scope.messageBoxes = userData.messageBoxes
   $scope.showSideNav = true;
-
-  $scope.friends = [{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"},{name: "Bob", lastLocation: "homepage"}]
-
+  $scope.friends;
   $scope.friendRequests;
     
   var initialize = function(){
     $scope.userData = userData.getUserData()
-    
+
     userData.getFriendRequests()
     .then(function (friendRequests){
       $scope.friendRequests = friendRequests
@@ -20,6 +18,9 @@ angular.module("homepage", [])
     userData.getFriends()
     .then(function (friends){
       $scope.friends = friends
+      for(var i = 0; i < friends.length; i++){
+        console.log("Get Friend Status")
+      }
     })
   }
 
