@@ -33,7 +33,7 @@ angular.module('services', [])
 
 	})
 
-	.factory('userData', function ($http, $window, $rootScope) {
+	.factory('userData', function ($http, $window, $rootScope, $cookies) {
 		/*conversations obj note - messages will be lost upon refresh
 		{ id: 
 			{
@@ -46,7 +46,7 @@ angular.module('services', [])
 		var conversations = {}
 		var messageBoxes = []
 		// displayName:"kyle", id:1, profile_photo: "/styles/no-pic.png"
-		var userData = userData || {}
+		var userData = $cookies.getObject("userData") || {}
 		$window.socket = io.connect('http://localhost:8001');
 
 
@@ -80,7 +80,7 @@ angular.module('services', [])
 				data: loginUserData
 			}).then(function (response){
 				if(response.data.loggedin){
-					userData = response.data.userData
+					updateUserData(response.data.userData)
 					buildOwnRoom()
 				}
 				return response.data
@@ -129,6 +129,8 @@ angular.module('services', [])
 		}
 
 		var updateUserData = function(newUserData){
+			$cookies.putObject("userData", newUserData)
+			console.log($cookies.getObject("userData"), "nom")
 			userData = newUserData
 		}
 

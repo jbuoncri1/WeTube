@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngRoute', 'login', 'stream', 'services', 'ngMaterial', 'ui.router', 'homepage', 'search', 'dtrw.bcrypt']);
+var app = angular.module('app', ['ngRoute', 'login', 'stream', 'services', 'ngMaterial', 'ui.router', 'homepage', 'search', 'dtrw.bcrypt', 'ngCookies']);
 
 app.run(function ($rootScope, $state, auth) {
   $rootScope.$on("$stateChangeStart", function (event, toState) {
