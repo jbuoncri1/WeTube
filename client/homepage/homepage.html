@@ -1,5 +1,5 @@
 <md-content layout = "column" style = "height:100vh;">  
-  <md-toolbar layout = "row" style = "z-index:3">
+  <md-toolbar layout = "row" style = "z-index:4">
     <span flex = "5"></span><h1>WeTube</h1>
     <span flex></span>
     <div layout = "column">
@@ -31,14 +31,19 @@
   </md-toolbar>
 
   <div layout = "row" flex style = "z-index:2">
-    <div class = "sideNav" layout = "column">
+    <div class = "sideNav hidden" ng-show = "hideLeftNav">
+      <div class="headerContainer">
+        <img src="styles/maximize.png" class = "cornerButton" ng-click = "hideLeftNav = false" >
+      </div>
+    </div>
 
-      <div layout = "row" ng-show = "friendRequests.length" ng-click = "displayRequests = !displayRequests;" class = "headerContainer">
+    <div class = "sideNav" layout = "column" ng-hide = "hideLeftNav">
+      <div layout = "row" ng-show = "friendRequests.length" ng-click = "displayRequests = !displayRequests;" class = "headerContainer" style = "z-index:3;">
         <span flex></span>
         <h3> Friend Requests </h3>
         <span flex></span>
         <div layout = "column">
-          <!-- <img src="styles/backArrow.png" class = "button" ng-click = "toggleSideNav()"> -->
+          <img src="styles/minimize.png" class = "cornerButton" ng-click = "hideLeftNav = true">
           <span flex></span>
         </div>
       </div>

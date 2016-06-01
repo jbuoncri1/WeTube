@@ -12,7 +12,7 @@ md-toolbar{
 }
 
 .shadow{
-  box-shadow: 0 0px 10px rgba(0,0,0,1), 0 0px 2px rgba(0,0,0,0.24);
+  box-shadow: 0 0px 10px rgba(0,0,0,1);
 }
 
 .cardContainer {
@@ -43,11 +43,14 @@ md-toolbar{
 }
 
 .sideNav{
-  z-index: 3;
-  box-shadow: 0px 0px 10px rgba(0,0,0,1), 0px 0px 2px rgba(0,0,0,0.24);
+  z-index: 2;
+  box-shadow: 5px 0px 10px rgba(0,0,0,1),-5px 0px 10px rgba(0,0,0,1);
   height: 85vh;
   width: 300px;
-  border: 2px solid black;  
+}
+
+.hidden{
+  width: 20px
 }
 
 .headerContainer{
@@ -110,6 +113,7 @@ md-toolbar{
 }
 
 .chatBox{
+  box-shadow: 0 0px 10px rgba(0,0,0,1);
   margin-top: -300px;
   max-height: 300px;
   width: 250px;
@@ -178,9 +182,6 @@ md-toolbar{
 
 }
 
-.button:hover{
-  background-color: rgb(180,180,180);
-}
 
 .cornerButton {
   border: 1px black solid;
@@ -189,8 +190,15 @@ md-toolbar{
   margin-right: 2px;
 }
 
+.cornerButton:hover{
+  background-color: rgb(180,180,180);
+}
 
 .cornerButton:active{
   background-color: rgb(240,240,240)
 }
 
+#player{
+  height:83vh;
+  width: 100%
+}

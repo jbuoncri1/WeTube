@@ -2,33 +2,22 @@
   <div class = "background">
     <div layout = "row">
       <span flex layout = "column">
-
       <!-- where the player gets added -->
-      <div id="player"></div>
+      <div id="player" class = "shadow"></div>
 
-      <!-- where the messager goes when we're in room -->
-      <div ng-show = "bool">
-
-        <input class = "messanger" ng-model = "message" ng-keyup="submitMessage($event.keyCode)"></input>
-
-        <div ng-repeat = "message in messages">
-
-          <span>
-            <img ng-src="{{message.userImage}}"></img>
-          </span>
-
-          <span>
-            {{message.user}} says: {{message.message}}
-          </span>
-        </div>
-      </div>
-        
       <script >
       </script>
       </span>
+      <div class = "sideNav hidden" ng-show = "hideRightNav">
+        <div class="headerContainer">
+          <img src="styles/maximize.png" class = "cornerButton" ng-click = "hideRightNav = false" >
+        </div>
+      </div>
 
-      <span class = "sideNav">
-        <div class="headerContainer"></div>
+      <span class = "sideNav" ng-hide = "hideRightNav">
+        <div class="headerContainer">
+            <img src="styles/minimize.png" class = "cornerButton" ng-click = "hideRightNav = true" >
+        </div>
       </span>
     </div>
   </div>
