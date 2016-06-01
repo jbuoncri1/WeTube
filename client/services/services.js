@@ -52,11 +52,7 @@ angular.module('services', [])
 
 
 		socket.on('newMessage', function (data) {
-			if(!tryNewMessageBox(data.userData, data.message)){
-				$rootScope.$apply(
-				 	conversations[data.userData.id].messages.push(data.message)
-					)
-			}
+			tryNewMessageBox(data.userData, data.message)
 		})
 
 		socket.on("friendAdded", function (data){
@@ -94,31 +90,41 @@ angular.module('services', [])
 		}
 
 		var tryNewMessageBox = function (targetData, message){
-			console.log(messageBoxes)
-
-			if(!conversations[targetData.id]){
-				var conversation = conversations[targetData.id] = {}
-				//if there is a message attached then the data is coming from socket.io and needs to be added to the digest cycle
-				conversations[targetData.id].userData = targetData
-				console.log("targetData", targetData)
-				if(message){
-					$rootScope.$apply(
-						conversation.messages = [message],
-						messageBoxes.unshift(conversations[targetData.id])
-						)
-				} else {
-					conversations[targetData.id].messages = []
-					messageBoxes.unshift(conversations[targetData.id])
+			var conversation = conversations[targetData.id]
+			//if no current message box make one
+			if(!findMessageBox(targetData.id)){
+				//is conversation is not message box
+				if(!conversation){
+					//initialize a new conversation
+					conversation = conversations[targetData.id] = {
+						userData : targetData,
+						messages : []
+					}
 				}
-				
-				return true
-			} else {
-				return false
+				messageBoxes.unshift(conversation)
+			}
+			if(message){
+				$rootScope.$apply(
+					conversation.messages.push(message)
+				)
 			}
 		}
 
 		var closeMessageBox = function(index){
 			messageBoxes.splice(index,1)
+		}
+
+		var addNewMessageBox = function(targetId){
+			messageBoxes.unshift(conversations[targetId])
+		}
+
+		var findMessageBox = function(targetId){
+			for(var i = 0; i < messageBoxes.length; i++){
+				if(messageBoxes[i].userData.id === targetId){
+					return true
+				} 
+			}
+			return false
 		}
 
 		var peerToPeerMessage = function (targetUser, message){

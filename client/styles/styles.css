@@ -102,7 +102,7 @@ md-toolbar{
   margin-top: -300px;
   max-height: 300px;
   width: 250px;
-  margin-right: 5px;
+  margin-left: 5px;
   background-color: rgba(240,240,240, 0.8);
   border: 1px solid gray;
   overflow: hidden;
