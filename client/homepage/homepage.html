@@ -39,7 +39,7 @@
 
     <div class = "sideNav" layout = "column" ng-hide = "hideLeftNav">
 
-      <div style = "z-index:1">
+      <div style = "z-index:3">
       <div layout = "row" ng-click = "hideFriends = !hideFriends" class = "headerContainer" >
         <span flex></span>
         <h3> Friends </h3>
@@ -74,7 +74,7 @@
         <md-card>
       </md-content>
 
-      <div layout = "row" ng-show = "friendRequests.length" ng-click = "displayRequests = !displayRequests;" class = "headerContainer" style = "z-index:3;">
+      <div layout = "row" ng-show = "friendRequests.length" ng-click = "displayRequests = !displayRequests;" class = "headerContainer" style = "z-index:1;">
         <span flex></span>
         <h3> Friend Requests </h3>
         <span flex></span>

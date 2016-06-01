@@ -1,4 +1,18 @@
 angular.module('services', [])
+
+	.factory("helperFunctions", function(){
+		//extend will overWriteOldProperties
+		var extend = function(oldObj, newObj){
+			for(var key in newObj){
+				oldObj[key] = newObj[key]
+			}
+		}
+
+		return {
+			extend: extend
+		}
+	})
+
 	.factory('OAuth', function ($http) {
 		var googleLogin = function (data) {
 			return $http({
@@ -33,7 +47,7 @@ angular.module('services', [])
 
 	})
 
-	.factory('userData', function ($http, $window, $rootScope, $cookies) {
+	.factory('userData', function ($http, $window, $rootScope, $cookies, helperFunctions) {
 		/*conversations obj note - messages will be lost upon refresh
 		{ id: 
 			{
@@ -49,6 +63,13 @@ angular.module('services', [])
 		var userData = {}
 		var friendRequests = []
 		var friends = []
+
+		var currentStatus = {
+			// status:"",
+			// watching: "",
+			// inRoom: "",
+		}
+
 		$window.socket = io.connect('http://localhost:8001');
 
 
@@ -87,6 +108,9 @@ angular.module('services', [])
 
 		var buildOwnRoom = function (){
 			socket.emit('createRoom',{room : userData.id, roomTitle : userData.id});
+			updateStatus({status: "online"})
+			console.log(currentStatus)
+
 		}
 
 		var tryNewMessageBox = function (targetData, message){
@@ -137,8 +161,14 @@ angular.module('services', [])
 		}
 
 		var updateUserData = function(newUserData){
+			helperFunctions.extend(userData, newUserData)
 			$cookies.putObject("userData", newUserData)
-			userData = newUserData
+		}
+
+		var updateStatus = function(newStatusObj){
+			helperFunctions.extend(currentStatus, newStatusObj)
+			$cookies.putObject("currentStatus", currentStatus)
+			console.log(currentStatus)
 		}
 
 		var localFriendRequests = function(){
@@ -207,6 +237,9 @@ angular.module('services', [])
 			var userData = $cookies.getObject("userData")
 			buildOwnRoom()
 		}
+		if($cookies.getObject("currentStatus")){
+			var currentStatus = $cookies.getObject("currentStatus")
+		}
 		
 		return {
 			createUser: createUser,
@@ -224,7 +257,8 @@ angular.module('services', [])
 			closeMessageBox: closeMessageBox,
 			friendRequests: friendRequests,
 			localFriendRequests: localFriendRequests,
-			localFriends: localFriends
+			localFriends: localFriends,
+			updateStatus: updateStatus
 		}
 	})
 
@@ -265,7 +299,12 @@ angular.module('services', [])
 
 	.factory('getVideo', function ($window, $interval, $rootScope, bcrypt, userData, $state) {
 
+		var videoQueue = [];
 		var roomId;
+		var host; 
+		var currentVideo = '';
+		var messages = [];
+
 
 		var onYoutubeStateChange = function() {
 			console.log('state change!')
@@ -284,10 +323,6 @@ angular.module('services', [])
 				});
 			}
 		};
-
-		var host = false; 
-		var currentVideo = '';
-		var messages = [];
 
 		//at the end of setupPlayer onYouTubeIframeAPIReady is automatically called
 		var setupPlayer = function(source, isHost) {
@@ -315,11 +350,14 @@ angular.module('services', [])
 				}
 			});
 		}
-
+		var currentStatus = {
+			// status:"",
+			// watching: "",
+			// inRoom: "",
+		}
 			//sets up the socket stream and events
 		var submitRoom = function(videoId, videoTitle, host, roomId){
-
-
+			roomId = roomId
 			currentVideo = videoId
 
 			var displayName = userData.getUserData().displayName 
@@ -327,6 +365,9 @@ angular.module('services', [])
 			if(host){
 				bcrypt.hash(displayName, 8, function(err, hash) {
 					roomId = hash
+					console.log(roomId, hash)
+					userData.updateStatus({inRoom:roomId, watching:videoTitle})
+
 					socket.emit('createRoom',{room : roomId, roomTitle : videoTitle});
 					$state.go("home.stream", {roomId: roomId, currentVideo:videoId, host:true})
 
@@ -356,6 +397,9 @@ angular.module('services', [])
 			if(!host){
 				socket.emit ('joinRoom', {room: roomId});
 
+				userData.updateStatus({inRoom:roomId, watching:videoTitle})
+
+
 				socket.on("currentVideo", function(data){
 					console.log("got data", data)
 					setupPlayer(data.currentVideo, false)
@@ -377,16 +421,12 @@ angular.module('services', [])
 				}
 			});
 
+
 		};
 
 		//submits the message through socket IO whenever one is made
 		$window.submitMessage = function(user, message){
-			console.log("Message submitted")
 			//grabs the username from Google account
-			var username = $rootScope.user.username
-			var userImage = $rootScope.user.photo
-			//since our socket only currently sends to people who did
-			//not brodcast we need to add the message to our messages array
 			socket.emit('newMessage', {
 				"user" : username,
 				"message" : message,

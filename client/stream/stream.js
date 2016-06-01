@@ -4,6 +4,7 @@ angular.module('stream', [])
 		$scope.startTime = 120;
 		//set messages to the factory array of messages since that is where
 		//they are kept updated
+		$scope.streamMessage = ""
 		$scope.messages = getVideo.messages;
 		$scope.rooms = [];
 		$scope.userData = userData.getUserData();
@@ -49,11 +50,12 @@ angular.module('stream', [])
 			getVideo.setupPlayer(videoId, false)
 		}
 
-		$scope.submitMessage = function(keyCode){
-			if(keyCode === 13){
-				getVideo.submitMessage($scope.user, $scope.message)
+		$scope.submitMessage = function(){
+			if(event.charCode === 13){
+				console.log($scope.streamMessage)
+				// getVideo.submitMessage($scope.user, $scope.message)
 				// ({user: $scope.user, message:$scope.message})
-				$scope.message = ""
+				$scope.streamMessage = ""
 			}					
 		}
 	})
