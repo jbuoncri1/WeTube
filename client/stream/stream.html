@@ -1,28 +1,35 @@
 <md-content >
   <div class = "background">
+    <div layout = "row">
+      <span flex layout = "column">
 
+      <!-- where the player gets added -->
+      <div id="player"></div>
 
-    <!-- where the player gets added -->
-    <div id="player"></div>
+      <!-- where the messager goes when we're in room -->
+      <div ng-show = "bool">
 
-    <!-- where the messager goes when we're in room -->
-    <div ng-show = "bool">
+        <input class = "messanger" ng-model = "message" ng-keyup="submitMessage($event.keyCode)"></input>
 
-      <input class = "messanger" ng-model = "message" ng-keyup="submitMessage($event.keyCode)"></input>
+        <div ng-repeat = "message in messages">
 
-      <div ng-repeat = "message in messages">
+          <span>
+            <img ng-src="{{message.userImage}}"></img>
+          </span>
 
-        <span>
-          <img ng-src="{{message.userImage}}"></img>
-        </span>
-
-        <span>
-          {{message.user}} says: {{message.message}}
-        </span>
+          <span>
+            {{message.user}} says: {{message.message}}
+          </span>
+        </div>
       </div>
+        
+      <script >
+      </script>
+      </span>
+
+      <span class = "sideNav">
+        <div class="headerContainer"></div>
+      </span>
     </div>
-      
-    <script>
-    </script>
   </div>
 </md-content>

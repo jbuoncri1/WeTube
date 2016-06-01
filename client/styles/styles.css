@@ -4,7 +4,7 @@ body, #loginBackground {
 
 md-toolbar{
   box-shadow: 0 0px 10px rgba(0,0,0,1), 0 0px 2px rgba(0,0,0,0.24);
-  max-height:15vh;
+  height:15vh;
 }
 
 .subView{
@@ -42,9 +42,20 @@ md-toolbar{
   padding: 5px;
 }
 
-.sidenav {
-  min-width: 300px;
-  min-height: 80px;
+.sideNav{
+  z-index: 3;
+  box-shadow: 0px 0px 10px rgba(0,0,0,1), 0px 0px 2px rgba(0,0,0,0.24);
+  height: 85vh;
+  width: 300px;
+  border: 2px solid black;  
+}
+
+.headerContainer{
+  color:white;
+  box-shadow: 0px 0px 10px rgba(0,0,0,1), 0 0px 2px rgba(0,0,0,0.24);
+  width: 100%;
+  height: 75px;
+  background-color: rgb(63,81,181);
 }
 
 .background, md-content{
@@ -178,9 +189,8 @@ md-toolbar{
   margin-right: 2px;
 }
 
+
 .cornerButton:active{
   background-color: rgb(240,240,240)
 }
-
-
 

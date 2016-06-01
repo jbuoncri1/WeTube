@@ -31,9 +31,9 @@
   </md-toolbar>
 
   <div layout = "row" flex style = "z-index:2">
-    <md-sidenav md-is-locked-open = "true" md-component-id="left" class = "sidenav background shadow" flex = "20" layout = "column">
+    <div class = "sideNav" layout = "column">
 
-      <md-toolbar layout = "row" ng-show = "friendRequests.length" ng-click = "displayRequests = !displayRequests;" class = "sidenav">
+      <div layout = "row" ng-show = "friendRequests.length" ng-click = "displayRequests = !displayRequests;" class = "headerContainer">
         <span flex></span>
         <h3> Friend Requests </h3>
         <span flex></span>
@@ -41,7 +41,7 @@
           <!-- <img src="styles/backArrow.png" class = "button" ng-click = "toggleSideNav()"> -->
           <span flex></span>
         </div>
-      </md-toolbar>
+      </div>
 
       <md-content ng-show = "displayRequests" style= "min-height : 140px;">
         <md-card ng-repeat = "request in friendRequests" class = "friendRequest">
@@ -71,11 +71,11 @@
 
 
       <div style = "z-index:1">
-      <md-toolbar layout = "row" ng-click = "hideFriends = !hideFriends" >
+      <div layout = "row" ng-click = "hideFriends = !hideFriends" class = "headerContainer" >
         <span flex></span>
         <h3> Friends </h3>
         <span flex></span>
-      </md-toolbar>
+      </div>
       </div>
       <md-content flex ng-hide = "hideFriends">
         <md-card ng-repeat = "friend in friends" class = "friend" ng-click = "newMessageBox(friend)">
@@ -100,7 +100,7 @@
           </md-card-content>
         <md-card>
       </md-content>
-    </md-sidenav>
+    </div>
 
     <div flex layout = "column">
 
@@ -125,7 +125,7 @@
               </div>
               <div class = "chatBoxMessageContainer" ng-hide = "minimize" layout = "column">
                 <div ng-repeat = "message in messageBox.messages track by $index">
-                  <p ng-class = "{chatBoxMessage:true,userMessage:message.isUser}"> {{message.text}}</p>
+                  <span ng-class = "{chatBoxMessage:true,userMessage:message.isUser}"> {{message.text}}</span>
                 </div>
               </div>
               <input ng-hide = "minimize" ng-keypress="sendMessage(messageBox)" ng-model = "messageBox.newMessage">
