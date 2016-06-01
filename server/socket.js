@@ -32,6 +32,10 @@ module.exports = function(app, PORT, express, routes){
       console.log('user disconnected', data);
     });
 
+    socket.on('getStatus', function(data){
+      console.log("getStatus", data)
+      io.to(data.targetId).emit('getStatus', data.originId)
+    })
     //on hearing this event the server return sync data to all viewers
     socket.on('hostPlayerState', function (data) {
       console.log(data.room, "hostPlayerSync");

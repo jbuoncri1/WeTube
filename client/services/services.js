@@ -77,6 +77,11 @@ angular.module('services', [])
 			tryNewMessageBox(data.userData, data.message)
 		})
 
+		socket.on('getStatus', function (data){
+			var sendStatusTo = data.id
+			socket.emit("sendingStatus", currentStatus)
+		})
+
 		socket.on("friendAdded", function (data){
 			$rootScope.$apply(friends.push(data))
 		})
@@ -91,6 +96,11 @@ angular.module('services', [])
 			})
 
 		}
+
+		var getStatus = function(targetId){
+			console.log(userData)
+			socket.emit("getStatus", {targetId: targetId, originId: userData.id})
+		}(1)
 
 		var loginUser = function(loginUserData){
 			return $http({
