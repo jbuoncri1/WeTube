@@ -159,7 +159,7 @@ md-toolbar{
   border: 1px black solid;
   width: 15px;
   height:15px;
-  margin-left: 2px;
+  margin-right: 2px;
 }
 
 .cornerButton:active{

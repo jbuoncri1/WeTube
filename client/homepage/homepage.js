@@ -73,8 +73,8 @@ angular.module("homepage", [])
 
   $scope.sendMessage = function (targetId, message){
     if(event.keyCode === 13){
-      console.log(targetId, message)
       userData.peerToPeerMessage(targetId, message)
+      $scope.newMessage = ""
       
     }
   }

@@ -86,7 +86,6 @@ angular.module('services', [])
 
 		var buildOwnRoom = function (){
 			socket.emit('createRoom',{room : userData.id, roomTitle : userData.id});
-			
 		}
 
 		var tryNewMessageBox = function (targetData, message){
@@ -127,9 +126,9 @@ angular.module('services', [])
 			return false
 		}
 
-		var peerToPeerMessage = function (targetUser, message){
+		var peerToPeerMessage = function (targetId, message){
 			socket.emit('newMessage', {
-				room: targetUser, 
+				room: targetId, 
 				userData: userData, 
 				message: message
 			})
