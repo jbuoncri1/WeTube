@@ -57,7 +57,7 @@ angular.module('services', [])
 		})
 
 		socket.on("friendAdded", function (data){
-			console.log(data, "newFriend")
+			$rootScope.$apply(friends.push(data))
 		})
 
 		var createUser = function(userData){
@@ -131,8 +131,9 @@ angular.module('services', [])
 			socket.emit('newMessage', {
 				room: targetId, 
 				userData: userData, 
-				message: message
+				message: {text:message}
 			})
+			conversations[targetId].messages.push({text:message, isUser:true})
 		}
 
 		var updateUserData = function(newUserData){

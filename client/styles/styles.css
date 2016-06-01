@@ -118,10 +118,26 @@ md-toolbar{
   background-color: rgb(63,81,181);
   color:white;
 }
-.chatBoxMessages{
+.chatBoxMessageContainer{
   height:350px;
+  overflow: auto;
 }
 
+.chatBoxMessage{
+  float:left;
+  color:white;
+  border-radius: 5px;
+  background-color: rgb(90,150,240);
+  margin: 5px;
+  padding: 5px;
+  max-width: 230px;
+  word-wrap: break-word;
+}
+
+.userMessage{
+  background-color: rgb(90,180,130);
+  float:right;
+}
 
 
 .searchResult{

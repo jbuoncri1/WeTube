@@ -123,10 +123,12 @@
                 </div>
                 <span flex></span>
               </div>
-              <div class = "chatBoxMessages" ng-hide = "minimize">
-                <p ng-repeat = "message in messageBox.messages track by $index">{{message}}</p>
+              <div class = "chatBoxMessageContainer" ng-hide = "minimize" layout = "column">
+                <div ng-repeat = "message in messageBox.messages track by $index">
+                  <p ng-class = "{chatBoxMessage:true,userMessage:message.isUser}"> {{message.text}}</p>
+                </div>
               </div>
-              <input ng-hide = "minimize" ng-keypress="sendMessage(messageBox.userData.id, newMessage)" ng-model = "newMessage">
+              <input ng-hide = "minimize" ng-keypress="sendMessage(messageBox)" ng-model = "messageBox.newMessage">
             </div>
         </div>
       </div>
