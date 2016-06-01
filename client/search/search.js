@@ -41,7 +41,7 @@ angular.module("search", [])
   }
 
   $scope.friendRequest = function(id){
-    userData.friendRequest(id)
+    userData.sendFriendRequest(id)
   }
 
   initialize()

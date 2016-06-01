@@ -47,7 +47,8 @@ angular.module('services', [])
 		var messageBoxes = []
 		// displayName:"kyle", id:1, profile_photo: "/styles/no-pic.png"
 		var userData = {}
-
+		var friendRequests = []
+		var friends = []
 		$window.socket = io.connect('http://localhost:8001');
 
 
@@ -136,8 +137,15 @@ angular.module('services', [])
 
 		var updateUserData = function(newUserData){
 			$cookies.putObject("userData", newUserData)
-			console.log($cookies.getObject("userData"), "nom")
 			userData = newUserData
+		}
+
+		var localFriendRequests = function(){
+			return friendRequests
+		}
+
+		var localFriends = function(){
+			return friends
 		}
 
 		var getUserData = function(){
@@ -162,7 +170,7 @@ angular.module('services', [])
 			})
 		}
 
-		var friendRequest = function(id){
+		var sendFriendRequest = function(id){
 			console.log("service", id)
 			return $http({
 				method: "POST",
@@ -181,15 +189,16 @@ angular.module('services', [])
 				method: 'GET',
 				url: "friendRequests/" + userData.id
 			}).then(function (response){
-				return response.data
+				friendRequests = response.data
 			})	
 		}
+
 		var getFriends = function(){
 			return $http({
 				method: 'GET',
 				url: "friends/" + userData.id
 			}).then(function (response){
-				return response.data
+				friends = response.data
 			})	
 		}
 
@@ -204,14 +213,17 @@ angular.module('services', [])
 			updateUserData: updateUserData,
 			getUserData: getUserData,
 			addFriend: addFriend,
-			friendRequest: friendRequest,
+			sendFriendRequest: sendFriendRequest,
 			getFriendRequests: getFriendRequests,
 			getFriends: getFriends,
 			peerToPeerMessage: peerToPeerMessage,
 			getMessageBoxes: getMessageBoxes,
 			messageBoxes: messageBoxes,
 			tryNewMessageBox: tryNewMessageBox,
-			closeMessageBox: closeMessageBox
+			closeMessageBox: closeMessageBox,
+			friendRequests: friendRequests,
+			localFriendRequests: localFriendRequests,
+			localFriends: localFriends
 		}
 	})
 

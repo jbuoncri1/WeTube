@@ -11,14 +11,14 @@ angular.module("homepage", [])
     $scope.userData = userData.getUserData()
 
     userData.getFriendRequests()
-    .then(function (friendRequests){
-      $scope.friendRequests = friendRequests
+    .then(function(){
+      $scope.friendRequests = userData.localFriendRequests()
     })
 
     userData.getFriends()
-    .then(function (friends){
-      $scope.friends = friends
-      for(var i = 0; i < friends.length; i++){
+    .then(function (){
+      $scope.friends = userData.localFriends()
+      for(var i = 0; i < $scope.friends.length; i++){
         console.log("Get Friend Status")
       }
     })
