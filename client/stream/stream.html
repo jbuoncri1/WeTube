@@ -14,11 +14,37 @@
         </div>
       </div>
 
-      <span class = "sideNav" ng-hide = "hideRightNav">
-        <div class="headerContainer">
-            <img src="styles/minimize.png" class = "cornerButton" ng-click = "hideRightNav = true" >
+      <div class = "sideNav" ng-hide = "hideRightNav">
+        <div class = "headerContainer" layout = "row">
+          <span flex = "33" class = "tab">
+            <div layout = "column" style = "position:absolute;">
+              <img src="styles/minimize.png" class = "cornerButton" ng-click = "hideRightNav = true" >
+            </div>
+            <div layout = "row">
+              <span flex></span>
+              <h2><label>Chat</label></h2>
+              <span flex></span>
+            </div>
+          </span>
+
+          <span flex = "33" class = "tab" layout = "row">
+            <span flex></span>
+            <h2><label>Queue</label></h2>
+            <span flex></span>
+          </span>
+
+          <span flex = "33" class = "tab" layout = "row">
+            <span flex></span>
+            <img class="button" src = "/styles/search.png">
+            <span flex></span>
+          </span>
         </div>
-      </span>
+
+        <div class = "streamChat">
+        </div>
+        <input class = "streamInput">
+
+      </div>
     </div>
   </div>
 </md-content>
