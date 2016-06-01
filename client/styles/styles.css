@@ -150,6 +150,7 @@ md-toolbar{
 }
 
 .streamChat{
+  border-radius: 5px;
   width: 280px;
   height:65vh;
   margin: 5px 10px 5px 10px;
