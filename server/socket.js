@@ -33,8 +33,14 @@ module.exports = function(app, PORT, express, routes){
     });
 
     socket.on('getStatus', function(data){
-      console.log("getStatus", data)
       io.to(data.targetId).emit('getStatus', data.originId)
+    })
+
+    socket.on('sendingStatus', function(data){
+      io.to(data.targetId).emit('sendingStatus', {
+        currentStatus: data.currentStatus,
+        originId: data.originId
+      })
     })
     //on hearing this event the server return sync data to all viewers
     socket.on('hostPlayerState', function (data) {

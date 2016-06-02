@@ -62,7 +62,7 @@ angular.module('services', [])
 		// displayName:"kyle", id:1, profile_photo: "/styles/no-pic.png"
 		var userData = {}
 		var friendRequests = []
-		var friends = []
+		var friends = {}
 
 		var currentStatus = {
 			// status:"",
@@ -77,13 +77,20 @@ angular.module('services', [])
 			tryNewMessageBox(data.userData, data.message)
 		})
 
-		socket.on('getStatus', function (data){
-			var sendStatusTo = data.id
-			socket.emit("sendingStatus", currentStatus)
+		socket.on('getStatus', function (originId){
+			socket.emit("sendingStatus", {
+				currentStatus: currentStatus,
+				targetId: originId,
+				originId: userData.id
+			})
+		})
+
+		socket.on('sendingStatus', function (data){
+
 		})
 
 		socket.on("friendAdded", function (data){
-			$rootScope.$apply(friends.push(data))
+			$rootScope.$apply(friends[data.id] = data)
 		})
 
 		var createUser = function(userData){
@@ -98,9 +105,9 @@ angular.module('services', [])
 		}
 
 		var getStatus = function(targetId){
-			console.log(userData)
+			console.log(userData, "status stuff")
 			socket.emit("getStatus", {targetId: targetId, originId: userData.id})
-		}(1)
+		}
 
 		var loginUser = function(loginUserData){
 			return $http({
@@ -207,6 +214,11 @@ angular.module('services', [])
 					id : id
 				}
 			}).then(function (response){
+				for(var i = 0; i < friendRequests.length; i ++){
+					if(friendRequests[i].id === id){
+						friendRequests.splice(i,1)
+					}
+				}
 				return response.data
 			})
 		}
@@ -239,7 +251,10 @@ angular.module('services', [])
 				method: 'GET',
 				url: "friends/" + userData.id
 			}).then(function (response){
-				friends = response.data
+				for(var i = 0; i < response.data.length; i++){
+					friend = response.data[i]
+					friends[friend.id] = friend
+				}
 			})	
 		}
 
