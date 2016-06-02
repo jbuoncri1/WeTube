@@ -77,18 +77,12 @@ angular.module('services', [])
 		})
 
 		socket.on('getStatus', function (data){
-			friends[data.originId].currentStatus = data.currentStatus
-			socket.emit("sendingStatus", {
-				currentStatus: currentStatus,
-				targetId: data.originId,
-				originId: userData.id
-			})
+			$rootScope.$apply(friends[data.originId].currentStatus = data.currentStatus)
+			sendStatus(data.originId)
 		})
 
 		socket.on('sendingStatus', function (data){
-			console.log(data, "data")
-			friends[data.originId] = data.currentStatus
-			console.log(friends)
+			$rootScope.$apply(friends[data.originId].currentStatus = data.currentStatus)
 		})
 
 		socket.on("friendAdded", function (data){
@@ -103,11 +97,17 @@ angular.module('services', [])
 			}).then(function(response){
 				return response.data
 			})
+		}
 
+		var sendStatus = function(targetId){
+			socket.emit("sendingStatus", {
+				currentStatus: currentStatus,
+				targetId: targetId,
+				originId: userData.id
+			})
 		}
 
 		var getStatus = function(targetId){
-			console.log(userData, "status stuff")
 			socket.emit("getStatus", {targetId: targetId, originId: userData.id, currentStatus: currentStatus})
 		}
 
@@ -127,8 +127,7 @@ angular.module('services', [])
 
 		var buildOwnRoom = function (){
 			socket.emit('createRoom',{room : userData.id, roomTitle : userData.id});
-			updateStatus({status: "online"})
-			console.log(currentStatus)
+			updateStatus({online: true})
 
 		}
 
@@ -187,7 +186,6 @@ angular.module('services', [])
 		var updateStatus = function(newStatusObj){
 			helperFunctions.extend(currentStatus, newStatusObj)
 			$cookies.putObject("currentStatus", currentStatus)
-			console.log(currentStatus)
 		}
 
 		var localFriendRequests = function(){

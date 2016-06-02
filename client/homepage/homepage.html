@@ -65,7 +65,8 @@
 
               <span flex></span>
               <div layout = "column">
-                <span>Hi {{friend.status}}</span>
+                <span ng-show = "friend.currentStatus.online">Online</span>
+                <span>{{friend.currentStatus.watching}}</span>
                 <span flex></span>
                 <button ng-show = "{{friend.status}}" class = "button">Join</button>
               </div>
