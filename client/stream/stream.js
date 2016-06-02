@@ -6,9 +6,9 @@ angular.module('stream', [])
 		//they are kept updated
 		$scope.streamMessage = ""
 		$scope.messages = getVideo.streamMessages;
-		$scope.rooms = [];
 		$scope.userData = userData.getUserData();
 		$scope.toolbars = true;
+		$scope.roomSubscribers = getVideo.getRoomSubscribers()
 
 		if($stateParams.currentVideo){
 			getVideo.setupPlayer($stateParams.currentVideo)

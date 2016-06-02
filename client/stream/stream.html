@@ -39,7 +39,10 @@
             <span flex></span>
           </span>
         </div>
+        <div class="streamSubscribers">
+          <div class="subscriber" ng-repeat = "subscriber in roomSubscribers"></div>
 
+        </div>
         <div class = "streamChat">
         </div>
         <input class = "streamInput" ng-model = "streamMessage" ng-keypress = "submitMessage()">

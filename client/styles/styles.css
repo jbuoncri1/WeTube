@@ -158,10 +158,26 @@ md-toolbar{
   word-wrap: break-word;
 }
 
+.streamSubscribers{
+  height: 14vh;
+  border-radius: 5px;
+  width: 270px;
+  padding: 5px 5px 5px 5px;
+  margin: 5px 10px 5px 10px;
+  background-color: rgba(40,40,40, 0.8);
+}
+.subscriber{
+  border-radius: 5px;
+  height: 30px;
+  width: 250px;
+  margin: 5px 10px 5px 10px;
+  background-color: rgba(240,240,240, 0.8); 
+}
+
 .streamChat{
   border-radius: 5px;
   width: 280px;
-  height:65vh;
+  height:50vh;
   margin: 5px 10px 5px 10px;
   background-color: rgba(240,240,240, 0.8);
 }

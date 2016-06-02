@@ -353,6 +353,9 @@ angular.module('services', [])
 		var streamMessages = [];
 		var hasYT = false;
 		var youtubePlayer;
+		var roomSubscribers = [1,2,3
+		// {userId:userId, displayName:displayName}
+		];
 
 		var emptyQueue = function(){
 			videoQueue = [];
@@ -360,7 +363,15 @@ angular.module('services', [])
 			host = false; 
 			currentVideo = '';
 			streamMessages = [];
+			roomSubscribers = [];
+		}
 
+		var addRoomSubscriber = function (newSubscriber){
+			roomSubscribers.push({userId:newSubscriber.id, displayName:newSubscriber.displayName})
+		}
+
+		var getRoomSubscribers = function(){
+			return roomSubscribers
 		}
 
 		var onYoutubeStateChange = function() {
@@ -419,7 +430,6 @@ angular.module('services', [])
 			currentVideo = videoId
 
 			var displayName = userData.getUserData().displayName 
-
 			if(host){
 				bcrypt.hash(displayName, 8, function(err, hash) {
 					roomId = hash
@@ -429,8 +439,10 @@ angular.module('services', [])
 					socket.emit('createRoom',{room : roomId, roomTitle : videoTitle});
 					$state.go("home.stream", {roomId: roomId, currentVideo:videoId, host:true})
 
+					addRoomSubscriber(userData.getUserData())
 					socket.on('newViewer', function(data){
 						console.log("newViewer")
+						$rootscope.$apply(addRoomSubscriber(data))
 
 						if(youtubePlayer.getCurrentTime() > 0)
 						socket.emit('hostPlayerState',
@@ -493,6 +505,7 @@ angular.module('services', [])
 			setupPlayer: setupPlayer,
 			submitMessage : submitMessage,
 			streamMessages : streamMessages,
-			submitRoom: submitRoom
+			submitRoom: submitRoom,
+			getRoomSubscribers: getRoomSubscribers
 		};
 	})
