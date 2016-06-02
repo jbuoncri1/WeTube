@@ -5,7 +5,7 @@ angular.module('stream', [])
 		//set messages to the factory array of messages since that is where
 		//they are kept updated
 		$scope.streamMessage = ""
-		$scope.messages = getVideo.messages;
+		$scope.messages = getVideo.streamMessages;
 		$scope.rooms = [];
 		$scope.userData = userData.getUserData();
 		$scope.toolbars = true;

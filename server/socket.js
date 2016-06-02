@@ -33,7 +33,7 @@ module.exports = function(app, PORT, express, routes){
     });
 
     socket.on('getStatus', function(data){
-      io.to(data.targetId).emit('getStatus', data.originId)
+      io.to(data.targetId).emit('getStatus', {originId: data.originId, currentStatus: data.currentStatus})
     })
 
     socket.on('sendingStatus', function(data){

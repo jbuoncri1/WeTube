@@ -20,7 +20,6 @@ angular.module('services', [])
 				url: '/auth/google/callback'
 			});
 		}
-
 		return {
 			googleLogin: googleLogin
 		};
@@ -77,16 +76,19 @@ angular.module('services', [])
 			tryNewMessageBox(data.userData, data.message)
 		})
 
-		socket.on('getStatus', function (originId){
+		socket.on('getStatus', function (data){
+			friends[data.originId].currentStatus = data.currentStatus
 			socket.emit("sendingStatus", {
 				currentStatus: currentStatus,
-				targetId: originId,
+				targetId: data.originId,
 				originId: userData.id
 			})
 		})
 
 		socket.on('sendingStatus', function (data){
-
+			console.log(data, "data")
+			friends[data.originId] = data.currentStatus
+			console.log(friends)
 		})
 
 		socket.on("friendAdded", function (data){
@@ -106,7 +108,7 @@ angular.module('services', [])
 
 		var getStatus = function(targetId){
 			console.log(userData, "status stuff")
-			socket.emit("getStatus", {targetId: targetId, originId: userData.id})
+			socket.emit("getStatus", {targetId: targetId, originId: userData.id, currentStatus: currentStatus})
 		}
 
 		var loginUser = function(loginUserData){
@@ -214,9 +216,11 @@ angular.module('services', [])
 					id : id
 				}
 			}).then(function (response){
-				for(var i = 0; i < friendRequests.length; i ++){
-					if(friendRequests[i].id === id){
-						friendRequests.splice(i,1)
+				if(response.status === 200){
+					for(var i = 0; i < friendRequests.length; i ++){
+						if(friendRequests[i].id === id){
+							friendRequests.splice(i,1)
+						}
 					}
 				}
 				return response.data
@@ -255,7 +259,14 @@ angular.module('services', [])
 					friend = response.data[i]
 					friends[friend.id] = friend
 				}
+				getFriendsStatus()
 			})	
+		}
+
+		var getFriendsStatus = function(){
+			for (var friend in friends){
+				getStatus(friend)
+			}
 		}
 
 		if($cookies.getObject("userData")){
@@ -328,7 +339,7 @@ angular.module('services', [])
 		var roomId;
 		var host; 
 		var currentVideo = '';
-		var messages = [];
+		var streamMessages = [];
 
 
 		var onYoutubeStateChange = function() {
@@ -464,7 +475,7 @@ angular.module('services', [])
 		return {
 			setupPlayer: setupPlayer,
 			submitMessage : submitMessage,
-			messages : messages,
+			streamMessages : streamMessages,
 			submitRoom: submitRoom
 		};
 	})
