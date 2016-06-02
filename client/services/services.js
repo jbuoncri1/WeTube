@@ -351,7 +351,7 @@ angular.module('services', [])
 		var host; 
 		var currentVideo = '';
 		var streamMessages = [];
-		var hasPlayer = false;
+		var hasYT = false;
 		var youtubePlayer;
 
 		var emptyQueue = function(){
@@ -388,14 +388,17 @@ angular.module('services', [])
 			tag.src = "https://www.youtube.com/iframe_api";
 			var firstScriptTag = document.getElementsByTagName('script')[0];
 			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-			onYouTubeIframeAPIReady()
+			if(hasYT){
+				onYouTubeIframeAPIReady()
+			}
+
 		};
 		//updated by setupPlayer b/c setupPlayer cannot directly pass into
 		//onYouTubeIframeAPIReady
 
 		$window.onYouTubeIframeAPIReady=function() {
 			console.log('youtube iFrame ready!');
-			hasPlayer = true;
+			hasYT = true;
 			youtubePlayer = new YT.Player('player', {
 				height: '400',
 				width: '600',
@@ -426,8 +429,6 @@ angular.module('services', [])
 					socket.emit('createRoom',{room : roomId, roomTitle : videoTitle});
 					$state.go("home.stream", {roomId: roomId, currentVideo:videoId, host:true})
 
-					setupPlayer(videoId, true)
-
 					socket.on('newViewer', function(data){
 						console.log("newViewer")
 
@@ -451,8 +452,6 @@ angular.module('services', [])
 				userData.updateStatus({inRoom:roomId, watching:videoTitle, videoId:videoId})
 
 				$state.go("home.stream", {roomId: roomId, currentVideo:videoId, host:host})
-
-				setupPlayer(videoId, false)
 
 				socket.on("currentVideo", function(data){
 					console.log("got data", data)

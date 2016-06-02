@@ -10,9 +10,9 @@ angular.module('stream', [])
 		$scope.userData = userData.getUserData();
 		$scope.toolbars = true;
 
-		getVideo.setupPlayer($stateParams.currentVideo)
-		
-		console.log("params", $stateParams)
+		if($stateParams.currentVideo){
+			getVideo.setupPlayer($stateParams.currentVideo)
+		}
 
 		$scope.clearUrl = function(){
 			$scope.url = ''
