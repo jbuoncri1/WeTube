@@ -185,6 +185,11 @@ angular.module('services', [])
 
 		var updateStatus = function(newStatusObj){
 			helperFunctions.extend(currentStatus, newStatusObj)
+			for(var friendId in friends){
+				if(friends[friendId].currentStatus.online){
+					sendStatus(friend.id)
+				}
+			}
 			$cookies.putObject("currentStatus", currentStatus)
 		}
 
@@ -255,6 +260,7 @@ angular.module('services', [])
 			}).then(function (response){
 				for(var i = 0; i < response.data.length; i++){
 					friend = response.data[i]
+					friend.currentStatus = {};
 					friends[friend.id] = friend
 				}
 				getFriendsStatus()
