@@ -66,6 +66,7 @@ angular.module('services', [])
 		var currentStatus = {
 			// status:"",
 			// watching: "",
+			// videoId: "",
 			// inRoom: "",
 		}
 
@@ -350,6 +351,8 @@ angular.module('services', [])
 		var host; 
 		var currentVideo = '';
 		var streamMessages = [];
+		var hasPlayer = false;
+		var youtubePlayer;
 
 		var emptyQueue = function(){
 			videoQueue = [];
@@ -364,38 +367,36 @@ angular.module('services', [])
 			console.log('state change!')
 
 			socket.emit('clientPlayerStateChange', {
-				stateChange: $window.youtubePlayer.getPlayerState(),
+				stateChange: youtubePlayer.getPlayerState(),
 				room: roomId
 			});
 
 			if(host){
 				socket.emit('hostPlayerState',
 				{
-					currentTime: $window.youtubePlayer.getCurrentTime(),
-					currentState: $window.youtubePlayer.getPlayerState(),
+					currentTime: youtubePlayer.getCurrentTime(),
+					currentState: youtubePlayer.getPlayerState(),
 					room : roomId
 				});
 			}
 		};
 
 		//at the end of setupPlayer onYouTubeIframeAPIReady is automatically called
-		var setupPlayer = function(source, isHost) {
+		var setupPlayer = function(source) {
 			videoId = source
-			host = isHost;
-			// add source to the io stream
-
 			var tag = document.createElement('script');
 			tag.src = "https://www.youtube.com/iframe_api";
 			var firstScriptTag = document.getElementsByTagName('script')[0];
 			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
+			onYouTubeIframeAPIReady()
 		};
 		//updated by setupPlayer b/c setupPlayer cannot directly pass into
 		//onYouTubeIframeAPIReady
 
 		$window.onYouTubeIframeAPIReady=function() {
 			console.log('youtube iFrame ready!');
-			$window.youtubePlayer = new YT.Player('player', {
+			hasPlayer = true;
+			youtubePlayer = new YT.Player('player', {
 				height: '400',
 				width: '600',
 				videoId: videoId,
@@ -420,7 +421,7 @@ angular.module('services', [])
 				bcrypt.hash(displayName, 8, function(err, hash) {
 					roomId = hash
 					console.log(roomId, hash)
-					userData.updateStatus({inRoom:roomId, watching:videoTitle})
+					userData.updateStatus({inRoom:roomId, watching:videoTitle, videoId:videoId})
 
 					socket.emit('createRoom',{room : roomId, roomTitle : videoTitle});
 					$state.go("home.stream", {roomId: roomId, currentVideo:videoId, host:true})
@@ -429,16 +430,12 @@ angular.module('services', [])
 
 					socket.on('newViewer', function(data){
 						console.log("newViewer")
-						socket.emit('currentVideo',{
-							currentVideo: currentVideo,
-							roomId : roomId
-						});
 
-						if($window.youtubePlayer.getCurrentTime() > 0)
+						if(youtubePlayer.getCurrentTime() > 0)
 						socket.emit('hostPlayerState',
 						{
-							currentTime: $window.youtubePlayer.getCurrentTime(),
-							currentState: $window.youtubePlayer.getPlayerState(),
+							currentTime: youtubePlayer.getCurrentTime(),
+							currentState: youtubePlayer.getPlayerState(),
 							room : roomId
 						});
 					})
@@ -449,10 +446,13 @@ angular.module('services', [])
 			//recieves this event from the server when the server hears the hostPlayerState
 			//even
 			if(!host){
-				socket.emit ('joinRoom', {room: roomId});
+				socket.emit ('joinRoom', {room: roomId, userData: userData});
 
-				userData.updateStatus({inRoom:roomId, watching:videoTitle})
+				userData.updateStatus({inRoom:roomId, watching:videoTitle, videoId:videoId})
 
+				$state.go("home.stream", {roomId: roomId, currentVideo:videoId, host:host})
+
+				setupPlayer(videoId, false)
 
 				socket.on("currentVideo", function(data){
 					console.log("got data", data)
@@ -461,17 +461,17 @@ angular.module('services', [])
 
 				socket.on("hostPlayerSync", function(data){
 					console.log(data, "hostPlayerSync -- viewer")
-					$window.youtubePlayer.seekTo(data.currentTime)
+					youtubePlayer.seekTo(data.currentTime)
 				})
 			}
 
 			socket.on('serverStateChange', function(data) {
 				console.log('server changed my state', data);
 				if (data === 2) {
-					$window.youtubePlayer.pauseVideo();
+					youtubePlayer.pauseVideo();
 				}
 				if (data === 1) {
-					$window.youtubePlayer.playVideo();
+					youtubePlayer.playVideo();
 				}
 			});
 

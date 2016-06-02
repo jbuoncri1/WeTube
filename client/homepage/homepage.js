@@ -1,6 +1,6 @@
 angular.module("homepage", [])
 
-.controller("HomepageController", function ($scope, $state, searchFactory, userData, $mdSidenav){
+.controller("HomepageController", function ($scope, $state, searchFactory, userData, $mdSidenav, getVideo){
 
   $scope.messageBoxes = userData.messageBoxes
   $scope.showSideNav = true;
@@ -68,8 +68,11 @@ angular.module("homepage", [])
     userData.addFriend(targetId)
   }
 
-  $scope.joinRoom = function(roomId){
-    console.log(roomId)
+  $scope.joinRoom = function(friendStatus){
+    var roomId = friendStatus.inRoom
+    var videoTitle = friendStatus.currentlyWatching
+    var videoId = friendStatus.videoId
+    getVideo.submitRoom(videoId, videoTitle, false, roomId)
   }
 
   $scope.toggleSideNav = function(){

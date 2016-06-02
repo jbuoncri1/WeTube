@@ -19,13 +19,12 @@ module.exports = function(app, PORT, express, routes){
     })
 
     socket.on('currentVideo', function(data){
-      console.log(data, "currentVideo")
       io.to(data.roomId).emit('currentVideo', data)
     })
 
     socket.on('joinRoom', function(data) {
       socket.join(data.room);
-      io.to(data.room).emit('newViewer', data);
+      io.to(data.room).emit('newViewer', data.userData);
     });
 
     socket.on('disconnect', function(data){
@@ -56,7 +55,7 @@ module.exports = function(app, PORT, express, routes){
     });
 
     socket.on('clientPlayerStateChange', function(data) {
-      console.log('client changed state!, server broadcast', data.stateChange);
+      console.log('client changed state!, server broadcast', data);
       io.to(data.room).emit('serverStateChange', data.stateChange);
       // socket.broadcast.emit('serverStateChange', data.stateChange);
     });
