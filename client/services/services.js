@@ -345,6 +345,14 @@ angular.module('services', [])
 		var currentVideo = '';
 		var streamMessages = [];
 
+		var emptyQueue = function(){
+			videoQueue = [];
+			roomId = "";
+			host = false; 
+			currentVideo = '';
+			streamMessages = [];
+
+		}
 
 		var onYoutubeStateChange = function() {
 			console.log('state change!')

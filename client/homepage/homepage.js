@@ -67,6 +67,10 @@ angular.module("homepage", [])
     userData.addFriend(targetId)
   }
 
+  $scope.joinRoom = function(roomId){
+    console.log(roomId)
+  }
+
   $scope.toggleSideNav = function(){
     $mdSidenav('left').toggle()
   }

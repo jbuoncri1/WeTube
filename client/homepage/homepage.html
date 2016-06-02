@@ -53,24 +53,22 @@
       <md-content ng-hide = "hideFriends">
         <md-card ng-repeat = "friend in friends" class = "friend" ng-click = "newMessageBox(friend)">
           <md-card-content>
-            <div layout = "row">
+            <div layout = "row" >
 
-              <img class = "smallThumbnail" ng-src = "{{request.profile_photo}}"/>
+              <img  class = "smallThumbnail" ng-src = "{{request.profile_photo}}"/ >
 
               <div layout = "column">
-                <div layout = "row">
-                <label>{{friend.displayName}}</label>
-                </div>
-                <span flex></span>
-              </div>
-
-              <span flex></span>
-              <div layout = "column">
+                <label flex>{{friend.displayName}}</label>
+                <span flex = "80" ng-show = "friend.currentStatus.watching" class = "currentlyWatching"> Watching: {{friend.currentStatus.watching}}</span>
                 <span ng-show = "friend.currentStatus.online">Online</span>
-                <span>{{friend.currentStatus.watching}}</span>
-                <span flex></span>
-                <button ng-show = "{{friend.status}}" class = "button">Join</button>
               </div>
+              <div layout = "column">
+                <span flex></span>
+                <button ng-show = "friend.currentStatus.watching" class = "button tab shadow" ng-click = "joinRoom(friend.currentStatus.inRoom);$event.stopPropagation();">Join</button>
+                <span flex></span>
+              </div>
+
+
             </div>
           </md-card-content>
         <md-card>
