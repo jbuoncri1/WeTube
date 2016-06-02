@@ -45,7 +45,7 @@
         <h3> Friends </h3>
         <span flex></span>
         <div layout = "column">
-          <img src="styles/minimize.png" class = "cornerButton" ng-click = "hideLeftNav = true">
+          <img src="styles/minimize.png" class = "cornerButton" ng-click = "hideLeftNav = true;$event.stopPropagation() ">
           <span flex></span>
         </div>
       </div>
@@ -57,14 +57,17 @@
 
               <img  class = "smallThumbnail" ng-src = "{{request.profile_photo}}"/ >
 
-              <div layout = "column">
+              <div layout = "column" flex>
                 <label flex>{{friend.displayName}}</label>
-                <span flex = "80" ng-show = "friend.currentStatus.watching" class = "currentlyWatching"> Watching: {{friend.currentStatus.watching}}</span>
+                <span ng-show = "friend.currentStatus.watching" class = "currentlyWatching"> Watching: {{friend.currentStatus.watching}}</span>
                 <span ng-show = "friend.currentStatus.online">Online</span>
               </div>
               <div layout = "column">
                 <span flex></span>
                 <button ng-show = "friend.currentStatus.watching" class = "button tab shadow" ng-click = "joinRoom(friend.currentStatus.inRoom);$event.stopPropagation();">Join</button>
+                <span flex></span>
+                <button ng-show = "currentStatus.watching && currentStatus.watching !== friend.currentStatus.watching" class = "button tab shadow" ng-click = "joinRoom(friend.currentStatus.inRoom);$event.stopPropagation();">Invite</button>
+
                 <span flex></span>
               </div>
 

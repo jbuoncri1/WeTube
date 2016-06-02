@@ -6,9 +6,10 @@ angular.module("homepage", [])
   $scope.showSideNav = true;
   $scope.friends;
   $scope.friendRequests;
-    
+      
   var initialize = function(){
     $scope.userData = userData.getUserData()
+    $scope.currentStatus = userData.getMyCurrentStatus()
 
     userData.getFriendRequests()
     .then(function(){

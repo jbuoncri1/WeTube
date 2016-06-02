@@ -111,6 +111,10 @@ angular.module('services', [])
 			socket.emit("getStatus", {targetId: targetId, originId: userData.id, currentStatus: currentStatus})
 		}
 
+		var getMyCurrentStatus = function(){
+			return currentStatus
+		}
+
 		var loginUser = function(loginUserData){
 			return $http({
 				method: "POST",
@@ -191,6 +195,7 @@ angular.module('services', [])
 				}
 			}
 			$cookies.putObject("currentStatus", currentStatus)
+			console.log("status", currentStatus, userData)
 		}
 
 		var localFriendRequests = function(){
@@ -298,7 +303,8 @@ angular.module('services', [])
 			friendRequests: friendRequests,
 			localFriendRequests: localFriendRequests,
 			localFriends: localFriends,
-			updateStatus: updateStatus
+			updateStatus: updateStatus,
+			getMyCurrentStatus: getMyCurrentStatus
 		}
 	})
 

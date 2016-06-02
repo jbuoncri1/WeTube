@@ -18,7 +18,7 @@
         <div class = "headerContainer" layout = "row">
           <span flex = "33" class = "tab">
             <div layout = "column" style = "position:absolute;">
-              <img src="styles/minimize.png" class = "cornerButton" ng-click = "hideRightNav = true" >
+              <img src="styles/minimize.png" class = "cornerButton" ng-click = "hideRightNav = true;$event.stopPropagation" >
             </div>
             <div layout = "row">
               <span flex></span>
