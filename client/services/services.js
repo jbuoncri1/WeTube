@@ -442,7 +442,7 @@ angular.module('services', [])
 					addRoomSubscriber(userData.getUserData())
 					socket.on('newViewer', function(data){
 						console.log("newViewer")
-						$rootscope.$apply(addRoomSubscriber(data))
+						$rootScope.$apply(addRoomSubscriber(data))
 
 						if(youtubePlayer.getCurrentTime() > 0)
 						socket.emit('hostPlayerState',
@@ -475,6 +475,10 @@ angular.module('services', [])
 					youtubePlayer.seekTo(data.currentTime)
 				})
 			}
+
+			socket.on('viewerDisconnect', function(data){
+				console.log("viewer dissconnected", data)
+			})
 
 			socket.on('serverStateChange', function(data) {
 				console.log('server changed my state', data);
