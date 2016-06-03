@@ -9,6 +9,7 @@ angular.module('stream', [])
 		$scope.userData = userData.getUserData();
 		$scope.toolbars = true;
 		$scope.roomSubscribers = getVideo.getRoomSubscribers()
+		$scope.friends = userData.localFriends();
 
 		if($stateParams.currentVideo){
 			getVideo.setupPlayer($stateParams.currentVideo)

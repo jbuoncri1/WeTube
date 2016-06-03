@@ -19,9 +19,6 @@ angular.module("homepage", [])
     userData.getFriends()
     .then(function (){
       $scope.friends = userData.localFriends()
-      for(var i = 0; i < $scope.friends.length; i++){
-        console.log("Get Friend Status")
-      }
     })
   }
 

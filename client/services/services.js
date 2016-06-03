@@ -353,7 +353,7 @@ angular.module('services', [])
 		var streamMessages = [];
 		var hasYT = false;
 		var youtubePlayer;
-		var roomSubscribers = [1,2,3
+		var roomSubscribers = [
 		// {userId:userId, displayName:displayName}
 		];
 

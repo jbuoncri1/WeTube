@@ -1,5 +1,6 @@
 body, #loginBackground {
   background-color: rgb(63,81,181);
+  overflow: hidden;
 }
 
 md-toolbar{
@@ -159,7 +160,9 @@ md-toolbar{
 }
 
 .streamSubscribers{
-  height: 14vh;
+  overflow: auto;
+  overflow-x: hidden; 
+  height: 15vh;
   border-radius: 5px;
   width: 270px;
   padding: 5px 5px 5px 5px;
@@ -167,17 +170,23 @@ md-toolbar{
   background-color: rgba(40,40,40, 0.8);
 }
 .subscriber{
+  overflow: hidden;
   border-radius: 5px;
   height: 30px;
-  width: 250px;
+  width: 240px;
   margin: 5px 10px 5px 10px;
-  background-color: rgba(240,240,240, 0.8); 
+  background-color: rgba(250,250,250, 0.8); 
+}
+
+.subscriberName{
+  margin: 0px 5px 5px 5px;
+  width: 200px;
 }
 
 .streamChat{
   border-radius: 5px;
   width: 280px;
-  height:50vh;
+  height:45vh;
   margin: 5px 10px 5px 10px;
   background-color: rgba(240,240,240, 0.8);
 }
