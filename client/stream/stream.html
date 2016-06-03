@@ -45,7 +45,7 @@
             <span flex></span>
             <div layout = "row">
               <span class = "subscriberName">{{subscriber.displayName}}</span>
-              <label ng-show = "!friends[subscriber.id]" class= "tab">Add</label>
+              <label ng-hide = "friends[subscriber.userId] || userData.id === subscriber.userId" class= "tab">Add</label>
             </div>
             <span flex></span>
           </div>

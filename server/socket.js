@@ -1,3 +1,6 @@
+var controllers = require('./db/controllers')
+
+
 module.exports = function(app, PORT, express, routes){
   var io = require('socket.io').listen(app.listen(PORT));
 
@@ -23,18 +26,42 @@ module.exports = function(app, PORT, express, routes){
       var roomsToMessage = []
       for(var room in socket.adapter.sids[socket.id]){
         if(!isNaN(Number(room))){
-          originId = room
+          originId = Number(room)
         } else if(room[0] === "$"){
           roomsToMessage.push(room)
         }
       }
-      for(var i = 0; i < roomsToMessage.length; i++){
-        var targetRoom = roomsToMessage[i]
-        console.log("telling rooms")
-        io.to(targetRoom).emit('viewerDisconnect', originId)
-      }
+
+      //gives me all of the remaining rooms, get friends if key of friend Id send message of status offline
+      var activeRoomsObj = socket.adapter.rooms
+
+        controllers.getFriends(originId, function (err, response){
+        if(err){
+          serverLog.log("Error getting friends in router", err)
+        } else {
+          for(var i = 0; i < response.length; i++){
+            roomsToMessage.push(response[i].id)          
+          }
+         
+          for(var i = 0; i < roomsToMessage.length; i++){
+            var targetRoom = roomsToMessage[i]
+            if(activeRoomsObj[targetRoom]){
+              console.log("telling rooms")
+              io.to(targetRoom).emit('viewerDisconnect', originId)
+              
+            }
+          }
+        }
+      })
+
+
       Object.getPrototypeOf(this).onclose.call(this,reason);
     }
+
+    socket.on('leaveRoom', function(data){
+      socket.to(data.roomId).emit('leavingRoom', data.originId)
+      socket.leave(data.room)
+    })
 
     socket.on('currentVideo', function(data){
       io.to(data.roomId).emit('currentVideo', data)
@@ -60,12 +87,6 @@ module.exports = function(app, PORT, express, routes){
         originId: data.originId
       })
     })
-    //on hearing this event the server return sync data to all viewers
-    socket.on('hostPlayerState', function (data) {
-      console.log(data.room, "hostPlayerSync");
-      io.to(data.room).emit('hostPlayerSync', data);
-      //socket.broadcast.emit('hostPlayerSync', data)
-    });
 
     socket.on('newMessage', function (data) {
       console.log(data);
@@ -73,10 +94,26 @@ module.exports = function(app, PORT, express, routes){
       // socket.broadcast.emit('newMessage', data)
     });
 
+    socket.on("currentRoomSubscribers", function (data){
+      io.to(data.room).emit("currentRoomSubscribers", data.roomSubscribers)
+    })
+
+    socket.on('getPlayerState', function(data){
+      io.broadcast.to(data).emit('getPlayerState')
+    })
+
     socket.on('clientPlayerStateChange', function(data) {
       console.log('client changed state!, server broadcast', data);
-      io.to(data.room).emit('serverStateChange', data.stateChange);
+      io.broadcast.to(data.room).emit('serverStateChange', data.stateChange);
       // socket.broadcast.emit('serverStateChange', data.stateChange);
     });
+
+    //on hearing this event the server return sync data to all viewers
+    socket.on('hostPlayerState', function (data) {
+      console.log(data.room, "hostPlayerSync");
+      io.broadcast.to(data.room).emit('hostPlayerSync', data);
+      //socket.broadcast.emit('hostPlayerSync', data)
+    });
+
   });
 }
