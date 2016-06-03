@@ -424,6 +424,7 @@ angular.module('services', [])
 				}
 			});
 			console.log(youtubePlayer)
+			console.log(roomId, "id")
 			if(!host){
 				socket.emit('getPlayerState', roomId)
 			}
@@ -434,9 +435,10 @@ angular.module('services', [])
 			// inRoom: "",
 		}
 			//sets up the socket stream and events
-		var submitRoom = function(videoId, videoTitle, host, source){
+		var submitRoom = function(videoId, videoTitle, isHost, source){
 			roomId = source
 			currentVideo = videoId
+			host = isHost
 
 			var displayName = userData.getUserData().displayName 
 			if(host){
@@ -474,7 +476,7 @@ angular.module('services', [])
 			if(!host){
 				socket.emit ('joinRoom', {room: roomId, userData: userData.getUserData()});
 
-				userData.updateStatus({inRoom:roomId, watching:videoTitle, videoId:videoId})
+				userData.updateStatus({inRoom:roomId, watching:videoTitle, watching:videoId})
 
 				$state.go("home.stream", {roomId: roomId, currentVideo:videoId, host:host})
 
