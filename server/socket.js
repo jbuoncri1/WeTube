@@ -99,19 +99,19 @@ module.exports = function(app, PORT, express, routes){
     })
 
     socket.on('getPlayerState', function(data){
-      io.broadcast.to(data).emit('getPlayerState')
+      socket.broadcast.to(data).emit('getPlayerState')
     })
 
     socket.on('clientPlayerStateChange', function(data) {
       console.log('client changed state!, server broadcast', data);
-      io.broadcast.to(data.room).emit('serverStateChange', data.stateChange);
+      socket.broadcast.to(data.room).emit('serverStateChange', data.stateChange);
       // socket.broadcast.emit('serverStateChange', data.stateChange);
     });
 
     //on hearing this event the server return sync data to all viewers
     socket.on('hostPlayerState', function (data) {
       console.log(data.room, "hostPlayerSync");
-      io.broadcast.to(data.room).emit('hostPlayerSync', data);
+      socket.broadcast.to(data.room).emit('hostPlayerSync', data);
       //socket.broadcast.emit('hostPlayerSync', data)
     });
 

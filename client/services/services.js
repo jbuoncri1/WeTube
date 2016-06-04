@@ -357,9 +357,8 @@ angular.module('services', [])
 		var streamMessages = [];
 		var hasYT = false;
 		var youtubePlayer;
-		var roomSubscribers = [
-		// {userId:userId, displayName:displayName}
-		];
+		var roomSubscribers = [];
+
 
 		var clearRoomData = function(){
 			videoQueue = [];
@@ -368,12 +367,21 @@ angular.module('services', [])
 			currentVideo = '';
 			streamMessages = [];
 			//can be refactored into an object
-			roomSubscribers = [];
+			roomSubscribers = [{ userId:userData.getUserData().id, displayName: userData.getUserData().displayName}];
 		}
 
 		var addRoomSubscriber = function (newSubscriber){
-			roomSubscribers.push({userId:newSubscriber.id, displayName:newSubscriber.displayName})
+			var userPresent = false
+			for(var i = 0; i < roomSubscribers.length; i++){
+				if(roomSubscribers[i].id === newSubscriber.id){
+					userPresent = true
+				}
+			}
+			if(!userPresent){
+				roomSubscribers.push({userId:newSubscriber.id, displayName:newSubscriber.displayName})
+			}
 		}
+		addRoomSubscriber(userData.getUserData())
 
 		var getRoomSubscribers = function(){
 			return roomSubscribers
@@ -450,15 +458,18 @@ angular.module('services', [])
 					socket.emit('createRoom',{room : roomId, roomTitle : videoTitle});
 					$state.go("home.stream", {roomId: roomId, currentVideo:videoId, host:true})
 
-					addRoomSubscriber(userData.getUserData())
 					socket.on('newViewer', function(data){
 						console.log("newViewer", data)
-						$rootScope.$apply(addRoomSubscriber(data))
+						for(var i = 0; i < data.length; i++){
+							var subscriber = data[i]
+							$rootScope.$apply(addRoomSubscriber(subscriber))
+						}
 
 						socket.emit("currentRoomSubscribers", {roomSubscribers:roomSubscribers, room:roomId})
 					})
 
 					socket.on('getPlayerState', function(){
+						console.log("sending state", roomId)
 						socket.emit('hostPlayerState',
 						{
 							currentTime: youtubePlayer.getCurrentTime(),
@@ -497,7 +508,17 @@ angular.module('services', [])
 
 				socket.on("hostPlayerSync", function(data){
 					console.log(data, "hostPlayerSync -- viewer")
-					youtubePlayer.seekTo(data.currentTime)
+
+					if (data.currentState === 2) {
+						youtubePlayer.pauseVideo();
+					}else	if (data.currentState === 1) {
+						youtubePlayer.playVideo();
+					}
+					2
+					var currentTime = youtubePlayer.getCurrentTime() 
+					if(Math.abs(currentTime - data.currentTime) > 1 || data.currentState === 2){
+						youtubePlayer.seekTo(data.currentTime)
+					}
 				})
 			}
 	
