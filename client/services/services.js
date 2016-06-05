@@ -460,10 +460,7 @@ angular.module('services', [])
 
 					socket.on('newViewer', function(data){
 						console.log("newViewer", data)
-						for(var i = 0; i < data.length; i++){
-							var subscriber = data[i]
-							$rootScope.$apply(addRoomSubscriber(subscriber))
-						}
+						$rootScope.$apply(addRoomSubscriber(data))
 
 						socket.emit("currentRoomSubscribers", {roomSubscribers:roomSubscribers, room:roomId})
 					})
@@ -498,6 +495,7 @@ angular.module('services', [])
 				})
 
 				socket.on('newViewer', function(data){
+					console.log(data)
 					$rootScope.$apply(addRoomSubscriber(data))
 				})
 

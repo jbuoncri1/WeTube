@@ -69,7 +69,7 @@ module.exports = function(app, PORT, express, routes){
 
     socket.on('joinRoom', function(data) {
       socket.join(data.room);
-      io.to(data.room).emit('newViewer', data.userData);
+      socket.broadcast.to(data.room).emit('newViewer', data.userData);
     });
 
     socket.on('disconnect', function(data){
