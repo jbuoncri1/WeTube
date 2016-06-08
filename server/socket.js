@@ -94,6 +94,11 @@ module.exports = function(app, PORT, express, routes){
       // socket.broadcast.emit('newMessage', data)
     });
 
+    socket.on('newStreamMessage', function (data) {
+      console.log(data);
+      socket.broadcast.to(data.room).emit('newStreamMessage', data)
+    });
+
     socket.on("currentRoomSubscribers", function (data){
       io.to(data.room).emit("currentRoomSubscribers", data.roomSubscribers)
     })

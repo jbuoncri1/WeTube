@@ -188,6 +188,7 @@ md-toolbar{
   width: 280px;
   height:45vh;
   margin: 5px 10px 5px 10px;
+  overflow: auto;
   background-color: rgba(240,240,240, 0.8);
 }
 .streamInput{
@@ -196,14 +197,25 @@ md-toolbar{
   height:5vh;
 }
 
+.streamSearch{
+  height:65vh;
+  overflow: auto;
+  overflow-x: hidden; 
+}
+
+.streamQueue{
+  height:72vh;
+  overflow: auto;
+  overflow-x: hidden; 
+}
+
 .userMessage{
   background-color: rgb(90,180,130);
   float:right;
 }
 
-
 .searchResult{
-  width: 300px;
+  width: 280px;
   height: 130px;
   display:inline-block;
   background-color: rgb(240,240,240);

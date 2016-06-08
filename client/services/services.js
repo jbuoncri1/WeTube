@@ -387,6 +387,10 @@ angular.module('services', [])
 			return roomSubscribers
 		}
 
+		var getStreamMessages = function(){
+			return streamMessages
+		}
+
 		var onYoutubeStateChange = function() {
 			console.log('state change!',youtubePlayer.getPlayerState())
 
@@ -444,6 +448,7 @@ angular.module('services', [])
 		}
 			//sets up the socket stream and events
 		var submitRoom = function(videoId, videoTitle, isHost, source){
+
 			roomId = source
 			currentVideo = videoId
 			host = isHost
@@ -548,18 +553,26 @@ angular.module('services', [])
 				}
 			});
 
+			socket.on("newStreamMessage", function (data){
+				$rootScope.$apply(streamMessages.push(data))
+			})
+
 
 		};
 
 		//submits the message through socket IO whenever one is made
-		$window.submitMessage = function(user, message){
-			//grabs the username from Google account
-			socket.emit('newMessage', {
-				"user" : username,
+		var submitMessage = function(message){
+
+
+			var messageObject = {
+				"userId" : userData.getUserData().id,
 				"message" : message,
-				"userImage" : userImage,
-				"room": roomId
-			});
+				"room" : roomId
+			}
+			//grabs the username from Google account
+			socket.emit('newStreamMessage', messageObject);
+			messageObject['isUser'] = true
+			streamMessages.push(messageObject)
 		}
 
 
@@ -567,6 +580,7 @@ angular.module('services', [])
 			setupPlayer: setupPlayer,
 			submitMessage : submitMessage,
 			streamMessages : streamMessages,
+			getStreamMessages: getStreamMessages,
 			submitRoom: submitRoom,
 			getRoomSubscribers: getRoomSubscribers,
 			clearRoomData: clearRoomData

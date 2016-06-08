@@ -1,16 +1,20 @@
 angular.module('stream', [])
-	.controller('StreamController', function ($scope, $http, getVideo, userData, $stateParams) {
+	.controller('StreamController', function ($scope, $http, getVideo, userData, $stateParams, searchFactory) {
 		$scope.videoId = "";
 		$scope.startTime = 120;
 		//set messages to the factory array of messages since that is where
 		//they are kept updated
 		$scope.streamMessage = ""
+		$scope.streamMessages = getVideo.getStreamMessages()
 		$scope.messages = getVideo.streamMessages;
 		$scope.userData = userData.getUserData();
 		$scope.toolbars = true;
 		$scope.roomSubscribers = getVideo.getRoomSubscribers()
 		$scope.friends = userData.localFriends();
-
+		$scope.streamSidenav = 'chat'
+		$scope.searchResults = []
+		$scope.streamQueue = []
+		
 		if($stateParams.currentVideo){
 			getVideo.setupPlayer($stateParams.currentVideo)
 		}
@@ -51,9 +55,23 @@ angular.module('stream', [])
 		$scope.submitMessage = function(){
 			if(event.charCode === 13){
 				console.log($scope.streamMessage)
-				// getVideo.submitMessage($scope.user, $scope.message)
+				getVideo.submitMessage($scope.streamMessage)
 				// ({user: $scope.user, message:$scope.message})
 				$scope.streamMessage = ""
 			}					
+		}
+
+		$scope.submitSearch = function(){
+			if(event.charCode === 13){
+				searchFactory.searchYoutube($scope.searchQuery).then(function (response){
+					$scope.searchResults = response
+				})
+				// ({user: $scope.user, message:$scope.message})
+				$scope.streamMessage = ""
+			}					
+		}
+
+		$scope.addToQueue = function(video){
+			$scope.streamQueue.push(video)
 		}
 	})

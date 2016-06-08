@@ -16,7 +16,7 @@
 
       <div class = "sideNav" ng-hide = "hideRightNav">
         <div class = "headerContainer" layout = "row">
-          <span flex = "33" class = "tab">
+          <span flex = "33" class = "tab" ng-click = "streamSidenav = 'chat'">
             <div layout = "column" style = "position:absolute;">
               <img src="styles/minimize.png" class = "cornerButton" ng-click = "hideRightNav = true;$event.stopPropagation" >
             </div>
@@ -27,34 +27,68 @@
             </div>
           </span>
 
-          <span flex = "33" class = "tab" layout = "row">
+          <span flex = "33" class = "tab" layout = "row" ng-click = "streamSidenav = 'queue'">
             <span flex></span>
             <h2><label>Queue</label></h2>
             <span flex></span>
           </span>
 
-          <span flex = "33" class = "tab" layout = "row">
+          <span flex = "33" class = "tab" layout = "row" ng-click = "streamSidenav = 'search'">
             <span flex></span>
-            <img class="button" src = "/styles/search.png">
+            <div layout = 'column'>
+              <span flex></span>
+              <img class="button" src = "/styles/search.png">
+              <span flex></span>
+            </div>
             <span flex></span>
           </span>
         </div>
-
-        <div class="streamSubscribers">
-          <div class="subscriber" ng-repeat = "subscriber in roomSubscribers" layout = "column">
-            <span flex></span>
-            <div layout = "row">
-              <span class = "subscriberName">{{subscriber.displayName}}</span>
-              <label ng-hide = "friends[subscriber.userId] || userData.id === subscriber.userId" class= "tab">Add</label>
+        <div ng-show = "streamSidenav === 'chat'">
+          <div class="streamSubscribers">
+            <div class="subscriber" ng-repeat = "subscriber in roomSubscribers" layout = "column">
+              <span flex></span>
+              <div layout = "row">
+                <span class = "subscriberName">{{subscriber.displayName}}</span>
+                <label ng-hide = "friends[subscriber.userId] || userData.id === subscriber.userId" class= "tab">Add</label>
+              </div>
+              <span flex></span>
             </div>
-            <span flex></span>
+
           </div>
+          <div class = "streamChat" layout = "column">
+
+            <div ng-repeat = "message in streamMessages track by $index">
+              <span ng-class = "{chatBoxMessage:true,userMessage:message.isUser}"> {{message.message}}</span>
+            </div>
+
+          </div>
+          <input class = "streamInput" ng-model = "streamMessage" ng-keypress = "submitMessage()">
 
         </div>
-        <div class = "streamChat">
-        </div>
-        <input class = "streamInput" ng-model = "streamMessage" ng-keypress = "submitMessage()">
 
+        <div ng-show = "streamSidenav === 'queue'">
+          <div class="streamQueue">
+            <md-card ng-repeat = "video in streamQueue track by $index" class = "searchResult" ng-click = "" >
+              <md-card-content layout = "row">
+                <img class = "thumbnail" src="{{video.snippet.thumbnails.default.url}}">
+                <p><label>{{video.snippet.title}}</label></p>
+              </md-card-content>
+            </md-card>
+          </div>
+        </div>
+
+        <div ng-show = "streamSidenav === 'search'" >
+          <input class = "streamInput" ng-model = "searchQuery" ng-keypress = "submitSearch()">
+
+          <div class="streamSearch">
+            <md-card ng-repeat = "result in searchResults" class = "searchResult" ng-click = "addToQueue(result)" >
+              <md-card-content layout = "row">
+                <img class = "thumbnail" src="{{result.snippet.thumbnails.default.url}}">
+                <p><label>{{result.snippet.title}}</label></p>
+              </md-card-content>
+            </md-card>
+          </div>
+        </div>
       </div>
     </div>
   </div>
