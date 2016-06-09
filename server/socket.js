@@ -68,8 +68,10 @@ module.exports = function(app, PORT, express, routes){
     })
 
     socket.on('joinRoom', function(data) {
-      socket.join(data.room);
-      socket.broadcast.to(data.room).emit('newViewer', data.userData);
+      if(!(data.room in socket.adapter.sids[socket.id])){
+        socket.join(data.room);
+        socket.broadcast.to(data.room).emit('newViewer', data.userData);
+      }
     });
 
     socket.on('disconnect', function(data){
@@ -88,8 +90,12 @@ module.exports = function(app, PORT, express, routes){
       })
     })
 
+    socket.on('newVideo', function (data){
+      console.log("new vid", data)
+      io.to(data.room).emit('newVideo', data.video)      
+    })
+
     socket.on('newMessage', function (data) {
-      console.log(data);
       io.to(data.room).emit('newMessage', data);
       // socket.broadcast.emit('newMessage', data)
     });
@@ -100,7 +106,7 @@ module.exports = function(app, PORT, express, routes){
     });
 
     socket.on("currentRoomSubscribers", function (data){
-      io.to(data.room).emit("currentRoomSubscribers", data.roomSubscribers)
+      io.to(data.room).emit("currentRoomSubscribers", data)
     })
 
     socket.on('getPlayerState', function(data){

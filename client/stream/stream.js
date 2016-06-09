@@ -13,8 +13,8 @@ angular.module('stream', [])
 		$scope.friends = userData.localFriends();
 		$scope.streamSidenav = 'chat'
 		$scope.searchResults = []
-		$scope.streamQueue = []
-		
+		$scope.streamQueue = getVideo.getVideoQueue()
+
 		if($stateParams.currentVideo){
 			getVideo.setupPlayer($stateParams.currentVideo)
 		}
@@ -72,6 +72,6 @@ angular.module('stream', [])
 		}
 
 		$scope.addToQueue = function(video){
-			$scope.streamQueue.push(video)
+			getVideo.addVideoToQueue(video)
 		}
 	})

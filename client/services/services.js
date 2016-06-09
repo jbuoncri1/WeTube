@@ -391,6 +391,10 @@ angular.module('services', [])
 			return streamMessages
 		}
 
+		var getVideoQueue = function(){
+			return videoQueue
+		}
+
 		var onYoutubeStateChange = function() {
 			console.log('state change!',youtubePlayer.getPlayerState())
 
@@ -467,7 +471,7 @@ angular.module('services', [])
 						console.log("newViewer", data)
 						$rootScope.$apply(addRoomSubscriber(data))
 
-						socket.emit("currentRoomSubscribers", {roomSubscribers:roomSubscribers, room:roomId})
+						socket.emit("currentRoomSubscribers", {roomSubscribers:roomSubscribers, room:roomId, videoQueue: videoQueue})
 					})
 
 					socket.on('getPlayerState', function(){
@@ -495,7 +499,9 @@ angular.module('services', [])
 
 				socket.on("currentRoomSubscribers", function(data){
 					if(roomSubscribers.length === 1){
-						$rootScope.$apply(roomSubscribers = data)
+						console.log(data, "newStuff")
+						$rootScope.$apply(videoQueue = data.videoQueue)
+						$rootScope.$apply(roomSubscribers = data.roomSubscribers)
 					}
 				})
 
@@ -557,8 +563,17 @@ angular.module('services', [])
 				$rootScope.$apply(streamMessages.push(data))
 			})
 
+			socket.on("newVideo", function (data){
+				console.log('new Vid')
+				$rootScope.$apply(videoQueue.push(data))
+			})
+
 
 		};
+
+		var addVideoToQueue = function(video){
+			socket.emit('newVideo', {room:roomId, video:video})
+		}
 
 		//submits the message through socket IO whenever one is made
 		var submitMessage = function(message){
@@ -581,6 +596,8 @@ angular.module('services', [])
 			submitMessage : submitMessage,
 			streamMessages : streamMessages,
 			getStreamMessages: getStreamMessages,
+			addVideoToQueue: addVideoToQueue,
+			getVideoQueue: getVideoQueue,
 			submitRoom: submitRoom,
 			getRoomSubscribers: getRoomSubscribers,
 			clearRoomData: clearRoomData
