@@ -52,8 +52,8 @@ angular.module('stream', [])
 			getVideo.setupPlayer(videoId, false)
 		}
 
-		$scope.submitMessage = function(){
-			if(event.charCode === 13){
+		$scope.submitMessage = function($event){
+			if($event.which === 13){
 				console.log($scope.streamMessage)
 				getVideo.submitMessage($scope.streamMessage)
 				// ({user: $scope.user, message:$scope.message})

@@ -1,6 +1,7 @@
 var app = angular.module('app', ['ngRoute', 'login', 'stream', 'services', 'ngMaterial', 'ui.router', 'homepage', 'search', 'dtrw.bcrypt', 'ngCookies']);
 
 app.run(function ($rootScope, $state, auth, getVideo, userData) {
+  
   $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
 
     if(fromState.name === "home.stream") {

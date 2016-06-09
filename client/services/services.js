@@ -502,6 +502,7 @@ angular.module('services', [])
 						console.log(data, "newStuff")
 						$rootScope.$apply(videoQueue = data.videoQueue)
 						$rootScope.$apply(roomSubscribers = data.roomSubscribers)
+						console.log(roomSubscribers)
 					}
 				})
 
@@ -530,6 +531,8 @@ angular.module('services', [])
 					}
 				})
 			}
+
+
 	
 			socket.on('leavingRoom', function(data){
 				console.log("leaving", data)

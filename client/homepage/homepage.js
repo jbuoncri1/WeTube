@@ -76,8 +76,8 @@ angular.module("homepage", [])
     $mdSidenav('left').toggle()
   }
 
-  $scope.sendMessage = function (messageBox){
-    if(event.keyCode === 13){
+  $scope.sendMessage = function ($event, messageBox){
+    if($event.which === 13){
       userData.peerToPeerMessage(messageBox.userData.id, messageBox.newMessage)
       messageBox.newMessage = ""
       

@@ -136,7 +136,7 @@
                   <span ng-class = "{chatBoxMessage:true,userMessage:message.isUser}"> {{message.text}}</span>
                 </div>
               </div>
-              <input ng-hide = "minimize" ng-keypress="sendMessage(messageBox)" ng-model = "messageBox.newMessage">
+              <input ng-hide = "minimize" ng-keypress="sendMessage($event, messageBox)" ng-model = "messageBox.newMessage">
             </div>
         </div>
       </div>
