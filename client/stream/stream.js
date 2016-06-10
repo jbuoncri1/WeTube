@@ -19,39 +19,6 @@ angular.module('stream', [])
 			getVideo.setupPlayer($stateParams.currentVideo)
 		}
 
-		$scope.clearUrl = function(){
-			$scope.url = ''
-		};
-
-		$scope.getRooms = function(){
-			// $scope.rooms = ['U0315DUM6Cg']
-			console.log("getting rooms")
-			$http({
-				method : "GET",
-				url : "/streams/rooms"
-			}).then(function(rooms) {
-				$scope.rooms = rooms.data
-     	}, function(error) {
-       console.log("Error finding rooms",error);
-			});
-		};
-
-		$scope.addVideo = function(videoId){
-		}
-
-		
-		$scope.logout = function() {
-			return $http({
-				method: "GET",
-				url:'/api/logout'
-			});
-		}
-
-		$scope.joinStream = function(videoId){
-			//pass in false since they are a viewer
-			getVideo.setupPlayer(videoId, false)
-		}
-
 		$scope.submitMessage = function($event){
 			if($event.which === 13){
 				getVideo.submitMessage($scope.streamMessage)
@@ -66,7 +33,7 @@ angular.module('stream', [])
 					$scope.searchResults = response
 				})
 				// ({user: $scope.user, message:$scope.message})
-				$scope.streamMessage = ""
+				$scope.searchQuery = ""
 			}					
 		}
 
