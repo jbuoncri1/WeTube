@@ -54,15 +54,14 @@ angular.module('stream', [])
 
 		$scope.submitMessage = function($event){
 			if($event.which === 13){
-				console.log($scope.streamMessage)
 				getVideo.submitMessage($scope.streamMessage)
 				// ({user: $scope.user, message:$scope.message})
 				$scope.streamMessage = ""
 			}					
 		}
 
-		$scope.submitSearch = function(){
-			if(event.charCode === 13){
+		$scope.submitSearch = function($event){
+			if($event.which === 13){
 				searchFactory.searchYoutube($scope.searchQuery).then(function (response){
 					$scope.searchResults = response
 				})

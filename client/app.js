@@ -16,7 +16,6 @@ app.run(function ($rootScope, $state, auth, getVideo, userData) {
 
     if(toState.authenticate){
       if(auth.isAuthenticated()){
-        auth.updateLocation(toState.name)
       } else {
         if(!auth.checkLoggedIn(toState.name)){
           $state.transitionTo("login")

@@ -35,13 +35,9 @@ angular.module('services', [])
 			return true
 		}
 
-		var updateLocation = function(){
-
-		}
 		return {
 			checkLoggedIn: checkLoggedIn,
-			isAuthenticated: isAuthenticated,
-			updateLocation: updateLocation
+			isAuthenticated: isAuthenticated
 		}
 
 	})
@@ -134,10 +130,10 @@ angular.module('services', [])
 			})
 		}
 
+		// for setting the the original person online
 		var buildOwnRoom = function (){
 			socket.emit('createRoom',{room : userData.id, roomTitle : userData.id});
 			updateStatus({online: true})
-
 		}
 
 		var tryNewMessageBox = function (targetData, message){
@@ -193,10 +189,10 @@ angular.module('services', [])
 		}
 
 		var updateStatus = function(newStatusObj){
-			helperFunctions.extend(currentStatus, newStatusObj)
+			currentStatus = newStatusObj
 			for(var friendId in friends){
 				if(friends[friendId].currentStatus.online){
-					sendStatus(friend.id)
+					sendStatus(friendId)
 				}
 			}
 			$cookies.putObject("currentStatus", currentStatus)
@@ -461,8 +457,7 @@ angular.module('services', [])
 			if(host){
 				bcrypt.hash(displayName, 8, function(err, hash) {
 					roomId = hash
-					console.log(roomId, hash)
-					userData.updateStatus({inRoom:roomId, watching:videoTitle, videoId:videoId})
+					userData.updateStatus({inRoom:roomId, watching:videoTitle, videoId:videoId, online:true})
 
 					socket.emit('createRoom',{room : roomId, roomTitle : videoTitle});
 					$state.go("home.stream", {roomId: roomId, currentVideo:videoId, host:true})
@@ -493,7 +488,7 @@ angular.module('services', [])
 			if(!host){
 				socket.emit ('joinRoom', {room: roomId, userData: userData.getUserData()});
 
-				userData.updateStatus({inRoom:roomId, watching:videoTitle, watching:videoId})
+				userData.updateStatus({inRoom:roomId, watching:videoTitle, watching:videoId, online:true})
 
 				$state.go("home.stream", {roomId: roomId, currentVideo:videoId, host:host})
 
@@ -584,6 +579,7 @@ angular.module('services', [])
 
 			var messageObject = {
 				"userId" : userData.getUserData().id,
+				"displayName" : userData.getUserData().displayName,
 				"message" : message,
 				"room" : roomId
 			}
