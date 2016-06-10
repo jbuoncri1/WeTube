@@ -68,10 +68,12 @@
 
         <div ng-show = "streamSidenav === 'queue'">
           <div class="streamQueue">
-            <md-card ng-repeat = "video in streamQueue track by $index" class = "searchResult" ng-click = "" >
+            <md-card ng-repeat = "video in streamQueue track by $index" class = "searchResult" ng-click = "playVideoFromQueue(video, $index)" >
               <md-card-content layout = "row">
                 <img class = "thumbnail" src="{{video.snippet.thumbnails.default.url}}">
                 <p><label>{{video.snippet.title}}</label></p>
+                <span flex></span>
+                <img src="/styles/close.png" class = "cornerButton" ng-click = "removeFromQueue($index);$event.stopPropagation()">
               </md-card-content>
             </md-card>
           </div>

@@ -468,6 +468,7 @@ angular.module('services', [])
 			//sets up the socket stream and events
 		var submitRoom = function(videoId, videoTitle, isHost, source){
 			clearRoomListeners()
+			clearRoomData()
 
 			roomId = source
 			currentVideo = videoId
@@ -509,6 +510,7 @@ angular.module('services', [])
 			//even
 			if(!host){
 				$state.go("home.stream", {roomId: roomId, currentVideo:videoId, host:host})
+			console.log(roomId, "roomId", source, "still there?")
 
 				socket.emit('joinRoom', {room: roomId, userData: userData.getUserData()});
 
@@ -558,7 +560,7 @@ angular.module('services', [])
 			}
 
 
-	
+			//listeners for everybody
 			roomListeners.push('leavingRoom')
 			socket.on('leavingRoom', function(data){
 				console.log("leaving", data)
@@ -599,12 +601,33 @@ angular.module('services', [])
 			socket.on("newVideo", function (data){
 				$rootScope.$apply(videoQueue.push(data))
 			})
+			
+			roomListeners.push('removeVideo')
+			socket.on("removeVideo", function (data){
+				$rootScope.$apply(videoQueue.splice(data,1))
+			})
+
+			roomListeners.push('playVideoFromQueue')
+			socket.on("playVideoFromQueue", function (data){
+				console.log("got message")
+				$rootScope.$apply(videoQueue.splice(data.index,1))
+				youtubePlayer.loadVideoById(data.videoData.videoId)
+				userData.updateStatus({inRoom:roomId, watching:data.videoData.videoTitle, videoId:data.videoData.videoId, online:true})
+			})		
 
 
 		};
 
 		var addVideoToQueue = function(video){
 			socket.emit('newVideo', {room:roomId, video:video})
+		}
+
+		var removeVideoFromQueue = function(index){
+			socket.emit('removeVideo', {room:roomId, index:index})
+		}
+
+		var playVideoFromQueue = function(videoData, index){
+			socket.emit('playVideoFromQueue', {room:roomId, videoData:videoData, index:index})
 		}
 
 		//submits the message through socket IO whenever one is made
@@ -633,6 +656,8 @@ angular.module('services', [])
 			getVideoQueue: getVideoQueue,
 			submitRoom: submitRoom,
 			getRoomSubscribers: getRoomSubscribers,
-			clearRoomData: clearRoomData
+			clearRoomData: clearRoomData,
+			removeVideoFromQueue: removeVideoFromQueue,
+			playVideoFromQueue: playVideoFromQueue
 		};
 	})

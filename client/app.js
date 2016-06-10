@@ -10,8 +10,6 @@ app.run(function ($rootScope, $state, auth, getVideo, userData) {
         roomId: fromParams.roomId,
         originId: userData.getUserData().id
       })
-
-      getVideo.clearRoomData()
     }
 
     if(toState.name !== "home.stream") {

@@ -93,6 +93,15 @@ module.exports = function(app, PORT, express, routes){
       io.to(data.room).emit('newVideo', data.video)      
     })
 
+    socket.on('removeVideo', function(data){
+      io.to(data.room).emit('removeVideo',data.index)
+    })
+
+    socket.on('playVideoFromQueue', function(data){
+      console.log(data)
+      io.to(data.room).emit('playVideoFromQueue',data)
+    })
+
     socket.on('newMessage', function (data) {
       io.to(data.room).emit('newMessage', data);
       // socket.broadcast.emit('newMessage', data)
