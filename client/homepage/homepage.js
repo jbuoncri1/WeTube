@@ -67,7 +67,7 @@ angular.module("homepage", [])
 
   $scope.joinRoom = function(friendStatus){
     var roomId = friendStatus.inRoom
-    var videoTitle = friendStatus.currentlyWatching
+    var videoTitle = friendStatus.watching
     var videoId = friendStatus.videoId
     getVideo.submitRoom(videoId, videoTitle, false, roomId)
   }

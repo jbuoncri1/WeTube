@@ -462,7 +462,7 @@ angular.module('services', [])
 			if(host){
 				bcrypt.hash(displayName, 8, function(err, hash) {
 					roomId = hash
-					userData.updateStatus({inRoom:roomId, watching:videoTitle, videoId:videoId, online:true})
+					userData.updateStatus({inRoom:roomId, watching:videoTitle, videoId:currentVideo, online:true})
 
 					socket.emit('createRoom',{room : roomId, roomTitle : videoTitle});
 					$state.go("home.stream", {roomId: roomId, currentVideo:videoId, host:true})
