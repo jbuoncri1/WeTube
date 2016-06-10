@@ -189,6 +189,7 @@ angular.module('services', [])
 		}
 
 		var updateStatus = function(newStatusObj){
+			// need to keep reference to the same object to keep it in the digest cycle
 			for(var key in currentStatus){
 				if(!(key in newStatusObj)){
 					delete currentStatus[key]
@@ -381,14 +382,21 @@ angular.module('services', [])
 		}
 
 		var addRoomSubscriber = function (newSubscriber){
+			console.log("newSub", newSubscriber)
+			if(newSubscriber.id){
+				testId = newSubscriber.id
+			} else {
+				testId = newSubscriber.userId
+			}
 			var userPresent = false
 			for(var i = 0; i < roomSubscribers.length; i++){
-				if(roomSubscribers[i].id === newSubscriber.id){
+				if(roomSubscribers[i].userId === testId){
 					userPresent = true
 				}
 			}
+			console.log(userPresent, "present")
 			if(!userPresent){
-				roomSubscribers.push({userId:newSubscriber.id, displayName:newSubscriber.displayName})
+				roomSubscribers.push({userId:testId, displayName:newSubscriber.displayName})
 			}
 		}
 		addRoomSubscriber(userData.getUserData())
@@ -510,8 +518,12 @@ angular.module('services', [])
 				socket.on("currentRoomSubscribers", function(data){
 					if(roomSubscribers.length === 1){
 						console.log(data, "newStuff")
-						$rootScope.$apply(videoQueue = data.videoQueue)
-						$rootScope.$apply(roomSubscribers = data.roomSubscribers)
+						data.videoQueue.forEach(function(video){
+							$rootScope.$apply(videoQueue.push(video))
+						})
+						data.roomSubscribers.forEach(function(subscriber){
+							$rootScope.$apply(addRoomSubscriber(subscriber))
+						})
 						console.log(roomSubscribers)
 					}
 				})
@@ -585,7 +597,6 @@ angular.module('services', [])
 
 			roomListeners.push('newVideo')
 			socket.on("newVideo", function (data){
-				console.log('new Vid')
 				$rootScope.$apply(videoQueue.push(data))
 			})
 
