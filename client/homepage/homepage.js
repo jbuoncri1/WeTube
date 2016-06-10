@@ -1,6 +1,6 @@
 angular.module("homepage", [])
 
-.controller("HomepageController", function ($scope, $state, searchFactory, userData, $mdSidenav, getVideo){
+.controller("HomepageController", function ($scope, $state, searchFactory, userData, $mdSidenav, getVideo, auth){
 
   $scope.messageBoxes = userData.messageBoxes
   $scope.showSideNav = true;
@@ -94,6 +94,10 @@ angular.module("homepage", [])
 
   $scope.closeMessageBox = function(index){
     userData.closeMessageBox(index)
+  }
+
+  $scope.logout = function(){
+    auth.logout()
   }
 
   initialize()

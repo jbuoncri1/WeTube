@@ -7,7 +7,6 @@ var session = require('express-session')
 var bcrypt = require('bcrypt');
 var controllers = require('./db/controllers')
 var bodyParser = require('body-parser');
-var weTubeSession = require('./db/userSessionController')
 var routes = require('./routes')
 var PORT = process.env.PORT || 8001;
 

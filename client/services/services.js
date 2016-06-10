@@ -25,7 +25,7 @@ angular.module('services', [])
 		};
 	})
 
-	.factory('auth', function ($http, $cookies){
+	.factory('auth', function ($http, $cookies, $state){
 		var jwtToken ;
 
 		var getJwtToken = function(){
@@ -46,6 +46,12 @@ angular.module('services', [])
 			})
 		}
 
+		var logout = function(){
+			jwtToken = undefined;
+			$cookies.remove("jwtToken")
+			$state.go("login")
+		}
+
 		if($cookies.get("jwtToken")){
 			setJwtToken($cookies.get("jwtToken"))
 		}
@@ -53,7 +59,8 @@ angular.module('services', [])
 		return {
 			isAuthenticated: isAuthenticated,
 			getJwtToken: getJwtToken,
-			setJwtToken: setJwtToken
+			setJwtToken: setJwtToken,
+			logout: logout
 		}
 
 	})
