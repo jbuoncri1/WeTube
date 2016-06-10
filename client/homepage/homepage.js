@@ -24,7 +24,7 @@ angular.module("homepage", [])
 
   $scope.displayOptions = function(){
     if($scope.searchQuery.length){
-      $scope.searchOptions = [{name:"people", article:"in"}, {name:"email",article:"by"}, {name:"youtube",article:"on"}, {name:"youtube url", article:"by"}]
+      $scope.searchOptions = [{name:"people", article:"in"}, {name:"email",article:"by"}, {name:"youtube",article:"on"}]
     } else {
       $scope.searchOptions = []
     }

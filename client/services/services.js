@@ -196,7 +196,6 @@ angular.module('services', [])
 				}
 			}
 			helperFunctions.extend(currentStatus, newStatusObj)
-			console.log(currentStatus, "current status")
 
 			for(var friendId in friends){
 				if(friends[friendId].currentStatus.online){
@@ -223,7 +222,6 @@ angular.module('services', [])
 		}
 
 		var addFriend = function(id){
-			console.log("service", id)
 			return $http({
 				method: "POST",
 				url: "/addFriend",
@@ -244,7 +242,6 @@ angular.module('services', [])
 		}
 
 		var sendFriendRequest = function(id){
-			console.log("service", id)
 			return $http({
 				method: "POST",
 				url: "/friendRequest",
@@ -375,14 +372,12 @@ angular.module('services', [])
 		}
 
 		var clearRoomListeners = function(){
-			console.log(roomListeners, "listen")
 			for(var i = 0; i < roomListeners.length; i++){
 				socket.off(roomListeners[i])
 			}
 		}
 
 		var addRoomSubscriber = function (newSubscriber){
-			console.log("newSub", newSubscriber)
 			if(newSubscriber.id){
 				testId = newSubscriber.id
 			} else {
@@ -394,7 +389,6 @@ angular.module('services', [])
 					userPresent = true
 				}
 			}
-			console.log(userPresent, "present")
 			if(!userPresent){
 				roomSubscribers.push({userId:testId, displayName:newSubscriber.displayName})
 			}
@@ -414,7 +408,6 @@ angular.module('services', [])
 		}
 
 		var onYoutubeStateChange = function() {
-			console.log('state change!',youtubePlayer.getPlayerState())
 
 			if(!host){
 				socket.emit('clientPlayerStateChange', {
@@ -446,7 +439,6 @@ angular.module('services', [])
 		//onYouTubeIframeAPIReady
 
 		$window.onYouTubeIframeAPIReady=function() {
-			console.log('youtube iFrame ready!');
 			hasYT = true;
 			youtubePlayer = new YT.Player('player', {
 				height: '400',
@@ -485,7 +477,6 @@ angular.module('services', [])
 
 					roomListeners.push('newViewer')
 					socket.on('newViewer', function(data){
-						console.log("newViewer", data)
 						$rootScope.$apply(addRoomSubscriber(data))
 
 						socket.emit("currentRoomSubscribers", {roomSubscribers:roomSubscribers, room:roomId, videoQueue: videoQueue})
@@ -493,7 +484,6 @@ angular.module('services', [])
 
 					roomListeners.push('getPlayerState')
 					socket.on('getPlayerState', function(){
-						console.log("sending state", roomId)
 						socket.emit('hostPlayerState',
 						{
 							currentTime: youtubePlayer.getCurrentTime(),
@@ -510,7 +500,6 @@ angular.module('services', [])
 			//even
 			if(!host){
 				$state.go("home.stream", {roomId: roomId, currentVideo:videoId, host:host})
-			console.log(roomId, "roomId", source, "still there?")
 
 				socket.emit('joinRoom', {room: roomId, userData: userData.getUserData()});
 
@@ -519,32 +508,27 @@ angular.module('services', [])
 				roomListeners.push('currentRoomSubscribers')
 				socket.on("currentRoomSubscribers", function(data){
 					if(roomSubscribers.length === 1){
-						console.log(data, "newStuff")
 						data.videoQueue.forEach(function(video){
 							$rootScope.$apply(videoQueue.push(video))
 						})
 						data.roomSubscribers.forEach(function(subscriber){
 							$rootScope.$apply(addRoomSubscriber(subscriber))
 						})
-						console.log(roomSubscribers)
 					}
 				})
 
 				roomListeners.push('newViewer')
 				socket.on('newViewer', function(data){
-					console.log(data)
 					$rootScope.$apply(addRoomSubscriber(data))
 				})
 
 				roomListeners.push('currentVideo')
 				socket.on("currentVideo", function(data){
-					console.log("got data", data)
 					setupPlayer(data.currentVideo, false)
 				})
 
 				roomListeners.push('hostPlayerSync')
 				socket.on("hostPlayerSync", function(data){
-					console.log(data, "hostPlayerSync -- viewer")
 
 					if (data.currentState === 2) {
 						youtubePlayer.pauseVideo();
@@ -563,7 +547,6 @@ angular.module('services', [])
 			//listeners for everybody
 			roomListeners.push('leavingRoom')
 			socket.on('leavingRoom', function(data){
-				console.log("leaving", data)
 				for(var i = 0; i < roomSubscribers.length; i++){
 					if(roomSubscribers[i].userId === data){
 						$rootScope.$apply(roomSubscribers.splice(i,1))
@@ -578,12 +561,10 @@ angular.module('services', [])
 						$rootScope.$apply(roomSubscribers.splice(i,1))
 					}
 				}
-				console.log("viewer dissconnected", data)
 			})
 
 			roomListeners.push('serverStateChange')
 			socket.on('serverStateChange', function(data) {
-				console.log('server changed my state', data);
 				if (data === 2) {
 					youtubePlayer.pauseVideo();
 				}
@@ -609,7 +590,6 @@ angular.module('services', [])
 
 			roomListeners.push('playVideoFromQueue')
 			socket.on("playVideoFromQueue", function (data){
-				console.log("got message")
 				$rootScope.$apply(videoQueue.splice(data.index,1))
 				youtubePlayer.loadVideoById(data.videoData.videoId)
 				userData.updateStatus({inRoom:roomId, watching:data.videoData.videoTitle, videoId:data.videoData.videoId, online:true})

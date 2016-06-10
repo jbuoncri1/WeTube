@@ -16,21 +16,18 @@ angular.module("search", [])
     "people" : function(searchQuery){
       searchFactory.searchByDisplayName(searchQuery)
       .then(function(searchResults){
-        console.log(searchResults)
         $scope.searchResults = searchResults
 
       })
     },
     "youtube" : function(searchQuery){
       searchFactory.searchYoutube(searchQuery).then(function (searchResults){
-        console.log(searchResults)
         $scope.searchResults = searchResults
       })
     },
     "email" : function(searchQuery){
       searchFactory.searchByEmail(searchQuery)
       .then(function (searchResults){
-        console.log(searchResults)
         $scope.searchResults = searchResults
       })
     }
