@@ -86,6 +86,10 @@ angular.module('services', [])
 			$rootScope.$apply(friends[data].currentStatus = {})
 		})
 
+		socket.on("friendRequest", function (data){
+			friendRequests.push(data)
+		})
+
 		socket.on("friendAdded", function (data){
 			$rootScope.$apply(friends[data.id] = data)
 		})
@@ -254,11 +258,31 @@ angular.module('services', [])
 			})
 		}
 
+		var cancelFriendRequest = function(targetId){
+			return $http({
+				method: "PUT",
+				url: "/friendRequest",
+				data: {
+					userData: userData,
+					targetId: targetId
+				}
+			}).then(function (response){
+				if(response.status === 204){
+					for(var i = 0; i < friendRequests.length; i++){
+						if(friendRequests[i].id === targetId){
+							friendRequests.splice(i,1)
+						}
+					}
+				}
+			})
+		}
+
 		var getFriendRequests = function(){
 			return $http({
 				method: 'GET',
 				url: "friendRequests/" + userData.id
 			}).then(function (response){
+				console.log(response.data)
 				friendRequests = response.data
 			})	
 		}
@@ -306,6 +330,7 @@ angular.module('services', [])
 			tryNewMessageBox: tryNewMessageBox,
 			closeMessageBox: closeMessageBox,
 			friendRequests: friendRequests,
+			cancelFriendRequest: cancelFriendRequest,
 			localFriendRequests: localFriendRequests,
 			localFriends: localFriends,
 			updateStatus: updateStatus,

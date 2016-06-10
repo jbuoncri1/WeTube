@@ -211,6 +211,17 @@ var addFriendRequest = function(userId1, userId2, callback) {
   })
 }
 
+var deleteFriendRequest = function(userId, targetId, callback){
+  console.log(userId, targetId)
+  connection.query('DELETE FROM friendRequests WHERE userId1=? AND userId2 = ?', [targetId, userId], function (err, response){
+    if(err){
+      serverLog.log("Error deleting friend request at controllers", err)
+    } else {
+      callback(null, response)
+    }
+  })
+}
+
 var getFriendRequests = function (userId, callback){
   connection.query('SELECT userId1 FROM friendRequests WHERE userId2 =?',userId, function (err, response){
     if(err){
@@ -259,6 +270,7 @@ module.exports = {
   findUserByDisplayName: findUserByDisplayName,
   addFriendship: addFriendship,
   addFriendRequest: addFriendRequest,
+  deleteFriendRequest: deleteFriendRequest,
   getFriendRequests: getFriendRequests,
   getFriends: getFriends
 };

@@ -1,5 +1,5 @@
 angular.module('stream', [])
-	.controller('StreamController', function ($scope, $http, getVideo, $stateParams, searchFactory) {
+	.controller('StreamController', function ($scope, $http, getVideo, $stateParams, searchFactory, userData) {
 		//set messages to the factory array of messages since that is where they are kept updated
 		$scope.streamMessage = ""
 		$scope.streamMessages = getVideo.getStreamMessages()
@@ -35,6 +35,10 @@ angular.module('stream', [])
 
 		$scope.removeFromQueue = function(index){
 			getVideo.removeVideoFromQueue(index)
+		}
+
+		$scope.sendFriendRequest = function(id){
+			userData.sendFriendRequest(id)
 		}
 
 		$scope.playVideoFromQueue = function(videoObj, index) {

@@ -66,9 +66,9 @@
                 <span flex></span>
                 <button ng-show = "friend.currentStatus.watching && friend.currentStatus.watching !== currentStatus.watching" class = "button tab shadow" ng-click = "joinRoom(friend.currentStatus);$event.stopPropagation();">Join</button>
                 <span flex></span>
-                <button ng-show = "currentStatus.watching && currentStatus.watching !== friend.currentStatus.watching" class = "button tab shadow" ng-click = ";$event.stopPropagation();">Invite</button>
+<!--                 <button ng-show = "currentStatus.watching && currentStatus.watching !== friend.currentStatus.watching" class = "button tab shadow" ng-click = ";$event.stopPropagation();">Invite</button>
 
-                <span flex></span>
+                <span flex></span> -->
               </div>
 
 
@@ -98,7 +98,7 @@
                 <img src="/styles/check.png">
               </div>
               <!-- flex property wasn't working here for some reason -->
-              <div flex class = "md-button" ng-click = "cancelRequest(request.id)">
+              <div flex class = "md-button" ng-click = "cancelFriendRequest(request.id)">
                 <img  src="/styles/cancel.png">
 
               </div>

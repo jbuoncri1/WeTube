@@ -65,6 +65,10 @@ angular.module("homepage", [])
     userData.addFriend(targetId)
   }
 
+  $scope.cancelFriendRequest = function(targetId){
+    userData.cancelFriendRequest(targetId)
+  }
+
   $scope.joinRoom = function(friendStatus){
     var roomId = friendStatus.inRoom
     var videoTitle = friendStatus.watching

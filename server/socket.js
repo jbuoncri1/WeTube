@@ -98,7 +98,6 @@ module.exports = function(app, PORT, express, routes){
 
     socket.on('newMessage', function (data) {
       io.to(data.room).emit('newMessage', data);
-      // socket.broadcast.emit('newMessage', data)
     });
 
     socket.on('newStreamMessage', function (data) {
@@ -115,13 +114,11 @@ module.exports = function(app, PORT, express, routes){
 
     socket.on('clientPlayerStateChange', function(data) {
       socket.broadcast.to(data.room).emit('serverStateChange', data.stateChange);
-      // socket.broadcast.emit('serverStateChange', data.stateChange);
     });
 
     //on hearing this event the server return sync data to all viewers
     socket.on('hostPlayerState', function (data) {
       socket.broadcast.to(data.room).emit('hostPlayerSync', data);
-      //socket.broadcast.emit('hostPlayerSync', data)
     });
 
   });

@@ -53,14 +53,6 @@ module.exports = function(app, express, socket, io){
     })
   })
 
-  // const myPlaintextPassword = 's0/\/\P4$$w0rD';
-  // const someOtherPlaintextPassword = 'not_bacon';
-  // // bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
-  // bcrypt.hash(myPlaintextPassword, 10, function(err, hash) {
-  //   bcrypt.compare(myPlaintextPassword, hash, function(err, res){
-  //     serverLog.log(res)
-  //   })
-  // });
   app.post('/login', function (req, res) {
     controllers.findUserByEmail(req.body.email, function (err, response) {
       if(err){
@@ -124,9 +116,21 @@ module.exports = function(app, express, socket, io){
       if(err) {
         serverLog.log("Error adding friendrequest at router", err)
       } else {
+        socket.to(req.body.id).emit('friendRequest',req.body.userData)
         res.status(201).send({message: "Friend request sent"})
       }
     })    
+  })
+  //for canceling friend requests
+  app.put("/friendRequest", function (req,res){
+    console.log(req.body)
+    controllers.deleteFriendRequest(req.body.userData.id, req.body.targetId, function (err, response){
+      if(err){
+        serverLog.log(err)
+      } else {
+        res.send(204)
+      }
+    })
   })
 
   app.get("/friendRequests/:id", function (req, res){
