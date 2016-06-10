@@ -46,7 +46,6 @@ module.exports = function(app, PORT, express, routes){
           for(var i = 0; i < roomsToMessage.length; i++){
             var targetRoom = roomsToMessage[i]
             if(activeRoomsObj[targetRoom]){
-              console.log("telling rooms")
               io.to(targetRoom).emit('viewerDisconnect', originId)
               
             }
@@ -74,10 +73,6 @@ module.exports = function(app, PORT, express, routes){
       }
     });
 
-    socket.on('disconnect', function(data){
-      console.log("disconnected")
-    });
-
     socket.on('getStatus', function(data){
       io.to(data.targetId).emit('getStatus', {originId: data.originId, currentStatus: data.currentStatus})
     })
@@ -98,7 +93,6 @@ module.exports = function(app, PORT, express, routes){
     })
 
     socket.on('playVideoFromQueue', function(data){
-      console.log(data)
       io.to(data.room).emit('playVideoFromQueue',data)
     })
 
@@ -108,7 +102,6 @@ module.exports = function(app, PORT, express, routes){
     });
 
     socket.on('newStreamMessage', function (data) {
-      console.log(data);
       socket.broadcast.to(data.room).emit('newStreamMessage', data)
     });
 
@@ -121,14 +114,12 @@ module.exports = function(app, PORT, express, routes){
     })
 
     socket.on('clientPlayerStateChange', function(data) {
-      console.log('client changed state!, server broadcast', data);
       socket.broadcast.to(data.room).emit('serverStateChange', data.stateChange);
       // socket.broadcast.emit('serverStateChange', data.stateChange);
     });
 
     //on hearing this event the server return sync data to all viewers
     socket.on('hostPlayerState', function (data) {
-      console.log(data.room, "hostPlayerSync");
       socket.broadcast.to(data.room).emit('hostPlayerSync', data);
       //socket.broadcast.emit('hostPlayerSync', data)
     });
