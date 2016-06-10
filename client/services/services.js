@@ -25,24 +25,40 @@ angular.module('services', [])
 		};
 	})
 
-	.factory('auth', function ($http){
+	.factory('auth', function ($http, $cookies){
+		var jwtToken ;
 
-		var checkLoggedIn = function (token, nextLocation) {
-			return false
+		var getJwtToken = function(){
+			return jwtToken
+		}
+
+		var setJwtToken = function(token){
+			jwtToken = token
+			$cookies.put("jwtToken", token)
 		}
 
 		var isAuthenticated = function(){
-			return true
+			return $http({
+				method: "GET",
+				url: "/isAuthenticated" + jwtToken
+			}).then(function (response){
+				return response.data.authenticated
+			})
+		}
+
+		if($cookies.get("jwtToken")){
+			setJwtToken($cookies.get("jwtToken"))
 		}
 
 		return {
-			checkLoggedIn: checkLoggedIn,
-			isAuthenticated: isAuthenticated
+			isAuthenticated: isAuthenticated,
+			getJwtToken: getJwtToken,
+			setJwtToken: setJwtToken
 		}
 
 	})
 
-	.factory('userData', function ($http, $window, $rootScope, $cookies, helperFunctions) {
+	.factory('userData', function ($http, $window, $rootScope, $cookies, helperFunctions, auth) {
 		/*conversations obj note - messages will be lost upon refresh
 		{ id: 
 			{
@@ -127,6 +143,7 @@ angular.module('services', [])
 				data: loginUserData
 			}).then(function (response){
 				if(response.data.loggedin){
+					auth.setJwtToken(response.data.token)
 					updateUserData(response.data.userData)
 					buildOwnRoom()
 				}
@@ -282,7 +299,6 @@ angular.module('services', [])
 				method: 'GET',
 				url: "friendRequests/" + userData.id
 			}).then(function (response){
-				console.log(response.data)
 				friendRequests = response.data
 			})	
 		}

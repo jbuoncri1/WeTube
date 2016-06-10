@@ -17,18 +17,16 @@ app.run(function ($rootScope, $state, auth, getVideo, userData) {
     }
 
     if(toState.authenticate){
-      if(auth.isAuthenticated()){
-      } else {
-        if(!auth.checkLoggedIn(toState.name)){
-          $state.transitionTo("login")
-          event.preventDefault();
+      auth.isAuthenticated().then(function (response){
+        if(response !== true){
+        $state.transitionTo("login")
+        event.preventDefault();
         }
-      }
+      })
     }
   })
 })
 
 app.controller('appController', function($scope){
-	$scope.hello = "hello"
 })
 

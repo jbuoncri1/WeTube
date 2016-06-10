@@ -2,6 +2,7 @@ var passport = require('passport');
 var bcrypt = require('bcrypt');
 var controllers = require('./db/controllers')
 var YouTube = require('youtube-node');
+var jwt = require('jsonwebtoken')
 
 var youTube = new YouTube();
 var serverLog = require('./serverLog')
@@ -23,6 +24,7 @@ module.exports = function(app, express, socket, io){
     req.logout();
     res.redirect('/#/stream');
   })
+
 
   app.post('/createUser', function (req, res) {
     controllers.findUserByEmail(req.body.email, function (err, response){
@@ -75,8 +77,13 @@ module.exports = function(app, express, socket, io){
                     serverLog.log("Error logging in at login", err)
                   } else {
                     req.session.passport.user = userData.id
-                    req.session.lastLocation = ["Homepage", new Date]
-                    res.send({loggedin : true, userData: userData})
+
+                    var token = jwt.sign(userData, 'notWeTube', {
+                      expiresIn: "1d"
+                    });
+                    console.log("token", token)
+
+                    res.send({loggedin : true, token: token, userData: userData})
                   }
                 })
               } else {
@@ -89,6 +96,18 @@ module.exports = function(app, express, socket, io){
         }
       }
     })  
+  })
+
+  app.get("/isAuthenticated:token", function (req, res){
+    var token = req.params.token
+    jwt.verify(token, 'notWeTube' , function(err, decoded) {
+      if (err) {
+        serverLog.log("Error failed to authenticate token", err)
+        res.send({authenticated: false, message: 'Failed to authenticate token.' });
+      } else {
+        res.send({authenticated: true})
+      }
+    });
   })
 
   app.post("/addFriend", function (req, res){
@@ -123,7 +142,6 @@ module.exports = function(app, express, socket, io){
   })
   //for canceling friend requests
   app.put("/friendRequest", function (req,res){
-    console.log(req.body)
     controllers.deleteFriendRequest(req.body.userData.id, req.body.targetId, function (err, response){
       if(err){
         serverLog.log(err)
