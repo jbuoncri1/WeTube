@@ -189,7 +189,14 @@ angular.module('services', [])
 		}
 
 		var updateStatus = function(newStatusObj){
-			currentStatus = newStatusObj
+			for(var key in currentStatus){
+				if(!(key in newStatusObj)){
+					delete currentStatus[key]
+				}
+			}
+			helperFunctions.extend(currentStatus, newStatusObj)
+			console.log(currentStatus, "current status")
+
 			for(var friendId in friends){
 				if(friends[friendId].currentStatus.online){
 					sendStatus(friendId)

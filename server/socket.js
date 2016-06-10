@@ -83,7 +83,6 @@ module.exports = function(app, PORT, express, routes){
     })
 
     socket.on('sendingStatus', function(data){
-      console.log("status", data)
       io.to(data.targetId).emit('sendingStatus', {
         currentStatus: data.currentStatus,
         originId: data.originId
@@ -91,7 +90,6 @@ module.exports = function(app, PORT, express, routes){
     })
 
     socket.on('newVideo', function (data){
-      console.log("new vid", data)
       io.to(data.room).emit('newVideo', data.video)      
     })
 
