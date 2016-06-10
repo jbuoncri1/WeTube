@@ -82,7 +82,7 @@ angular.module('services', [])
 			// inRoom: "",
 		}
 
-		$window.socket = io.connect('http://localhost:8001');
+		$window.socket = io.connect();
 
 
 		socket.on('newMessage', function (data) {
