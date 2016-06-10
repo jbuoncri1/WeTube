@@ -78,7 +78,7 @@
         </div>
 
         <div ng-show = "streamSidenav === 'search'" >
-          <input class = "streamInput" ng-model = "searchQuery" ng-keypress = "submitMessage($event)">
+          <input class = "streamInput" ng-model = "searchQuery" ng-keypress = "submitSearch($event)">
 
           <div class="streamSearch">
             <md-card ng-repeat = "result in searchResults" class = "searchResult" ng-click = "addToQueue(result)" >

@@ -14,6 +14,10 @@ app.run(function ($rootScope, $state, auth, getVideo, userData) {
       getVideo.clearRoomData()
     }
 
+    if(toState.name !== "home.stream") {
+      userData.updateStatus({online:true})
+    }
+
     if(toState.authenticate){
       if(auth.isAuthenticated()){
       } else {
