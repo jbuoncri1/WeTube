@@ -64,7 +64,7 @@
               </div>
               <div layout = "column">
                 <span flex></span>
-                <button ng-show = "friend.currentStatus.watching" class = "button tab shadow" ng-click = "joinRoom(friend.currentStatus);$event.stopPropagation();">Join</button>
+                <button ng-show = "friend.currentStatus.watching && friend.currentStatus.watching !== currentStatus.watching" class = "button tab shadow" ng-click = "joinRoom(friend.currentStatus);$event.stopPropagation();">Join</button>
                 <span flex></span>
                 <button ng-show = "currentStatus.watching && currentStatus.watching !== friend.currentStatus.watching" class = "button tab shadow" ng-click = ";$event.stopPropagation();">Invite</button>
 

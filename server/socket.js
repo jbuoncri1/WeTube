@@ -76,7 +76,6 @@ module.exports = function(app, PORT, express, routes){
 
     socket.on('disconnect', function(data){
       console.log("disconnected")
-
     });
 
     socket.on('getStatus', function(data){
@@ -84,7 +83,6 @@ module.exports = function(app, PORT, express, routes){
     })
 
     socket.on('sendingStatus', function(data){
-      console.log(data, "status")
       io.to(data.targetId).emit('sendingStatus', {
         currentStatus: data.currentStatus,
         originId: data.originId
