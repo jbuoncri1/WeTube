@@ -87,7 +87,7 @@ angular.module('services', [])
 		})
 
 		socket.on("friendRequest", function (data){
-			friendRequests.push(data)
+			$rootScope.$apply(friendRequests.push(data))
 		})
 
 		socket.on("friendAdded", function (data){
