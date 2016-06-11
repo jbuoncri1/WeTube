@@ -6,28 +6,40 @@
     <span flex></span>
     <md-card >
       <md-card-content class = "content">
-        <h2 ng-cloak class = "center">{{message}}</h2>
-        <section layout="column" layout-align="center center" layout-wrap>
-<!-- add form validation -->
-          <md-input-container class = "md-block">
-            <label>Email</label>
-            <input ng-model = "loginData.email" type="text">
-          </md-input-container>
-          <md-input-container class = "md-block">
-            <label>Display Name</label>
-            <input ng-model = "loginData.displayName" type="text">
-          </md-input-container>        
-          <md-input-container>
-            <label>Password</label>
-            <input ng-model = "loginData.password" type="text">
-          </md-input-container>
+        <form name="loginForm">
+
+          <h2 ng-cloak class = "center">{{message}}</h2>
+          <section layout="column" layout-align="center center" layout-wrap>
+  <!-- add form validation -->
+            <md-input-container class = "md-block">
+              <label>Email</label>
+              <input ng-model = "loginData.email" type="email" name = "email" required minlength="4" maxlength="100" ng-pattern="/^.+@.+\..+$/">
+              <div ng-messages="loginForm.email.$error">
+                <div ng-message-exp ="['required', 'minlength', 'maxlength', 'pattern']">Please enter a valid Email address.</div>
+              </div>          
+            </md-input-container>
+            <md-input-container class = "md-block">
+              <label>Display Name</label>
+              <input ng-model = "loginData.displayName" name = "displayName" required type="text">
+              <div ng-messages="loginForm.displayName.$error">
+                <div ng-message="required">Please fill out this section.</div>
+              </div>
+            </md-input-container>        
+            <md-input-container>
+              <label>Password</label>
+              <input ng-model = "loginData.password"  name = "password" type="password" required minlength="6" maxlength="100">
+              <div ng-messages="loginForm.password.$error">
+                <div ng-message="minlength">Must be at least 6 characters.</div>
+            </div>
+            </md-input-container>
 
 
-          <md-button class="loginBtns md-raised md-primary" ng-click = "loginUser()">Login</md-button>
-  <!--         <md-button class="loginBtns md-raised md-primary" ng-href='/auth/google'>Login With Google</md-button> -->
-          <md-button class="loginBtns md-raised md-primary" ng-click = "createAccount()">Create An Account</md-button>
-        </section> 
+            <md-button class="loginBtns md-raised md-primary" ng-click = "loginUser()">Login</md-button>
+    <!--         <md-button class="loginBtns md-raised md-primary" ng-href='/auth/google'>Login With Google</md-button> -->
+            <md-button class="loginBtns md-raised md-primary" ng-click = "createAccount()">Create An Account</md-button>
+          </section> 
 
+        </form>
       </md-card-content>
     </md-card>
     <span flex></span>

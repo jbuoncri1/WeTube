@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngRoute', 'login', 'stream', 'services', 'ngMaterial', 'ui.router', 'homepage', 'search', 'dtrw.bcrypt', 'ngCookies']);
+var app = angular.module('app', ['ngRoute', 'login', 'stream', 'services', 'ngMaterial', 'ui.router', 'homepage', 'search', 'dtrw.bcrypt', 'ngCookies', 'ngMessages']);
 
 app.run(function ($rootScope, $state, auth, getVideo, userData) {
   
