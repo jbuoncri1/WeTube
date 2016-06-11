@@ -20,7 +20,7 @@ CREATE TABLE friendships (
   FOREIGN KEY(userId1) REFERENCES users(id),
   userId2 int,
   FOREIGN KEY(userId2) REFERENCES users(id)
-)
+);
 
 CREATE TABLE friendRequests (
   id int NOT NULL AUTO_INCREMENT,
@@ -29,4 +29,4 @@ CREATE TABLE friendRequests (
   FOREIGN KEY(userId1) REFERENCES users(id),
   userId2 int,
   FOREIGN KEY(userId2) REFERENCES users(id)  
-)
+);

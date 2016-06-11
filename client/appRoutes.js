@@ -23,6 +23,7 @@ app.config(function($routeProvider,$stateProvider, $urlRouterProvider, $sceDeleg
       url: "",
       templateUrl:"homepage/homepage.html",
       controller:"HomepageController",
+      authenticate: true,
     })
 		.state("home.stream", {
       url: "/stream/:roomId",
